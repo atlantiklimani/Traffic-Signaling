@@ -3,14 +3,13 @@ from time import time
 from random import sample, choices, shuffle
 from recordclass import recordclass
 from copy import deepcopy
+import random
 
 Schedule = recordclass('Schedule', [
     'i_intersection',
     'order',
     'green_times'
 ])
-
-
 
 def randomSolution(intersections):
     schedules = []
@@ -88,7 +87,7 @@ def PSO(streets, intersections, paths, total_duration, bonus_points, terminated_
     velocity_pBest = [1 for i in range(10)]
     gbest = max(pBests)
     gbest_schedule = pBest_schedules[pBests.index(gbest)]
-    while (time() - terminated_time < 260):
+    while (time() - terminated_time < 2):
         for i in range(len(pBest_schedules)):
             # 1. update position
             # 2. get score of new position
@@ -111,12 +110,113 @@ def PSO(streets, intersections, paths, total_duration, bonus_points, terminated_
                     velocity_gBest[i] = 1  # we reset velocity_gBest for this particle since it found new best solution
     return gbest_schedule, gbest
 
+# resp = [x["age"] for x in filonlist]
+
+def justTry(streets, intersections, paths, total_duration, bonus_points):
+    # particles = initialPopulation(streets, intersections, paths, total_duration, bonus_points)
+    # print(particles,'Tryin something')
+    sol = randomSolution(intersections)
+    # print(sol, "Try Somethingg")
+    print("Score of Random Solution: ",gl.grade(sol,streets, intersections, paths, total_duration, bonus_points))
+    print("First Element: ",len(sol[1].order))
+
+def sortKey(e):
+  return e.score
+class Patch:
+    def __init__(self, score, scheduleArray):
+        self.score = score
+        self.scheduleArray = scheduleArray
+        self.stgLim = 0
+        self.employees = 0
+        self.stg = True
+
+def firstOperator(order):
+    order = order[1:] + order[:1]
+    return order
+
+def copyScheduleArray(scheduleArr):
+    newScheduleArr = []
+    for i in range(0,len(scheduleArr)):
+        newScheduleArr.append(
+            Schedule(
+                i_intersection=scheduleArr[i].i_intersection,
+                order=deepcopy(scheduleArr[i].order),
+                green_times=deepcopy(scheduleArr[i].green_times))
+            )
+        
+    return newScheduleArr
+
+def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time):
+    patches = []
+    ns = 20 #number of scout bees
+    nb = 6 #number of best sites
+    ne = 3 #number of elite sites
+    nrb = 5 #number of recruited bees for best sites
+    nre = 10 #number of recruited bees for elite sites
+    stgLim = 3 #stagnation limit for patches
+
+    for i in range(0,ns):
+        sol = randomSolution(intersections)
+        grade = gl.grade(sol,streets, intersections, paths, total_duration, bonus_points)
+        patches.append(Patch(grade, sol))
+
+    while (time() - terminated_time < 10):
+        patches.sort(reverse=True, key=sortKey)
+        for i in range(0,nb):
+            employees = 0
+            if(i < ne):
+                employees = nre
+                patches[i].employees = nre
+            else :
+                employees = nrb
+                patches[i].employees = nrb
+
+            patches[i].stg = True
+
+            for e in range(0,employees):
+                rand = random.randint(0,len(patches[i].scheduleArray) - 1)
+                # tempSchedule = Schedule(
+                #     patches[i].schedule.i_intersection,
+                #     firstOperator(deepcopy(patches[i].schedule.order)),
+                #     patches[i].schedule.green_times
+                #     )
+                tempSchedule = copyScheduleArray(patches[i].scheduleArray)
+                tempSchedule[rand].order = firstOperator(tempSchedule[rand].order)
+                tempScore = gl.grade(tempSchedule,streets, intersections, paths, total_duration, bonus_points)
+
+                if(tempScore > patches[i].score):
+                    patches[i].stg = False
+                    patches[i].scheduleArray = tempSchedule
+                    patches[i].score = tempScore
+            
+            patches[i].stgLim += 1
+
+            if(patches[i].stgLim > stgLim):
+                patches[i].scheduleArray = randomSolution(intersections)
+                patches[i].score = gl.grade(patches[i].scheduleArray,streets, intersections, paths, total_duration, bonus_points)
+                patches[i].stgLim = 0
+
+        for i in range(nb, ns):
+            patches[i].scheduleArray = randomSolution(intersections)
+            patches[i].score = gl.grade(patches[i].scheduleArray,streets, intersections, paths, total_duration, bonus_points)
+            patches[i].stgLim = 0
+    
+    ### For visualising purposes
+    patches.sort(reverse=True, key=sortKey)
+    for patch in patches:
+        print(patch.score, " Score of patch")
+    
+    print("Validate Score of Best Patch: ",gl.grade(patches[0].scheduleArray,streets, intersections, paths, total_duration, bonus_points))
 
 file = input("Enter name of the input file, e.g. \"a.txt\": ")
 start = time()
 total_duration, bonus_points, intersections, streets, name_to_i_street, paths = gl.readInput(file)
 schedule, score = PSO(streets, intersections, paths, total_duration, bonus_points, start)
-time_spend = time() - start
-gl.printSchedule(schedule, streets)
-print("Score: ", score)
-print("Time: ", time_spend)
+# time_spend = time() - start
+# # gl.printSchedule(schedule, streets)
+# print("PSO Score: ", score)
+# print("PSO Time: ", time_spend)
+
+# justTry(streets, intersections, paths, total_duration, bonus_points)
+BeeHive(streets, intersections, paths, total_duration, bonus_points,start)
+
