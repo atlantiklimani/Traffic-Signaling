@@ -49,6 +49,7 @@ def justTry(streets, intersections, paths, total_duration, bonus_points):
 
 def sortKey(e):
   return e.score
+
 class Patch:
     def __init__(self, score, scheduleArray):
         self.score = score
@@ -87,7 +88,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         grade = gl.grade(sol,streets, intersections, paths, total_duration, bonus_points)
         patches.append(Patch(grade, sol))
 
-    while (time() - terminated_time < 60):
+    while (time() - terminated_time < 120):
         patches.sort(reverse=True, key=sortKey)
         for i in range(0,nb):
             employees = 0
@@ -111,9 +112,10 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                     patches[i].scheduleArray = tempSchedule
                     patches[i].score = tempScore
             
-            patches[i].stgLim += 1
+            if(patches[i].stg):
+                patches[i].stgLim += 1
 
-            if(patches[i].stgLim > stgLim):
+            if(patches[i].stgLim > stgLim and i != 0):
                 patches[i].scheduleArray = randomSolution(intersections)
                 patches[i].score = gl.grade(patches[i].scheduleArray,streets, intersections, paths, total_duration, bonus_points)
                 patches[i].stgLim = 0
@@ -133,12 +135,5 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
 file = input("Enter name of the input file, e.g. \"a.txt\": ")
 start = time()
 total_duration, bonus_points, intersections, streets, name_to_i_street, paths = gl.readInput(file)
-# schedule, score = PSO(streets, intersections, paths, total_duration, bonus_points, start)
-# time_spend = time() - start
-# # gl.printSchedule(schedule, streets)
-# print("PSO Score: ", score)
-# print("PSO Time: ", time_spend)
-
-# justTry(streets, intersections, paths, total_duration, bonus_points)
 BeeHive(streets, intersections, paths, total_duration, bonus_points,start)
 
