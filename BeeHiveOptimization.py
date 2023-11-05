@@ -4,6 +4,7 @@ from random import sample, choices, shuffle
 from recordclass import recordclass
 from copy import deepcopy
 import random
+import math
 
 Schedule = recordclass('Schedule', [
     'i_intersection',
@@ -62,6 +63,15 @@ def firstOperator(order):
     order = order[1:] + order[:1]
     return order
 
+def thirdOperator(schedule,numberOfIntersection):
+    count = 0
+    maxIntersection = math.floor(len(schedule) / 10)
+    while(count < numberOfIntersection and count < maxIntersection):
+        rand = random.randint(0,len(schedule) - 1)
+        schedule[rand].order = firstOperator(schedule[rand].order)
+        count+=1
+    return schedule
+
 def copyScheduleArray(scheduleArr):
     newScheduleArr = []
     for i in range(0,len(scheduleArr)):
@@ -78,17 +88,17 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     patches = []
     ns = 20 #number of scout bees
     nb = 6 #number of best sites
-    ne = 3 #number of elite sites
+    ne = 2 #number of elite sites
     nrb = 5 #number of recruited bees for best sites
-    nre = 10 #number of recruited bees for elite sites
-    stgLim = 3 #stagnation limit for patches
+    nre = 20 #number of recruited bees for elite sites
+    stgLim = 10 #stagnation limit for patches
 
     for i in range(0,ns):
         sol = randomSolution(intersections)
         grade = gl.grade(sol,streets, intersections, paths, total_duration, bonus_points)
         patches.append(Patch(grade, sol))
 
-    while (time() - terminated_time < 120):
+    while (time() - terminated_time < 60):
         patches.sort(reverse=True, key=sortKey)
         for i in range(0,nb):
             employees = 0
@@ -104,7 +114,8 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
             for e in range(0,employees):
                 rand = random.randint(0,len(patches[i].scheduleArray) - 1)
                 tempSchedule = copyScheduleArray(patches[i].scheduleArray)
-                tempSchedule[rand].order = firstOperator(tempSchedule[rand].order)
+                # tempSchedule[rand].order = firstOperator(tempSchedule[rand].order)
+                tempSchedule = thirdOperator(tempSchedule, 5)
                 tempScore = gl.grade(tempSchedule,streets, intersections, paths, total_duration, bonus_points)
 
                 if(tempScore > patches[i].score):
