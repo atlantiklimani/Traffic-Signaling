@@ -63,6 +63,26 @@ def firstOperator(order):
     order = order[1:] + order[:1]
     return order
 
+def fourthOperator(schedule, numberOfIntersection, numberOfRoads):
+    if(numberOfIntersection <= 0):
+        return schedule
+    
+    count = 0
+    randomRangeBegins = random.randint(0,len(schedule)- numberOfIntersection - 1)
+
+    while(count < numberOfIntersection):
+        rand = random.randint(randomRangeBegins, randomRangeBegins + numberOfIntersection)
+        # random.shuffle(schedule[rand].order)
+        length = len(schedule[rand].order)
+        otherCount = 0
+        while(otherCount < length and otherCount < numberOfRoads):
+            semaforId = random.randint(0,length - 1)
+            schedule[rand].green_times[schedule[rand].order[semaforId],''] = choices([2, random.randint(3,5)],weights=[70,30], k=1) 
+            otherCount += 1
+        count+=1
+
+    return schedule
+
 def thirdOperator(schedule,numberOfIntersection):
     if(numberOfIntersection <= 0):
         return schedule
@@ -91,11 +111,11 @@ def copyScheduleArray(scheduleArr):
 
 def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time):
     patches = []
-    ns = 1 #number of scout bees
-    nb = 1 #number of best sites
+    ns = 100 #number of scout bees
+    nb = 5 #number of best sites
     ne = 1 #number of elite sites
     nrb = 10 #number of recruited bees for best sites
-    nre = 100 #number of recruited bees for elite sites
+    nre = 50 #number of recruited bees for elite sites
     stgLim = 10 #stagnation limit for patches
     shrinkageFactor = 0.01 # how fast does the neighbourhood shrink. 1 is max. This higher the factor the less is the neighbourhood shrinking
     print("number of intersections = ",len(intersections))
@@ -103,9 +123,10 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         sol = randomSolution(intersections)
         grade = gl.grade(sol,streets, intersections, paths, total_duration, bonus_points)
         patches.append(Patch(grade, sol))
+        # print(patches[i].scheduleArray, " patch patch")
 
 
-    while (time() - terminated_time < 60):
+    while (time() - terminated_time < 120):
         patches.sort(reverse=True, key=sortKey)
         for i in range(0,nb):
             employees = 0
@@ -122,7 +143,8 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                 rand = random.randint(0,len(patches[i].scheduleArray) - 1)
                 tempSchedule = copyScheduleArray(patches[i].scheduleArray)
                 # tempSchedule[rand].order = firstOperator(tempSchedule[rand].order)
-                tempSchedule = thirdOperator(tempSchedule, math.floor(len(intersections) * shrinkageFactor))
+                # tempSchedule = thirdOperator(tempSchedule, math.floor(len(intersections) * shrinkageFactor))
+                tempSchedule = fourthOperator(tempSchedule, math.floor(len(intersections) * shrinkageFactor * 0.5), 1)
                 tempScore = gl.grade(tempSchedule,streets, intersections, paths, total_duration, bonus_points)
 
                 if(tempScore > patches[i].score):
@@ -148,8 +170,8 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     
     ### For visualising purposes
     patches.sort(reverse=True, key=sortKey)
-    # for patch in patches:
-    #     print(patch.score, " Score of patch")
+    for patch in patches:
+        print("Score of patch: ",patch.score)
     
     print("Validate Score of Best Patch: ",gl.grade(patches[0].scheduleArray,streets, intersections, paths, total_duration, bonus_points))
 
