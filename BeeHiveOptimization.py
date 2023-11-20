@@ -103,37 +103,36 @@ def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads):
 
     return schedule
 
-def shuffleOrder(schedule,numberOfIntersection, intersectionsLength):
+def shuffleOrder(schedules,numberOfIntersection):
     if(numberOfIntersection <= 0):
-        return schedule
+        return schedules
     
     count = 0
 
     while(count < numberOfIntersection):
-        rand = random.randint(0, intersectionsLength - 1)
-        random.shuffle(schedule[rand].order)
+        rand = random.randint(0, len(schedules) - 1)
+        random.shuffle(schedules[rand].order)
         count+=1
         
-    return schedule
+    return schedules
 
-def swapOrder(schedule, numberOfIntersections, intersectionsLength):
+def swapOrder(schedules, numberOfIntersections):
     if(numberOfIntersections <= 0):
-        return schedule
-
+        return schedules
     for i in range(0, numberOfIntersections):
-        rand = random.randint(0, intersectionsLength - 1)
-        incomingStreetsLength = len(schedule[rand].order)
+        rand = random.randint(0, len(schedules) - 1)
+        incomingStreetsLength = len(schedules[rand].order)
         if(incomingStreetsLength == 1):
             continue
         rand1 = random.randint(0, incomingStreetsLength - 1)
         rand2 = random.randint(0, incomingStreetsLength - 1)
         while(rand1 == rand2):
             rand2 = random.randint(0, incomingStreetsLength - 1)
-        temp = schedule[rand].order[rand1]
-        schedule[rand].order[rand1] = schedule[rand].order[rand2]
-        schedule[rand].order[rand2] = temp
+        temp = schedules[rand].order[rand1]
+        schedules[rand].order[rand1] = schedules[rand].order[rand2]
+        schedules[rand].order[rand2] = temp
     
-    return schedule
+    return schedules
 
 def copyScheduleArray(scheduleArr):
     newScheduleArr = []
@@ -149,13 +148,13 @@ def copyScheduleArray(scheduleArr):
 
 def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time):
     patches = []
-    ns = 10 #number of scout bees
-    nb = 3 #number of best sites
-    ne = 1 #number of elite sites
-    nrb = 5 #number of recruited bees for best sites
-    nre = 10 #number of recruited bees for elite sites
+    ns = 100 #number of scout bees
+    nb = 10 #number of best sites
+    ne = 5 #number of elite sites
+    nrb = 10 #number of recruited bees for best sites
+    nre = 20 #number of recruited bees for elite sites
     stgLim = 10 #stagnation limit for patches
-    shrinkageFactor = 0.6 # how fast does the neighbourhood shrink. 1 is max. This higher the factor the less is the neighbourhood shrinking
+    shrinkageFactor = 0.3 # how fast does the neighbourhood shrink. 1 is max. This higher the factor the less is the neighbourhood shrinking
     print("number of intersections = ",len(intersections))
     for i in range(0,ns):
         sol = randomSolution(intersections)
@@ -180,9 +179,9 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                 tempSchedule = copyScheduleArray(patches[i].scheduleArray)
                 decideOperator = random.randint(0,10) 
                 if(decideOperator < 4):
-                    tempSchedule = shuffleOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1, len(intersections))
+                    tempSchedule = shuffleOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1)
                 elif(decideOperator >= 4 and decideOperator < 10):
-                    tempSchedule = swapOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1, len(intersections))
+                    tempSchedule = swapOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1)
                 else:
                     tempSchedule = changeGreenTimeDuration(tempSchedule, math.floor(len(intersections) * shrinkageFactor * 0.001) + 1, 1)
                 tempScore = gl.grade(tempSchedule,streets, intersections, paths, total_duration, bonus_points)
@@ -210,14 +209,13 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     
     ### For visualising purposes
     patches.sort(reverse=True, key=sortKey)
-    for patch in patches:
-        print("Score of patch: ",patch.score)
+    for i in range(0,math.floor(len(patches)/10)):
+        print("Score of patch: ",patches[i])
     
-    print(patches[0].scheduleArray)
-    print("Validate Score of Best Patch: ",gl.grade(patches[0].scheduleArray,streets, intersections, paths, total_duration, bonus_points))
-
+    return patches[0].scheduleArray, patches[0].score
 file = input("Enter name of the input file, e.g. \"a.txt\": ")
 start = time()
 total_duration, bonus_points, intersections, streets, name_to_i_street, paths = gl.readInput(file)
-BeeHive(streets, intersections, paths, total_duration, bonus_points,start)
+schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start)
+gl.printSchedule(schedule, streets)
 
