@@ -84,7 +84,7 @@ def fifthOperator(schedules, numberOfIntersections, numberOfRoads, instersection
 
     return schedules
 
-def fourthOperator(schedule, numberOfIntersection, numberOfRoads):
+def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads):
     if(numberOfIntersection <= 0):
         return schedule
 
@@ -97,23 +97,42 @@ def fourthOperator(schedule, numberOfIntersection, numberOfRoads):
         otherCount = 0
         while(otherCount < length and otherCount < numberOfRoads):
             semaforId = random.randint(0,length - 1)
-            schedule[rand].green_times[schedule[rand].order[semaforId]] = int(choices([2, random.randint(3,5)],weights=[70,30], k=1)[0]) 
+            schedule[rand].green_times[schedule[rand].order[semaforId]] = int(choices([1, 2, 3],weights=[10, 70, 20], k=1)[0]) 
             otherCount += 1
         count+=1
 
     return schedule
 
-def thirdOperator(schedule,numberOfIntersection):
+def shuffleOrder(schedule,numberOfIntersection, intersectionsLength):
     if(numberOfIntersection <= 0):
         return schedule
     
     count = 0
 
     while(count < numberOfIntersection):
-        rand = random.randint(0, numberOfIntersection - 1)
+        rand = random.randint(0, intersectionsLength - 1)
         random.shuffle(schedule[rand].order)
         count+=1
         
+    return schedule
+
+def swapOrder(schedule, numberOfIntersections, intersectionsLength):
+    if(numberOfIntersections <= 0):
+        return schedule
+
+    for i in range(0, numberOfIntersections):
+        rand = random.randint(0, intersectionsLength - 1)
+        incomingStreetsLength = len(schedule[rand].order)
+        if(incomingStreetsLength == 1):
+            continue
+        rand1 = random.randint(0, incomingStreetsLength - 1)
+        rand2 = random.randint(0, incomingStreetsLength - 1)
+        while(rand1 == rand2):
+            rand2 = random.randint(0, incomingStreetsLength - 1)
+        temp = schedule[rand].order[rand1]
+        schedule[rand].order[rand1] = schedule[rand].order[rand2]
+        schedule[rand].order[rand2] = temp
+    
     return schedule
 
 def copyScheduleArray(scheduleArr):
@@ -159,10 +178,13 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
             for e in range(0,employees):
                 rand = random.randint(0,len(patches[i].scheduleArray) - 1)
                 tempSchedule = copyScheduleArray(patches[i].scheduleArray)
-                if(random.randint(0,10) < 8):
-                    tempSchedule = thirdOperator(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1)
+                decideOperator = random.randint(0,10) 
+                if(decideOperator < 4):
+                    tempSchedule = shuffleOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1, len(intersections))
+                elif(decideOperator >= 4 and decideOperator < 10):
+                    tempSchedule = swapOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1, len(intersections))
                 else:
-                    tempSchedule = fourthOperator(tempSchedule, math.floor(len(intersections) * shrinkageFactor * 0.001) + 1, 1)
+                    tempSchedule = changeGreenTimeDuration(tempSchedule, math.floor(len(intersections) * shrinkageFactor * 0.001) + 1, 1)
                 tempScore = gl.grade(tempSchedule,streets, intersections, paths, total_duration, bonus_points)
 
                 if(tempScore > patches[i].score):
