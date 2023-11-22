@@ -38,16 +38,6 @@ def initialPopulation(streets, intersections, paths, total_duration, bonus_point
         population.append([gl.grade(schedules, streets, intersections, paths, total_duration, bonus_points), schedules])
     return population
 
-# resp = [x["age"] for x in filonlist]
-
-def justTry(streets, intersections, paths, total_duration, bonus_points):
-    # particles = initialPopulation(streets, intersections, paths, total_duration, bonus_points)
-    # print(particles,'Tryin something')
-    sol = randomSolution(intersections)
-    # print(sol, "Try Somethingg")
-    print("Score of Random Solution: ",gl.grade(sol,streets, intersections, paths, total_duration, bonus_points))
-    print("First Element: ",len(sol[1].order))
-
 def sortKey(e):
   return e.score
 
@@ -146,22 +136,70 @@ def copyScheduleArray(scheduleArr):
         
     return newScheduleArr
 
+def traffic_based_initial_solution(intersections: list[gl.Intersection]) -> list[Schedule]:
+    schedules = []
+
+    # Calculate the global threshold first for efficiency
+    all_waiting_cars = [len(street.waiting_cars) for intersection in intersections for street in intersection.incomings]
+    threshold = sum(all_waiting_cars) / len(all_waiting_cars)
+
+    for intersection in intersections:
+        order = []
+        green_times = {}
+
+        # Sort streets based on the sum of lengths of driving_cars and waiting_cars
+        sorted_streets = sorted(intersection.incomings,
+                                key=lambda s: len(s.driving_cars) + len(s.waiting_cars),
+                                reverse=True)
+
+        for street in sorted_streets:
+            if street.name in intersection.using_streets:
+                order.append(street.id)
+                # Introduce randomness in green time allocation
+                random_factor = random.uniform(1, 2)  # Adjust the range as needed
+                green_time = 2 if len(street.waiting_cars) > threshold else 1
+                green_times[street.id] = int(green_time * random_factor)
+
+        if order:
+            schedules.append(Schedule(intersection.id, order, green_times))
+    return schedules
+
+def usage_based_initial_solution(intersections: list[gl.Intersection]) -> list[Schedule]:
+    schedules = []
+    for intersection in intersections:
+        order = []
+        green_times = {}
+
+        sorted_streets = sorted(intersection.incomings, key=lambda s: intersection.streets_usage.get(s.name, 0),
+                                reverse=True)
+
+        for street in sorted_streets:
+            if street.name in intersection.using_streets:
+                order.append(street.id)
+                usage = intersection.streets_usage.get(street.name, 0)
+                green_time = int(math.sqrt(usage)) if usage > 0 else 1
+                green_times[street.id] = green_time
+
+        if order:
+            schedules.append(Schedule(intersection.id, order, green_times))
+    return schedules
+
 def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time):
     patches = []
-    ns = 100 #number of scout bees
+    ns = 30 #number of scout bees
     nb = 10 #number of best sites
     ne = 5 #number of elite sites
     nrb = 10 #number of recruited bees for best sites
-    nre = 20 #number of recruited bees for elite sites
+    nre = 30 #number of recruited bees for elite sites
     stgLim = 10 #stagnation limit for patches
     shrinkageFactor = 0.3 # how fast does the neighbourhood shrink. 1 is max. This higher the factor the less is the neighbourhood shrinking
-    print("number of intersections = ",len(intersections))
     for i in range(0,ns):
-        sol = randomSolution(intersections)
+        # sol = randomSolution(intersections)
+        sol = traffic_based_initial_solution(intersections)
         grade = gl.grade(sol,streets, intersections, paths, total_duration, bonus_points)
         patches.append(Patch(grade, sol))
 
-    while (time() - terminated_time < 30):
+    while (time() - terminated_time < 3600):
         patches.sort(reverse=True, key=sortKey)
         for i in range(0,nb):
             employees = 0
@@ -175,15 +213,15 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
             patches[i].stg = True
 
             for e in range(0,employees):
-                rand = random.randint(0,len(patches[i].scheduleArray) - 1)
                 tempSchedule = copyScheduleArray(patches[i].scheduleArray)
-                decideOperator = random.randint(0,10) 
-                if(decideOperator < 4):
+                decideOperator = random.randint(0,20) 
+                if(decideOperator < 10):
                     tempSchedule = shuffleOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1)
-                elif(decideOperator >= 4 and decideOperator < 10):
+                elif(decideOperator >= 10 and decideOperator < 20):
                     tempSchedule = swapOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1)
                 else:
                     tempSchedule = changeGreenTimeDuration(tempSchedule, math.floor(len(intersections) * shrinkageFactor * 0.001) + 1, 1)
+                    
                 tempScore = gl.grade(tempSchedule,streets, intersections, paths, total_duration, bonus_points)
 
                 if(tempScore > patches[i].score):
@@ -210,7 +248,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     ### For visualising purposes
     patches.sort(reverse=True, key=sortKey)
     for i in range(0,math.floor(len(patches)/10)):
-        print("Score of patch: ",patches[i])
+        print("Score of patch: ",patches[i].score)
     
     return patches[0].scheduleArray, patches[0].score
 file = input("Enter name of the input file, e.g. \"a.txt\": ")
