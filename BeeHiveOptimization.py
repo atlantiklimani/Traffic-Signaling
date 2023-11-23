@@ -195,7 +195,12 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     shrinkageFactor = 0.3 # how fast does the neighbourhood shrink. 1 is max. This higher the factor the less is the neighbourhood shrinking
     for i in range(0,ns):
         # sol = randomSolution(intersections)
-        sol = traffic_based_initial_solution(intersections)
+        decideGen = random.randint(0,1)
+        if(decideGen == 0):
+            sol = traffic_based_initial_solution(intersections)
+        else:
+            sol = usage_based_initial_solution(intersections)
+            
         grade = gl.grade(sol,streets, intersections, paths, total_duration, bonus_points)
         patches.append(Patch(grade, sol))
 
