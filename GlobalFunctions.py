@@ -1,5 +1,6 @@
 from collections import deque
 from recordclass import recordclass
+import json
 
 Street = recordclass('Street', [
     'id',
@@ -150,7 +151,7 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
 
     street_ids_with_driving_cars = set()
     score = 0
-
+    dict = {}
     # Main simulation loop
     for t in range(total_duration):
 
@@ -166,10 +167,56 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
                 intersection.green_street = intersection.green_street_per_t_mod[t_mod]
 
             green_street = intersection.green_street
+            # print(green_street.id, "greennnnnn")
+            # red_street = []
+            for s in intersection.incomings:
+                if( s.id != green_street.id):
+                    # print(s, "what is this")
+                    for c in s.waiting_cars:
+                        if f'{c}' in dict:
+                            dict[f'{c}'][f'{t}'] = {
+                                'streetId': s.id,
+                                'streetName': s.name,
+                                'secondsToFinish': 0,
+                                'action': 'waiting',
+                                'streetState':'red'
+                            } 
+                        else:
+                            dict[f'{c}'] = {}
+                            dict[f'{c}'][f'{t}'] = {
+                                'streetId': s.id,
+                                'streetName': s.name,
+                                'secondsToFinish': 0,
+                                'action': 'waiting',
+                                'streetState':'red'
+                            } 
+                        print("Red Street. Simulation: ",t,".car: ",c,". Street: ",s.name)
+
+                    # red_street.append(s)
+
             waiting_cars = green_street.waiting_cars
             if len(waiting_cars) > 0:
                 # Drive across the intersection
                 waiting_car = waiting_cars.popleft()
+                for c in waiting_cars:
+                    if f'{c}' in dict:
+                        dict[f'{c}'][f'{t}'] = {
+                            'streetId': green_street.id,
+                            'streetName': green_street.name,
+                            'secondsToFinish': 0,
+                            'action': 'waiting',
+                            'streetState':'green'
+                        } 
+                    else:
+                        dict[f'{c}'] = {}
+                        dict[f'{c}'][f'{t}'] = {
+                            'streetId': green_street.id,
+                            'streetName': green_street.name,
+                            'secondsToFinish': 0,
+                            'action': 'waiting',
+                            'streetState':'green'
+                        } 
+                    print("Green Street, but there is queue. Simulation: ",t,".car: ",c,". Street: ",green_street.name)
                 green_street.departure_times[waiting_car] = t
                 next_street = paths[waiting_car].popleft()
                 next_street.driving_cars[waiting_car] = next_street.duration
@@ -191,6 +238,22 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
                 # Update the "time to live" of this car, i.e. the remaining
                 # driving seconds.
                 ttl = driving_cars[car]
+                if f'{car}' in dict:
+                    dict[f'{car}'][f'{t}'] = {
+                        'streetId': street.id,
+                        'streetName': street.name,
+                        'secondsToFinish': ttl,
+                        'action': 'moving',
+                    } 
+                else:
+                    dict[f'{car}'] = {}
+                    dict[f'{car}'][f'{t}'] = {
+                        'streetId': street.id,
+                        'streetName': street.name,
+                        'secondsToFinish': ttl,
+                        'action': 'moving',
+                    } 
+                print("Moving.    Simulation: ",t,".car: ",car,". Street: ",street.name,". To Finish: ",ttl)
                 ttl -= 1
                 if ttl < 0:
                     raise ValueError
@@ -215,6 +278,9 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
                 street_ids_to_remove.add(i_street)
         street_ids_with_driving_cars.difference_update(street_ids_to_remove)
 
+    print(dict)
+    with open('simulation.json',"w") as outfile:
+        json.dump(dict, outfile)
     # The end of simulation, we reset the paths
     for i_path in range(len(paths)):
         paths[i_path] = paths_copy[i_path]

@@ -1,0 +1,74 @@
+{
+    "1": {
+        "0": {
+            "streetId": 2,
+            "streetName": "rue-d-athenes",
+            "secondsToFinish": 0,
+            "action": "waiting",
+            "streetState": "red"
+        },
+        "1": {
+            "streetId": 4,
+            "streetName": "rue-de-moscou",
+            "secondsToFinish": 3,
+            "action": "moving"
+        },
+        "2": {
+            "streetId": 4,
+            "streetName": "rue-de-moscou",
+            "secondsToFinish": 2,
+            "action": "moving"
+        },
+        "3": {
+            "streetId": 4,
+            "streetName": "rue-de-moscou",
+            "secondsToFinish": 1,
+            "action": "moving"
+        },
+        "4": {
+            "streetId": 0,
+            "streetName": "rue-de-londres",
+            "secondsToFinish": 1,
+            "action": "moving"
+        }
+    },
+    "0": {
+        "0": {
+            "streetId": 1,
+            "streetName": "rue-d-amsterdam",
+            "secondsToFinish": 1,
+            "action": "moving"
+        },
+        "1": {
+            "streetId": 1,
+            "streetName": "rue-d-amsterdam",
+            "secondsToFinish": 0,
+            "action": "waiting",
+            "streetState": "red"
+        },
+        "2": {
+            "streetId": 4,
+            "streetName": "rue-de-moscou",
+            "secondsToFinish": 3,
+            "action": "moving"
+        },
+        "3": {
+            "streetId": 4,
+            "streetName": "rue-de-moscou",
+            "secondsToFinish": 2,
+            "action": "moving"
+        },
+        "4": {
+            "streetId": 4,
+            "streetName": "rue-de-moscou",
+            "secondsToFinish": 1,
+            "action": "moving"
+        },
+        "5": {
+            "streetId": 3,
+            "streetName": "rue-de-rome",
+            "secondsToFinish": 2,
+            "action": "moving"
+        }
+    }
+}
