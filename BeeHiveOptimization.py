@@ -42,9 +42,10 @@ def sortKey(e):
   return e.score
 
 class Patch:
-    def __init__(self, score, scheduleArray):
+    def __init__(self, score, neighborhood):
         self.score = score
-        self.scheduleArray = scheduleArray
+        self.neighborhood = neighborhood
+        self.scout = neighborhood
         self.stgLim = 0
         self.employees = 0
         self.stg = True
@@ -184,30 +185,37 @@ def usage_based_initial_solution(intersections: list[gl.Intersection]) -> list[S
             schedules.append(Schedule(intersection.id, order, green_times))
     return schedules
 
+def generateSolution(intersections):
+    decideGen = random.randint(0,1)
+
+    if(decideGen == 0):
+        solution = traffic_based_initial_solution(intersections)
+    else:
+        solution = usage_based_initial_solution(intersections)
+
+    return solution
+
 def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time):
     patches = []
-    ns = 30 #number of scout bees
-    nb = 10 #number of best sites
-    ne = 5 #number of elite sites
+    ns = 50 #number of scout bees
+    nb = 20 #number of best sites
+    ne = 10 #number of elite sites
     nrb = 10 #number of recruited bees for best sites
     nre = 30 #number of recruited bees for elite sites
-    stgLim = 10 #stagnation limit for patches
-    shrinkageFactor = 0.3 # how fast does the neighbourhood shrink. 1 is max. This higher the factor the less is the neighbourhood shrinking
+    stgLim = 2 #stagnation limit for patches
+    shrinkageFactor = 0.3 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
+    shrinkageFactorReducedBy = 0.8 # by how much is the shrinkage factor reduceb by for iteration
+    executionTime = 8 * 60 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor 
+    countIterations = 0
     ##
     for i in range(0,ns):
-        # sol = randomSolution(intersections)
-        decideGen = random.randint(0,1)
-        if(decideGen == 0):
-            sol = traffic_based_initial_solution(intersections)
-        else:
-            sol = usage_based_initial_solution(intersections)
-            
+        sol = generateSolution(intersections)         
         grade = gl.grade(sol,streets, intersections, paths, total_duration, bonus_points)
         patches.append(Patch(grade, sol))
 
-    while (time() - terminated_time < 10):
+    while (time() - terminated_time < executionTime):
         patches.sort(reverse=True, key=sortKey)
         for i in range(0,nb):
             employees = 0
@@ -221,7 +229,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
             patches[i].stg = True
 
             for e in range(0,employees):
-                tempSchedule = copyScheduleArray(patches[i].scheduleArray)
+                tempSchedule = copyScheduleArray(patches[i].neighborhood)
                 decideOperator = random.randint(0,20) 
                 if(decideOperator < 10):
                     tempSchedule = shuffleOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1)
@@ -234,32 +242,38 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
 
                 if(tempScore > patches[i].score):
                     patches[i].stg = False
-                    patches[i].scheduleArray = tempSchedule
+                    patches[i].scout = tempSchedule
                     patches[i].score = tempScore
             
             if(patches[i].stg):
                 patches[i].stgLim += 1
-
-            if(patches[i].stgLim > stgLim and i != 0):
-                patches[i].scheduleArray = randomSolution(intersections)
-                patches[i].score = gl.grade(patches[i].scheduleArray,streets, intersections, paths, total_duration, bonus_points)
+            else:
+                patches[i].neighborhood = patches[i].scout
                 patches[i].stgLim = 0
+                 
+            if(patches[i].stgLim > stgLim and i != 0):
+                solution = generateSolution(intersections)      
+                grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points)
+                patches[i] = Patch(score=grade, neighborhood= solution)
 
         for i in range(nb, ns):
-            patches[i].scheduleArray = randomSolution(intersections)
-            patches[i].score = gl.grade(patches[i].scheduleArray,streets, intersections, paths, total_duration, bonus_points)
-            patches[i].stgLim = 0
+            solution = generateSolution(intersections)      
+            grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points)
+            patches[i] = Patch(score=grade, neighborhood= solution)
     
         if(shrinkageFactor > 0.001):
-            shrinkageFactor *= 0.8
+            shrinkageFactor *= shrinkageFactorReducedBy
+        
+        countIterations += 1
 
     patches.sort(reverse=True, key=sortKey)
     ### For visualising purposes
-    print('Parameters:\nns - ',ns,', nb - ',nb,', ne - ',ne,', nrb - ',nrb,', nre - ',nre,',\nStagnation limit - ',stgLim,', Initial shrinkage factor - ',initialShrinkageFactor,', Termianl shrinkage factor - ',shrinkageFactor,'\n')
-    for i in range(0,math.floor(len(patches)/10)):
+    print('Parameters:\nns - ',ns,', nb - ',nb,', ne - ',ne,', nrb - ',nrb,', nre - ',nre,',\nStagnation limit - ',stgLim,'\nInitial shrinkage factor - ',initialShrinkageFactor,', Shrinkage Factor per Iteration Reduced by - ',shrinkageFactorReducedBy,', Termianl shrinkage factor - ','{0:.3f}'.format(shrinkageFactor),
+    "\nExecution Time - ",executionTime,', Number of loop iterations - ',countIterations,'\n')
+    for i in range(0,10):
         print("Score of patch: ",patches[i].score)
     
-    return patches[0].scheduleArray, patches[0].score
+    return patches[0].neighborhood, patches[0].score
 file = input("Enter name of the input file, e.g. \"a.txt\": ")
 start = time()
 total_duration, bonus_points, intersections, streets, name_to_i_street, paths = gl.readInput(file)
