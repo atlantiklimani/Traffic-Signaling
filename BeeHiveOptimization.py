@@ -193,6 +193,9 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     nre = 30 #number of recruited bees for elite sites
     stgLim = 10 #stagnation limit for patches
     shrinkageFactor = 0.3 # how fast does the neighbourhood shrink. 1 is max. This higher the factor the less is the neighbourhood shrinking
+    ## Only for visualisation purposes
+    initialShrinkageFactor = shrinkageFactor 
+    ##
     for i in range(0,ns):
         # sol = randomSolution(intersections)
         decideGen = random.randint(0,1)
@@ -204,7 +207,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         grade = gl.grade(sol,streets, intersections, paths, total_duration, bonus_points)
         patches.append(Patch(grade, sol))
 
-    while (time() - terminated_time < 3600):
+    while (time() - terminated_time < 10):
         patches.sort(reverse=True, key=sortKey)
         for i in range(0,nb):
             employees = 0
@@ -249,9 +252,10 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     
         if(shrinkageFactor > 0.001):
             shrinkageFactor *= 0.8
-    
-    ### For visualising purposes
+
     patches.sort(reverse=True, key=sortKey)
+    ### For visualising purposes
+    print('Parameters:\nns - ',ns,', nb - ',nb,', ne - ',ne,', nrb - ',nrb,', nre - ',nre,',\nStagnation limit - ',stgLim,', Initial shrinkage factor - ',initialShrinkageFactor,', Termianl shrinkage factor - ',shrinkageFactor,'\n')
     for i in range(0,math.floor(len(patches)/10)):
         print("Score of patch: ",patches[i].score)
     
