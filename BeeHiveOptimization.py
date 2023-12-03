@@ -197,15 +197,15 @@ def generateSolution(intersections):
 
 def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time):
     patches = []
-    ns = 50 #number of scout bees
-    nb = 20 #number of best sites
-    ne = 10 #number of elite sites
+    ns = 20 #number of scout bees
+    nb = 15 #number of best sites
+    ne = 8 #number of elite sites
     nrb = 10 #number of recruited bees for best sites
-    nre = 30 #number of recruited bees for elite sites
+    nre = 20 #number of recruited bees for elite sites
     stgLim = 2 #stagnation limit for patches
-    shrinkageFactor = 0.3 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
-    shrinkageFactorReducedBy = 0.8 # by how much is the shrinkage factor reduceb by for iteration
-    executionTime = 8 * 60 * 60
+    shrinkageFactor = 0.5 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
+    shrinkageFactorReducedBy = 0.99 # by how much is the shrinkage factor reduceb by for iteration
+    executionTime = 120 #8 * 60 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor 
     countIterations = 0
@@ -244,6 +244,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                     patches[i].stg = False
                     patches[i].scout = tempSchedule
                     patches[i].score = tempScore
+                    break
             
             if(patches[i].stg):
                 patches[i].stgLim += 1
@@ -272,11 +273,11 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     "\nExecution Time - ",executionTime,', Number of loop iterations - ',countIterations,'\n')
     for i in range(0,10):
         print("Score of patch: ",patches[i].score)
-    
     return patches[0].neighborhood, patches[0].score
 file = input("Enter name of the input file, e.g. \"a.txt\": ")
 start = time()
 total_duration, bonus_points, intersections, streets, name_to_i_street, paths = gl.readInput(file)
 schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start)
-gl.printSchedule(schedule, streets)
+print('Real Execution Time: ', time() - start)
+# gl.printSchedule(schedule, streets)
 
