@@ -42,10 +42,9 @@ def sortKey(e):
   return e.score
 
 class Patch:
-    def __init__(self, score, neighborhood):
+    def __init__(self, score, scout):
         self.score = score
-        self.neighborhood = neighborhood
-        self.scout = neighborhood
+        self.scout = scout
         self.stgLim = 0
         self.employees = 0
         self.stg = True
@@ -198,14 +197,14 @@ def generateSolution(intersections):
 def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time):
     patches = []
     ns = 20 #number of scout bees
-    nb = 15 #number of best sites
-    ne = 8 #number of elite sites
-    nrb = 10 #number of recruited bees for best sites
-    nre = 20 #number of recruited bees for elite sites
+    nb = 10 #number of best sites
+    ne = 5 #number of elite sites
+    nrb = 2 #number of recruited bees for best sites
+    nre = 5 #number of recruited bees for elite sites
     stgLim = 2 #stagnation limit for patches
     shrinkageFactor = 0.5 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
     shrinkageFactorReducedBy = 0.99 # by how much is the shrinkage factor reduceb by for iteration
-    executionTime = 120 #8 * 60 * 60
+    executionTime = 30 #8 * 60 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor 
     countIterations = 0
@@ -229,7 +228,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
             patches[i].stg = True
 
             for e in range(0,employees):
-                tempSchedule = copyScheduleArray(patches[i].neighborhood)
+                tempSchedule = copyScheduleArray(patches[i].scout)
                 decideOperator = random.randint(0,20) 
                 if(decideOperator < 10):
                     tempSchedule = shuffleOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1)
@@ -242,30 +241,34 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
 
                 if(tempScore > patches[i].score):
                     patches[i].stg = False
-                    patches[i].scout = tempSchedule
-                    patches[i].score = tempScore
-                    break
+                    # patches[i].scout = tempSchedule
+                    # patches[i].score = tempScore
+                    # break
+
+                patches.append(Patch(score=tempScore, scout=tempSchedule))
             
             if(patches[i].stg):
                 patches[i].stgLim += 1
             else:
-                patches[i].neighborhood = patches[i].scout
                 patches[i].stgLim = 0
                  
             if(patches[i].stgLim > stgLim and i != 0):
                 solution = generateSolution(intersections)      
                 grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points)
-                patches[i] = Patch(score=grade, neighborhood= solution)
+                patches[i] = Patch(score=grade, scout= solution)
 
         for i in range(nb, ns):
             solution = generateSolution(intersections)      
             grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points)
-            patches[i] = Patch(score=grade, neighborhood= solution)
+            patches.append(Patch(score=grade, scout= solution))
     
         if(shrinkageFactor > 0.001):
             shrinkageFactor *= shrinkageFactorReducedBy
         
         countIterations += 1
+
+        patches.sort(reverse=True, key=sortKey)
+        patches = patches[0: ns * 2]
 
     patches.sort(reverse=True, key=sortKey)
     ### For visualising purposes
@@ -273,7 +276,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     "\nExecution Time - ",executionTime,', Number of loop iterations - ',countIterations,'\n')
     for i in range(0,10):
         print("Score of patch: ",patches[i].score)
-    return patches[0].neighborhood, patches[0].score
+    return patches[0].scout, patches[0].score
 file = input("Enter name of the input file, e.g. \"a.txt\": ")
 start = time()
 total_duration, bonus_points, intersections, streets, name_to_i_street, paths = gl.readInput(file)
