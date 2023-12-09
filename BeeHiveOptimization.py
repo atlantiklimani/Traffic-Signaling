@@ -204,7 +204,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     stgLim = 2 #stagnation limit for patches
     shrinkageFactor = 0.5 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
     shrinkageFactorReducedBy = 0.99 # by how much is the shrinkage factor reduceb by for iteration
-    executionTime = 30 #8 * 60 * 60
+    executionTime = 20 #8 * 60 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor 
     countIterations = 0
@@ -244,8 +244,8 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                     # patches[i].scout = tempSchedule
                     # patches[i].score = tempScore
                     # break
+                    patches.append(Patch(score=tempScore, scout=tempSchedule))
 
-                patches.append(Patch(score=tempScore, scout=tempSchedule))
             
             if(patches[i].stg):
                 patches[i].stgLim += 1
