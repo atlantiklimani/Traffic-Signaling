@@ -215,7 +215,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         patches.append(Patch(grade, sol))
 
     while (time() - terminated_time < executionTime):
-        patches.sort(reverse=True, key=sortKey)
+        # patches.sort(reverse=True, key=sortKey)
         for i in range(0,nb):
             employees = 0
             if(i < ne):
