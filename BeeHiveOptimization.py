@@ -270,7 +270,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         countIterations += 1
 
         patches.sort(reverse=True, key=sortKey)
-        patches = patches[0: ns * 2]
+        patches = patches[0: ns]
 
     patches.sort(reverse=True, key=sortKey)
     ### For visualising purposes
