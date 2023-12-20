@@ -1,0 +1,17 @@
+Parameters:
+ns -  20 , nb -  10 , ne -  5 , nrb -  2 , nre -  5 ,
+Stagnation limit -  2 
+Initial shrinkage factor -  0.5 , Shrinkage Factor per Iteration Reduced by -  0.99 , Termianl shrinkage factor -  0.401 
+Execution Time -  600 , Number of loop iterations -  22 
+
+Score of patch:  4566809
+Score of patch:  4566717
+Score of patch:  4566650
+Score of patch:  4566630
+Score of patch:  4566590
+Score of patch:  4566569
+Score of patch:  4566567
+Score of patch:  4566561
+Score of patch:  4566384
+Score of patch:  4566384
+Real Execution Time:  610.7845585346222
