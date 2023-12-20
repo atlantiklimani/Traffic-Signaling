@@ -31,6 +31,37 @@ Schedule = recordclass('Schedule', [
     'green_times'
 ])
 
+def readSolution(solution_file_path, streets):
+    
+    with open(solution_file_path) as f:
+        lines = deque(f.readlines())
+    
+    num_intersections = int(lines.popleft())
+    
+    schedules = []
+    for i in range(0,num_intersections):
+        i_intersection = int(lines.popleft())
+        num_streets = int(lines.popleft())
+        order = []
+        green_times = {}
+        for j in range(0, num_streets):
+            street_name, green_time_str = lines.popleft().split()
+            green_time = int(green_time_str)
+            
+            street_id = None
+            for street in streets:
+                if street.name == street_name:
+                    street_id = street.id
+                    break
+
+            order.append(street_id)
+            green_times[street_id] = green_time
+
+        schedules.append(Schedule(i_intersection=i_intersection,
+                                order=order,
+                                green_times=green_times))
+    
+    return schedules
 
 def readInput(input_file_path):
     filename = "Instances/" + input_file_path
