@@ -5,6 +5,7 @@ from recordclass import recordclass
 from copy import deepcopy
 import random
 import math
+import sys
 
 Schedule = recordclass('Schedule', [
     'i_intersection',
@@ -196,23 +197,29 @@ def generateSolution(intersections):
 
 def findNumberOfBees (ns, shrinkageFactor, xValue):
     return 1 
-def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time):
+def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, use_seed = False, solution_file_path = None):
     patches = []
     ns = 20 #number of scout bees
-    nb = 10 #number of best sites
-    ne = 5 #number of elite sites
-    nrb = 2 #number of recruited bees for best sites
-    nre = 5 #number of recruited bees for elite sites
-    stgLim = 2 #stagnation limit for patches
-    shrinkageFactor = 0.5 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
+    nb = 5 #number of best sites
+    ne = 2 #number of elite sites
+    nrb = 5 #number of recruited bees for best sites
+    nre = 20 #number of recruited bees for elite sites
+    stgLim = 4 #stagnation limit for patches
+    shrinkageFactor = 0.01 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
     shrinkageFactorReducedBy = 0.99 # by how much is the shrinkage factor reduceb by for iteration
-    executionTime = 20 #8 * 60 * 60
+    executionTime = 60 #8 * 60 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor 
     countIterations = 0
     ##
     for i in range(0,ns):
-        sol = generateSolution(intersections)         
+        if(use_seed == 'True' and i < 5):
+            sol = gl.readSolution(solution_file_path=solution_file_path, streets=streets)
+            if i != 0:
+                sol = shuffleOrder(sol, math.floor(len(intersections) * 0.2) + 1)
+        else :    
+            sol = generateSolution(intersections)         
+        
         grade = gl.grade(sol,streets, intersections, paths, total_duration, bonus_points)
         patches.append(Patch(grade, sol))
 
@@ -232,9 +239,9 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
             for e in range(0,employees):
                 tempSchedule = copyScheduleArray(patches[i].scout)
                 decideOperator = random.randint(0,20) 
-                if(decideOperator < 10):
+                if(decideOperator < 3):
                     tempSchedule = shuffleOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1)
-                elif(decideOperator >= 10 and decideOperator < 20):
+                elif(decideOperator >= 3 and decideOperator < 20):
                     tempSchedule = swapOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1)
                 else:
                     tempSchedule = changeGreenTimeDuration(tempSchedule, math.floor(len(intersections) * shrinkageFactor * 0.001) + 1, 1)
@@ -279,10 +286,19 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     for i in range(0,10):
         print("Score of patch: ",patches[i].score)
     return patches[0].scout, patches[0].score
-file = input("Enter name of the input file, e.g. \"a.txt\": ")
+# file = input("Enter name of the input file, e.g. \"a.txt\": ")
+file = sys.argv[1]
+
 start = time()
 total_duration, bonus_points, intersections, streets, name_to_i_street, paths = gl.readInput(file)
-schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start)
+if len(sys.argv) == 3:
+    use_seed = sys.argv[2]
+    solution_file_path = './seeds/' + sys.argv[1] + '.txt.out'
+    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, use_seed, solution_file_path)
+else :
+    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start)
+
+# print(gl.grade(gl.readSolution('./seeds/I500_S998_C1000.txt.out',streets),streets, intersections, paths, total_duration, bonus_points))
 print('Real Execution Time: ', time() - start)
 # gl.printSchedule(schedule, streets)
 

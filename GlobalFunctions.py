@@ -64,7 +64,8 @@ def readSolution(solution_file_path, streets):
     return schedules
 
 def readInput(input_file_path):
-    filename = "Instances/" + input_file_path
+    # filename = "Instances/" + input_file_path
+    filename = "Traffic Instances/instances_to_test/" + input_file_path
 
     with open(filename) as f:
         lines = deque(f.readlines())
