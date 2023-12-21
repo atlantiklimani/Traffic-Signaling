@@ -205,7 +205,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     nrb = 5 #number of recruited bees for best sites
     nre = 20 #number of recruited bees for elite sites
     stgLim = 4 #stagnation limit for patches
-    shrinkageFactor = 0.01 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
+    shrinkageFactor = 0.001 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
     shrinkageFactorReducedBy = 0.99 # by how much is the shrinkage factor reduceb by for iteration
     executionTime = 60 #8 * 60 * 60
     ## Only for visualisation purposes
@@ -300,5 +300,5 @@ else :
 
 # print(gl.grade(gl.readSolution('./seeds/I500_S998_C1000.txt.out',streets),streets, intersections, paths, total_duration, bonus_points))
 print('Real Execution Time: ', time() - start)
-# gl.printSchedule(schedule, streets)
+gl.printSchedule(schedule, streets)
 
