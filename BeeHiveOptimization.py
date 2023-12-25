@@ -222,9 +222,12 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         
         grade = gl.grade(sol,streets, intersections, paths, total_duration, bonus_points)
         patches.append(Patch(grade, sol))
-
+    
     while (time() - terminated_time < executionTime):
-        # patches.sort(reverse=True, key=sortKey)
+        
+        patches.sort(reverse=True, key=sortKey)
+        patches = patches[0: ns]
+
         for i in range(0,nb):
             employees = 0
             if(i < ne):
@@ -276,8 +279,8 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         
         countIterations += 1
 
-        patches.sort(reverse=True, key=sortKey)
-        patches = patches[0: ns]
+        # patches.sort(reverse=True, key=sortKey)
+        # patches = patches[0: ns]
 
     patches.sort(reverse=True, key=sortKey)
     ### For visualising purposes
