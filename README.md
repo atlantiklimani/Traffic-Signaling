@@ -12,4 +12,5 @@
    3. For the other solutions(not the best) replace with new generated solutions
 3. Return the best solution
 
-|Instance|Upper Bound|	Sagi Shporer Greedy Approach - SSGA|ABC (score)|ABC Best vs. SSGA (%)|	ABC Avg vs. SSGA (%)|(SSGA+ABC Best) vs. SSGA score)|(SSGA+ABC Best) vs. SSGA (%)|									   |--------| - -       | ----------                          | ------    | -----                | -----                | -------                        | ------    |   					
+|Instance|Upper Bound|	Sagi Shporer Greedy Approach - SSGA|ABC (score)|ABC Best vs. SSGA (%)|	ABC Avg vs. SSGA (%)|(SSGA+ABC Best) vs. SSGA score)|(SSGA+ABC Best) vs. SSGA (%)|									   |--------| - -       | ----------                          | ------    | -----                | -----                | -------                        | ------                    |   					
+|1        |2            |3                                | 4            | 5                    | 6                    |7                                |8                        |
