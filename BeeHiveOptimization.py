@@ -195,8 +195,6 @@ def generateSolution(intersections):
 
     return solution
 
-def findNumberOfBees (ns, shrinkageFactor, xValue):
-    return 1 
 def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, use_seed = False, solution_file_path = None):
     patches = []
     ns = 20 #number of scout bees
