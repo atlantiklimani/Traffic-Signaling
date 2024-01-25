@@ -196,11 +196,11 @@ def generateSolution(intersections):
 
     return solution
 
-def assignEmployeesArray(ns, ne, i, shrinkage):
+def assignEmployeesArray(ns, ne, shrinkage):
     employees = np.zeros(ns)
 
     for i in range(0,ns):
-        employees[i] = shrinkage ** i
+        employees[i] = shrinkage ** (i / 2)
     
     employees = employees / employees.sum()
 
@@ -242,15 +242,16 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         
         patches.sort(reverse=True, key=sortKey)
         patches = patches[0: ns]
-
+        assignEmployees = assignEmployeesArray(ns, ne, shrinkage=shrinkageFactor)
         for i in range(0,nb):
-            employees = 0
-            if(i < ne):
-                employees = nre
-                patches[i].employees = nre
-            else :
-                employees = nrb
-                patches[i].employees = nrb
+            employees = assignEmployees[i]
+            # employees = 0
+            # if(i < ne):
+            #     employees = nre
+            #     patches[i].employees = nre
+            # else :
+            #     employees = nrb
+            #     patches[i].employees = nrb
 
             patches[i].stg = True
 
