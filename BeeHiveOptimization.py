@@ -215,10 +215,7 @@ def assignEmployeesArray(ns, ne, shrinkage):
 def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, use_seed = False, solution_file_path = None):
     patches = []
     ns = 20 #number of scout bees
-    nb = 5 #number of best sites
-    ne = 2 #number of elite sites
-    nrb = 5 #number of recruited bees for best sites
-    nre = 20 #number of recruited bees for elite sites
+    nEmployees = 100
     stgLim = 4 #stagnation limit for patches
     shrinkageFactor = 0.001 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
     shrinkageFactorReducedBy = 0.99 # by how much is the shrinkage factor reduceb by for iteration
@@ -242,20 +239,18 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         
         patches.sort(reverse=True, key=sortKey)
         patches = patches[0: ns]
-        assignEmployees = assignEmployeesArray(ns, ne, shrinkage=shrinkageFactor)
-        for i in range(0,nb):
+        assignEmployees = assignEmployeesArray(ns, nEmployees, shrinkage=shrinkageFactor)
+        indexOfFirstSiteWithoutEmployees = None
+        for i in range(0,ns):
             employees = assignEmployees[i]
-            # employees = 0
-            # if(i < ne):
-            #     employees = nre
-            #     patches[i].employees = nre
-            # else :
-            #     employees = nrb
-            #     patches[i].employees = nrb
+
+            if(employees == 0):
+                indexOfFirstSiteWithoutEmployees = i
+                break
 
             patches[i].stg = True
 
-            for e in range(0,employees):
+            for e in range(0,int(employees)):
                 tempSchedule = copyScheduleArray(patches[i].scout)
                 decideOperator = random.randint(0,20) 
                 if(decideOperator < 3):
@@ -269,9 +264,6 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
 
                 if(tempScore > patches[i].score):
                     patches[i].stg = False
-                    # patches[i].scout = tempSchedule
-                    # patches[i].score = tempScore
-                    # break
                     patches.append(Patch(score=tempScore, scout=tempSchedule))
 
             
@@ -285,7 +277,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                 grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points)
                 patches[i] = Patch(score=grade, scout= solution)
 
-        for i in range(nb, ns):
+        for i in range(indexOfFirstSiteWithoutEmployees, ns):
             solution = generateSolution(intersections)      
             grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points)
             patches.append(Patch(score=grade, scout= solution))
@@ -300,7 +292,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
 
     patches.sort(reverse=True, key=sortKey)
     ### For visualising purposes
-    print('Parameters:\nns - ',ns,', nb - ',nb,', ne - ',ne,', nrb - ',nrb,', nre - ',nre,',\nStagnation limit - ',stgLim,'\nInitial shrinkage factor - ',initialShrinkageFactor,', Shrinkage Factor per Iteration Reduced by - ',shrinkageFactorReducedBy,', Termianl shrinkage factor - ','{0:.3f}'.format(shrinkageFactor),
+    print('Parameters:\nns - ',ns,', nEmployees - ',nEmployees,',\nStagnation limit - ',stgLim,'\nInitial shrinkage factor - ',initialShrinkageFactor,', Shrinkage Factor per Iteration Reduced by - ',shrinkageFactorReducedBy,', Termianl shrinkage factor - ','{0:.3f}'.format(shrinkageFactor),
     "\nExecution Time - ",executionTime,', Number of loop iterations - ',countIterations,'\n')
     for i in range(0,10):
         print("Score of patch: ",patches[i].score)
