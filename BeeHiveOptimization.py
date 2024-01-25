@@ -6,6 +6,7 @@ from copy import deepcopy
 import random
 import math
 import sys
+import numpy as np
 
 Schedule = recordclass('Schedule', [
     'i_intersection',
@@ -194,6 +195,22 @@ def generateSolution(intersections):
         solution = usage_based_initial_solution(intersections)
 
     return solution
+
+def assignEmployeesArray(ns, ne, i, shrinkage):
+    employees = np.zeros(ns)
+
+    for i in range(0,ns):
+        employees[i] = shrinkage ** i
+    
+    employees = employees / employees.sum()
+
+    for i in range(0, ns):
+        employees[i] = math.floor(employees[i] * ne)
+    
+    for i in range(0, int(ne - employees.sum())):
+        employees[i] += 1
+
+    return employees
 
 def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, use_seed = False, solution_file_path = None):
     patches = []
