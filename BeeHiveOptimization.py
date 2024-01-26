@@ -215,11 +215,11 @@ def assignEmployeesArray(ns, ne, shrinkage):
 def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, use_seed = False, solution_file_path = None):
     patches = []
     ns = 20 #number of scout bees
-    nEmployees = 100
+    nEmployees = 200
     stgLim = 4 #stagnation limit for patches
-    shrinkageFactor = 0.001 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
-    shrinkageFactorReducedBy = 0.99 # by how much is the shrinkage factor reduceb by for iteration
-    executionTime = 60 #8 * 60 * 60
+    shrinkageFactor = 0.9 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
+    shrinkageFactorReducedBy = 0.95 # by how much is the shrinkage factor reduceb by for iteration
+    executionTime = 2 * 60 #8 * 60 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor 
     countIterations = 0
@@ -240,7 +240,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         patches.sort(reverse=True, key=sortKey)
         patches = patches[0: ns]
         assignEmployees = assignEmployeesArray(ns, nEmployees, shrinkage=shrinkageFactor)
-        indexOfFirstSiteWithoutEmployees = None
+        indexOfFirstSiteWithoutEmployees = ns
         for i in range(0,ns):
             employees = assignEmployees[i]
 
