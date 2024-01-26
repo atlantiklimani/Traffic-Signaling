@@ -212,6 +212,28 @@ def assignEmployeesArray(ns, ne, shrinkage):
 
     return employees
 
+# Select intersections based on the number of waiting cars. This number is the total of waiting cars on all streets
+def selectInteresctions(allIntersections, numOfIntersections):
+    if(numOfIntersections * 2 > len(allIntersections)):
+        expandedIntersections = len(allIntersections)
+    else: 
+        expandedIntersections = numOfIntersections * 2
+
+    intersections = random.sample(allIntersections, expandedIntersections)
+
+    def sortKey(i):
+        return i["num_waiting_cars"]
+        
+    intersections.sort(reverse=True, key=sortKey)
+    
+    intersections = intersections[:numOfIntersections]
+
+    return intersections
+
+
+
+
+    
 def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, use_seed = False, solution_file_path = None):
     patches = []
     ns = 20 #number of scout bees
