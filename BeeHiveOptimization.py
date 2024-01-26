@@ -76,53 +76,64 @@ def fifthOperator(schedules, numberOfIntersections, numberOfRoads, instersection
 
     return schedules
 
-def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads):
-    if(numberOfIntersection <= 0):
-        return schedule
+def changeGreenTimeDuration(schedule, intersections, numberOfRoads):
+    # if(numberOfIntersection <= 0):
+    #     return schedule
 
     count = 0
-    randomRangeBegins = random.randint(0,len(schedule)- numberOfIntersection - 1)
+    # randomRangeBegins = random.randint(0,len(schedule)- numberOfIntersection - 1)
         
-    while(count < numberOfIntersection):
-        rand = random.randint(randomRangeBegins, randomRangeBegins + numberOfIntersection)
-        length = len(schedule[rand].order)
+    # while(count < numberOfIntersection):
+    for intersection in intersections:
+        # rand = random.randint(randomRangeBegins, randomRangeBegins + numberOfIntersection)
+        selectedIntersection = intersection.id
+        length = len(schedule[selectedIntersection].order)
         otherCount = 0
         while(otherCount < length and otherCount < numberOfRoads):
             semaforId = random.randint(0,length - 1)
-            schedule[rand].green_times[schedule[rand].order[semaforId]] = int(choices([1, 2, 3],weights=[10, 70, 20], k=1)[0]) 
+            schedule[selectedIntersection].green_times[schedule[selectedIntersection].order[semaforId]] = int(choices([1, 2, 3],weights=[10, 70, 20], k=1)[0]) 
             otherCount += 1
         count+=1
 
     return schedule
 
-def shuffleOrder(schedules,numberOfIntersection):
-    if(numberOfIntersection <= 0):
-        return schedules
+def shuffleOrder(schedules, intersections):
+    # if(numberOfIntersection <= 0):
+    #     return schedules
     
-    count = 0
+    # count = 0
 
-    while(count < numberOfIntersection):
-        rand = random.randint(0, len(schedules) - 1)
-        random.shuffle(schedules[rand].order)
-        count+=1
+
+    # while(count < numberOfIntersection):
+    #     rand = random.randint(0, len(schedules) - 1)
+    #     random.shuffle(schedules[rand].order)
+    #     count+=1
         
+    # return schedules
+
+    for intersection in intersections:
+        random.shuffle(schedules[intersection.id].order)
+
     return schedules
 
-def swapOrder(schedules, numberOfIntersections):
-    if(numberOfIntersections <= 0):
-        return schedules
-    for i in range(0, numberOfIntersections):
-        rand = random.randint(0, len(schedules) - 1)
-        incomingStreetsLength = len(schedules[rand].order)
+def swapOrder(schedules, intersections):
+    # if(numberOfIntersections <= 0):
+    #     return schedules
+
+    # for i in range(0, numberOfIntersections):
+    for intersection in intersections:
+        # rand = random.randint(0, len(schedules) - 1)
+        selectedIntersection = intersection.id
+        incomingStreetsLength = len(schedules[selectedIntersection].order)
         if(incomingStreetsLength == 1):
             continue
         rand1 = random.randint(0, incomingStreetsLength - 1)
         rand2 = random.randint(0, incomingStreetsLength - 1)
         while(rand1 == rand2):
             rand2 = random.randint(0, incomingStreetsLength - 1)
-        temp = schedules[rand].order[rand1]
-        schedules[rand].order[rand1] = schedules[rand].order[rand2]
-        schedules[rand].order[rand2] = temp
+        temp = schedules[selectedIntersection].order[rand1]
+        schedules[selectedIntersection].order[rand1] = schedules[selectedIntersection].order[rand2]
+        schedules[selectedIntersection].order[rand2] = temp
     
     return schedules
 
@@ -241,7 +252,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     stgLim = 4 #stagnation limit for patches
     shrinkageFactor = 0.9 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
     shrinkageFactorReducedBy = 0.95 # by how much is the shrinkage factor reduceb by for iteration
-    executionTime = 2 * 60 #8 * 60 * 60
+    executionTime = 30 #8 * 60 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor 
     countIterations = 0
@@ -313,6 +324,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         # patches = patches[0: ns]
 
     patches.sort(reverse=True, key=sortKey)
+    print(patches[0].scout)
     ### For visualising purposes
     print('Parameters:\nns - ',ns,', nEmployees - ',nEmployees,',\nStagnation limit - ',stgLim,'\nInitial shrinkage factor - ',initialShrinkageFactor,', Shrinkage Factor per Iteration Reduced by - ',shrinkageFactorReducedBy,', Termianl shrinkage factor - ','{0:.3f}'.format(shrinkageFactor),
     "\nExecution Time - ",executionTime,', Number of loop iterations - ',countIterations,'\n')
@@ -333,5 +345,5 @@ else :
 
 # print(gl.grade(gl.readSolution('./seeds/I500_S998_C1000.txt.out',streets),streets, intersections, paths, total_duration, bonus_points))
 print('Real Execution Time: ', time() - start)
-gl.printSchedule(schedule, streets)
+# gl.printSchedule(schedule, streets)
 
