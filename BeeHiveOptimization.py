@@ -273,8 +273,8 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         if(len(patches) == ns):
             patches = patches[0: ns]
         elif len(patches) > ns:
-            lowerScorePatchesPercent = math.floor(len(patches) * 0.2)
-            worsePatches = patches[ns:(ns + lowerScorePatchesPercent)]
+            lowerScorePatchesPercent = math.floor(len(patches) * 0.35)
+            worsePatches = random.choices(patches[ns:], k=lowerScorePatchesPercent)
             patches = patches[0:(ns - lowerScorePatchesPercent)]
             patches.extend(worsePatches)
             
