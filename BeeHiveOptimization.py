@@ -6,6 +6,8 @@ from copy import deepcopy
 import random
 import math
 import sys
+import os
+import string
 
 Schedule = recordclass('Schedule', [
     'i_intersection',
@@ -197,7 +199,11 @@ def generateSolution(intersections):
 
 def outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, stgLim, initialShrinkageFactor, shrinkageFactorReducedBy, shrinkageFactor, start):
     global file
-    output = open(f'{file}_{patches[0].score}', 'a')
+
+    if not os.path.exists(f'output/{file}'):
+        os.mkdir(f'output/{file}')
+    
+    output = open(f'output/{file}/{file}_{patches[0].score}_{"".join(random.choices(string.ascii_lowercase, k= 3))}', 'a')
     output.write(f'Parameters:\nns - {ns}, nb - {nb}, ne - {ne}, nrb - {nrb}, nre - {nre},\nStagnation limit - {stgLim}\nInitial shrinkage factor - {initialShrinkageFactor}, Shrinkage Factor per Iteration Reduced by - {shrinkageFactorReducedBy}, Termianl shrinkage factor - {shrinkageFactor:.3f}'
     f'\nExecution Time - {executionTime}, Number of loop iterations - {countIterations}\n')
     for i in range(0,10):
@@ -294,7 +300,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         # patches = patches[0: ns]
 
     patches.sort(reverse=True, key=sortKey)
-    
+
     outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, stgLim, initialShrinkageFactor, shrinkageFactorReducedBy, shrinkageFactor, start)
 
     return patches[0].scout, patches[0].score
