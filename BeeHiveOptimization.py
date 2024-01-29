@@ -259,9 +259,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
             for e in range(0,employees):
                 tempSchedule = copyScheduleArray(patches[i].scout)
                 decideOperator = random.randint(0,20) 
-                if(decideOperator < 3):
-                    tempSchedule = shuffleOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1)
-                elif(decideOperator >= 3 and decideOperator < 20):
+                if( decideOperator < 20):
                     tempSchedule = swapOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1)
                 else:
                     tempSchedule = changeGreenTimeDuration(tempSchedule, math.floor(len(intersections) * shrinkageFactor * 0.001) + 1, 1)
