@@ -65,7 +65,7 @@ def readSolution(solution_file_path, streets):
 
 def readInput(input_file_path):
     # filename = "Instances/" + input_file_path
-    filename = "Input/" + input_file_path
+    filename = "input/" + input_file_path
 
     with open(filename) as f:
         lines = deque(f.readlines())

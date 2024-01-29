@@ -213,14 +213,14 @@ def assignEmployeesArray(ns, ne, shrinkage):
         employees[i] += 1
 
     return employees
-def outputToFile(patches, executionTime, countIterations, nEmployees, stgLim, initialShrinkageFactor, shrinkageFactorReducedBy, shrinkageFactor, start):
+def outputToFile(patches, executionTime, countIterations, ns, nEmployees, stgLim, initialShrinkageFactor, shrinkageFactorReducedBy, shrinkageFactor, start):
     global file
 
     if not os.path.exists(f'output/{file}'):
         os.mkdir(f'output/{file}')
     
     output = open(f'output/{file}/{file}_{patches[0].score}_{"".join(random.choices(string.ascii_lowercase, k= 3))}', 'a')
-    output.write(f'Parameters:\nnumber of employees - {nEmployees},\nStagnation limit - {stgLim}\nInitial shrinkage factor - {initialShrinkageFactor}, Shrinkage Factor per Iteration Reduced by - {shrinkageFactorReducedBy}, Termianl shrinkage factor - {shrinkageFactor:.3f}'
+    output.write(f'Parameters:\nns - {ns}, number of employees - {nEmployees},\nStagnation limit - {stgLim}\nInitial shrinkage factor - {initialShrinkageFactor}, Shrinkage Factor per Iteration Reduced by - {shrinkageFactorReducedBy}, Termianl shrinkage factor - {shrinkageFactor:.3f}'
     f'\nExecution Time - {executionTime}, Number of loop iterations - {countIterations}\n')
     for i in range(0,10):
         output.write(f'Score of patch: ,{patches[i].score}\n')
@@ -237,7 +237,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     stgLim = 4 #stagnation limit for patches
     shrinkageFactor = 0.9 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
     shrinkageFactorReducedBy = 0.95 # by how much is the shrinkage factor reduceb by for iteration
-    executionTime = 2 * 60 #8 * 60 * 60
+    executionTime = 10 #8 * 60 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor 
     countIterations = 0
@@ -310,7 +310,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
 
     patches.sort(reverse=True, key=sortKey)
 
-    outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, stgLim, initialShrinkageFactor, shrinkageFactorReducedBy, shrinkageFactor, start)
+    outputToFile(patches, executionTime, countIterations, ns, nEmployees, stgLim, initialShrinkageFactor, shrinkageFactorReducedBy, shrinkageFactor, start)
 
     return patches[0].scout, patches[0].score
 
