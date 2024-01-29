@@ -7,6 +7,8 @@ import random
 import math
 import sys
 import numpy as np
+import os
+import string
 
 Schedule = recordclass('Schedule', [
     'i_intersection',
@@ -211,6 +213,22 @@ def assignEmployeesArray(ns, ne, shrinkage):
         employees[i] += 1
 
     return employees
+def outputToFile(patches, executionTime, countIterations, nEmployees, stgLim, initialShrinkageFactor, shrinkageFactorReducedBy, shrinkageFactor, start):
+    global file
+
+    if not os.path.exists(f'output/{file}'):
+        os.mkdir(f'output/{file}')
+    
+    output = open(f'output/{file}/{file}_{patches[0].score}_{"".join(random.choices(string.ascii_lowercase, k= 3))}', 'a')
+    output.write(f'Parameters:\nnumber of employees - {nEmployees},\nStagnation limit - {stgLim}\nInitial shrinkage factor - {initialShrinkageFactor}, Shrinkage Factor per Iteration Reduced by - {shrinkageFactorReducedBy}, Termianl shrinkage factor - {shrinkageFactor:.3f}'
+    f'\nExecution Time - {executionTime}, Number of loop iterations - {countIterations}\n')
+    for i in range(0,10):
+        output.write(f'Score of patch: ,{patches[i].score}\n')
+    output.write(f'Real Execution Time: {time() - start}\n')
+    output.write("------------------------- Output File Begins Here -------------------------------------\n")
+    output.write(gl.getPrintedSchedule(patches[0].scout, streets=streets))
+    output.close()
+    return
 
 def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, use_seed = False, solution_file_path = None):
     patches = []
@@ -291,12 +309,11 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         # patches = patches[0: ns]
 
     patches.sort(reverse=True, key=sortKey)
-    ### For visualising purposes
-    print('Parameters:\nns - ',ns,', nEmployees - ',nEmployees,',\nStagnation limit - ',stgLim,'\nInitial shrinkage factor - ',initialShrinkageFactor,', Shrinkage Factor per Iteration Reduced by - ',shrinkageFactorReducedBy,', Termianl shrinkage factor - ','{0:.3f}'.format(shrinkageFactor),
-    "\nExecution Time - ",executionTime,', Number of loop iterations - ',countIterations,'\n')
-    for i in range(0,10):
-        print("Score of patch: ",patches[i].score)
+
+    outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, stgLim, initialShrinkageFactor, shrinkageFactorReducedBy, shrinkageFactor, start)
+
     return patches[0].scout, patches[0].score
+
 # file = input("Enter name of the input file, e.g. \"a.txt\": ")
 file = sys.argv[1]
 
@@ -310,6 +327,6 @@ else :
     schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start)
 
 # print(gl.grade(gl.readSolution('./seeds/I500_S998_C1000.txt.out',streets),streets, intersections, paths, total_duration, bonus_points))
-print('Real Execution Time: ', time() - start)
-gl.printSchedule(schedule, streets)
+# print(gl.grade(gl.readSolution('./I200_S17200_C1000_1207889',streets),streets, intersections, paths, total_duration, bonus_points))
 
+# gl.printSchedule(schedule, streets)
