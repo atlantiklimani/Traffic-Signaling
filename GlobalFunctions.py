@@ -65,7 +65,7 @@ def readSolution(solution_file_path, streets):
 
 def readInput(input_file_path):
     # filename = "Instances/" + input_file_path
-    filename = "Input/" + input_file_path
+    filename = "input/" + input_file_path
 
     with open(filename) as f:
         lines = deque(f.readlines())
@@ -259,3 +259,17 @@ def printSchedule(schedules, streets):
         print(len(schedule.order))
         for i in range(len(schedule.order)):
             print(streets[schedule.order[i]].name, schedule.green_times[schedule.order[i]])
+
+def getPrintedSchedule(schedules, streets):
+    result = f'{len(schedules)}\n'
+    # print(len(schedules))
+    for schedule in schedules:
+        # print(schedule.i_intersection)
+        # print(len(schedule.order))
+        result += f'{schedule.i_intersection}\n'
+        result += f'{len(schedule.order)}\n'
+        for i in range(len(schedule.order)):
+            # print(streets[schedule.order[i]].name, schedule.green_times[schedule.order[i]])
+            result += f'{streets[schedule.order[i]].name} {schedule.green_times[schedule.order[i]]}\n'
+    
+    return result
