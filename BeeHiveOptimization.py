@@ -244,12 +244,12 @@ def selectInteresctions(allIntersections, numOfIntersections):
     
 def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, use_seed = False, solution_file_path = None):
     patches = []
-    ns = 20 #number of scout bees
-    nEmployees = 200
+    ns = 30 #number of scout bees
+    nEmployees = 150
     stgLim = 4 #stagnation limit for patches
-    shrinkageFactor = 0.9 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
-    shrinkageFactorReducedBy = 0.95 # by how much is the shrinkage factor reduceb by for iteration
-    executionTime = 10 #8 * 60 * 60
+    shrinkageFactor = 0.5 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
+    shrinkageFactorReducedBy = 0.97 # by how much is the shrinkage factor reduceb by for iteration
+    executionTime = 30 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor 
     countIterations = 0
