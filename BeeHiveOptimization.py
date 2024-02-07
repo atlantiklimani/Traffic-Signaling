@@ -78,40 +78,38 @@ def fifthOperator(schedules, numberOfIntersections, numberOfRoads, instersection
 
     return schedules
 
-def changeGreenTimeDuration(schedule, intersections, numberOfRoads):
+def changeGreenTimeDuration(schedules, numberOfRoads):
     count = 0
 
-    for intersection in intersections:
-        selectedIntersection = intersection.id
-        length = len(schedule[selectedIntersection].order)
+    for schedule in schedules:
+        length = len(schedule.order)
         otherCount = 0
         while(otherCount < length and otherCount < numberOfRoads):
             semaforId = random.randint(0,length - 1)
-            schedule[selectedIntersection].green_times[schedule[selectedIntersection].order[semaforId]] = int(choices([1, 2, 3],weights=[10, 70, 20], k=1)[0]) 
+            schedule.green_times[schedule.order[semaforId]] = int(choices([1, 2, 3],weights=[10, 70, 20], k=1)[0]) 
             otherCount += 1
         count+=1
 
     return schedule
 
-def shuffleOrder(schedules, intersections):
-    for intersection in intersections:
-        random.shuffle(schedules[intersection.id].order)
+def shuffleOrder(schedules):
+    for schedule in schedules:
+        random.shuffle(schedule.order)
 
     return schedules
 
-def swapOrder(schedules, intersections):
-    for intersection in intersections:
-        selectedIntersection = intersection.id
-        incomingStreetsLength = len(schedules[selectedIntersection].order)
+def swapOrder(schedules):
+    for schedule in schedules:
+        incomingStreetsLength = len(schedule.order)
         if(incomingStreetsLength == 1):
             continue
         rand1 = random.randint(0, incomingStreetsLength - 1)
         rand2 = random.randint(0, incomingStreetsLength - 1)
         while(rand1 == rand2):
             rand2 = random.randint(0, incomingStreetsLength - 1)
-        temp = schedules[selectedIntersection].order[rand1]
-        schedules[selectedIntersection].order[rand1] = schedules[selectedIntersection].order[rand2]
-        schedules[selectedIntersection].order[rand2] = temp
+        temp = schedule.order[rand1]
+        schedule.order[rand1] = schedule.order[rand2]
+        schedule.order[rand2] = temp
     
     return schedules
 
@@ -218,33 +216,25 @@ def outputToFile(patches, executionTime, countIterations, ns, nEmployees, stgLim
     return
 
 # Select intersections based on the number of waiting cars. This number is the total of waiting cars on all streets
-def selectInteresctions(schedules, allIntersections, numOfIntersections):
-    if(numOfIntersections <= 0):
-        # return [random.choice(allIntersections)]
-        return allIntersections[random.randint(0, len(schedules) - 1)]
+def selectInteresctions(schedules, numOfSchedules):
+    if(numOfSchedules <= 0):
+        return random.sample(schedules, k=1)
     
-    if(numOfIntersections * 2 > len(schedules)):
+    if(numOfSchedules * 2 > len(schedules)):
         expandedIntersections = len(schedules)
     else: 
-        expandedIntersections = numOfIntersections * 2
+        expandedIntersections = numOfSchedules * 2
 
     schedules = random.sample(schedules, k=expandedIntersections)
-
-    intersections = [allIntersections[s.i_intersection] for s in schedules]
     
-    # intersections = random.sample(allIntersections, expandedIntersections)
-
-    def sortKey(i):
-        return i.num_waiting_cars
+    def sortKey(s):
+        return intersections[s.i_intersection].num_waiting_cars
         
-    intersections.sort(reverse=True, key=sortKey)
-    
-    intersections = intersections[:numOfIntersections]
+    schedules.sort(reverse=True, key=sortKey)
 
-    return intersections
+    schedules = schedules[:numOfSchedules]
 
-
-
+    return schedules
 
     
 def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, use_seed = False, solution_file_path = None):
@@ -254,19 +244,18 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     stgLim = 4 #stagnation limit for patches
     shrinkageFactor = 0.5 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
     shrinkageFactorReducedBy = 0.97 # by how much is the shrinkage factor reduceb by for iteration
-    executionTime = 1 # 30 * 60
+    executionTime = 30 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor 
     countIterations = 0
     ##
 
-    print(intersections[505].id, " Intersections in order???")
     for i in range(0,ns):
         if(use_seed == 'True' and i < 5):
             sol = gl.readSolution(solution_file_path=solution_file_path, streets=streets)
             if i != 0:
-                selectedInteresctions = selectInteresctions(sol, intersections,  math.floor(len(intersections) * 0.2))
-                sol = shuffleOrder(sol, selectedInteresctions)
+                selectedSchedules = selectInteresctions(sol, intersections,  math.floor(len(sol) * 0.2))
+                shuffleOrder(selectedSchedules)
         else :    
             sol = generateSolution(intersections)         
         
@@ -292,14 +281,15 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                 tempSchedule = copyScheduleArray(patches[i].scout)
                 decideOperator = random.randint(0,20) 
                 if(decideOperator < 3):
-                    selectedInteresctions = selectInteresctions(tempSchedule, intersections,  math.floor(len(intersections) * shrinkageFactor) + 1)
-                    tempSchedule = shuffleOrder(tempSchedule, selectedInteresctions)
+                    selectedSchedules = selectInteresctions(tempSchedule, intersections,  math.floor(len(tempSchedule) * shrinkageFactor) + 1)
+                    shuffleOrder(selectedSchedules)
                 elif(decideOperator >= 3 and decideOperator < 20):
-                    selectedInteresctions = selectInteresctions(tempSchedule, intersections,  math.floor(len(intersections) * shrinkageFactor) + 1)
-                    tempSchedule = swapOrder(tempSchedule, selectedInteresctions)
+                    selectedSchedules = selectInteresctions(tempSchedule, intersections,  math.floor(len(tempSchedule) * shrinkageFactor) + 1)
+                    swapOrder(selectedSchedules)
                 else:
-                    selectedInteresctions = selectInteresctions(tempSchedule, intersections,  math.floor(len(intersections) * shrinkageFactor * 0.001) + 1)
-                    tempSchedule = changeGreenTimeDuration(tempSchedule, selectedInteresctions, 1)
+                    selectedSchedules = selectInteresctions(tempSchedule, intersections,  math.floor(len(tempSchedule) * shrinkageFactor * 0.001) + 1)
+                    changeGreenTimeDuration(selectedSchedules, 1)
+
                     
                 tempScore = gl.grade(tempSchedule,streets, intersections, paths, total_duration, bonus_points)
 
