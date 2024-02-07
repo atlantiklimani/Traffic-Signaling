@@ -218,16 +218,21 @@ def outputToFile(patches, executionTime, countIterations, ns, nEmployees, stgLim
     return
 
 # Select intersections based on the number of waiting cars. This number is the total of waiting cars on all streets
-def selectInteresctions(allIntersections, numOfIntersections):
+def selectInteresctions(schedules, allIntersections, numOfIntersections):
     if(numOfIntersections <= 0):
-        return [random.choice(allIntersections)]
+        # return [random.choice(allIntersections)]
+        return allIntersections[random.randint(0, len(schedules) - 1)]
     
-    if(numOfIntersections * 2 > len(allIntersections)):
-        expandedIntersections = len(allIntersections)
+    if(numOfIntersections * 2 > len(schedules)):
+        expandedIntersections = len(schedules)
     else: 
         expandedIntersections = numOfIntersections * 2
 
-    intersections = random.sample(allIntersections, expandedIntersections)
+    schedules = random.sample(schedules, k=expandedIntersections)
+
+    intersections = [allIntersections[s.i_intersection] for s in schedules]
+    
+    # intersections = random.sample(allIntersections, expandedIntersections)
 
     def sortKey(i):
         return i.num_waiting_cars
@@ -249,16 +254,18 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     stgLim = 4 #stagnation limit for patches
     shrinkageFactor = 0.5 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
     shrinkageFactorReducedBy = 0.97 # by how much is the shrinkage factor reduceb by for iteration
-    executionTime = 30 * 60
+    executionTime = 1 # 30 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor 
     countIterations = 0
     ##
+
+    print(intersections[505].id, " Intersections in order???")
     for i in range(0,ns):
         if(use_seed == 'True' and i < 5):
             sol = gl.readSolution(solution_file_path=solution_file_path, streets=streets)
             if i != 0:
-                selectedInteresctions = selectInteresctions(intersections,  math.floor(len(intersections) * 0.2))
+                selectedInteresctions = selectInteresctions(sol, intersections,  math.floor(len(intersections) * 0.2))
                 sol = shuffleOrder(sol, selectedInteresctions)
         else :    
             sol = generateSolution(intersections)         
@@ -285,13 +292,13 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                 tempSchedule = copyScheduleArray(patches[i].scout)
                 decideOperator = random.randint(0,20) 
                 if(decideOperator < 3):
-                    selectedInteresctions = selectInteresctions(intersections,  math.floor(len(intersections) * shrinkageFactor) + 1)
+                    selectedInteresctions = selectInteresctions(tempSchedule, intersections,  math.floor(len(intersections) * shrinkageFactor) + 1)
                     tempSchedule = shuffleOrder(tempSchedule, selectedInteresctions)
                 elif(decideOperator >= 3 and decideOperator < 20):
-                    selectedInteresctions = selectInteresctions(intersections,  math.floor(len(intersections) * shrinkageFactor) + 1)
+                    selectedInteresctions = selectInteresctions(tempSchedule, intersections,  math.floor(len(intersections) * shrinkageFactor) + 1)
                     tempSchedule = swapOrder(tempSchedule, selectedInteresctions)
                 else:
-                    selectedInteresctions = selectInteresctions(intersections,  math.floor(len(intersections) * shrinkageFactor * 0.001) + 1)
+                    selectedInteresctions = selectInteresctions(tempSchedule, intersections,  math.floor(len(intersections) * shrinkageFactor * 0.001) + 1)
                     tempSchedule = changeGreenTimeDuration(tempSchedule, selectedInteresctions, 1)
                     
                 tempScore = gl.grade(tempSchedule,streets, intersections, paths, total_duration, bonus_points)
