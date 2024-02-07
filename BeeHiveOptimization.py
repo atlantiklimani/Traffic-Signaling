@@ -216,7 +216,7 @@ def outputToFile(patches, executionTime, countIterations, ns, nEmployees, stgLim
     return
 
 # Select intersections based on the number of waiting cars. This number is the total of waiting cars on all streets
-def selectInteresctions(schedules, numOfSchedules):
+def selectSchedules(schedules, numOfSchedules):
     if(numOfSchedules <= 0):
         return random.sample(schedules, k=1)
     
@@ -254,7 +254,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         if(use_seed == 'True' and i < 5):
             sol = gl.readSolution(solution_file_path=solution_file_path, streets=streets)
             if i != 0:
-                selectedSchedules = selectInteresctions(sol, intersections,  math.floor(len(sol) * 0.2))
+                selectedSchedules = selectSchedules(sol,  math.floor(len(sol) * 0.2))
                 shuffleOrder(selectedSchedules)
         else :    
             sol = generateSolution(intersections)         
@@ -281,13 +281,13 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                 tempSchedule = copyScheduleArray(patches[i].scout)
                 decideOperator = random.randint(0,20) 
                 if(decideOperator < 3):
-                    selectedSchedules = selectInteresctions(tempSchedule, intersections,  math.floor(len(tempSchedule) * shrinkageFactor) + 1)
+                    selectedSchedules = selectSchedules(tempSchedule,  math.floor(len(tempSchedule) * shrinkageFactor) + 1)
                     shuffleOrder(selectedSchedules)
                 elif(decideOperator >= 3 and decideOperator < 20):
-                    selectedSchedules = selectInteresctions(tempSchedule, intersections,  math.floor(len(tempSchedule) * shrinkageFactor) + 1)
+                    selectedSchedules = selectSchedules(tempSchedule,  math.floor(len(tempSchedule) * shrinkageFactor) + 1)
                     swapOrder(selectedSchedules)
                 else:
-                    selectedSchedules = selectInteresctions(tempSchedule, intersections,  math.floor(len(tempSchedule) * shrinkageFactor * 0.001) + 1)
+                    selectedSchedules = selectSchedules(tempSchedule,  math.floor(len(tempSchedule) * shrinkageFactor * 0.001) + 1)
                     changeGreenTimeDuration(selectedSchedules, 1)
 
                     
