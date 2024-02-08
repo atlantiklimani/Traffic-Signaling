@@ -342,7 +342,7 @@ start = time()
 total_duration, bonus_points, intersections, streets, name_to_i_street, paths = gl.readInput(file)
 if len(sys.argv) == 3:
     use_seed = sys.argv[2]
-    solution_file_path = './seeds/' + sys.argv[1] + '.txt.out'
+    solution_file_path = './seeds/' + sys.argv[1] # + '.txt.out'
     schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, use_seed, solution_file_path)
 else :
     schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start)
