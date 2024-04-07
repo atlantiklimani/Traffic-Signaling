@@ -23,7 +23,8 @@ Intersection = recordclass('Intersection', [
     'using_streets',
     'streets_usage',
     'green_street_per_t_mod',
-    'needs_updates'
+    'needs_updates',
+    'constraints'
 ])
 Schedule = recordclass('Schedule', [
     'i_intersection',
@@ -83,7 +84,8 @@ def readInput(input_file_path):
                                        schedule_duration=None,
                                        using_streets=deque(),
                                        streets_usage=dict(),
-                                       needs_updates=False)
+                                       needs_updates=False,
+                                       constraints={})
                           for i in range(num_intersections))
 
     # Parse the streets
@@ -125,6 +127,22 @@ def readInput(input_file_path):
 
         path = deque(name_to_street[name] for name in path)
         paths.append(path)
+    
+    while (len(lines) > 0):
+        line = lines.popleft().split()
+        if (len (line) > 0):
+            constraint_type = line[0]
+            i_id = line[1]
+            constraint_streets = []
+            for i in range(2, len(line)):
+                for street in streets:
+                    if street.name == line[i]:
+                        constraint_streets.append(street)
+            if(f'{constraint_type}' in intersections[int(i_id)].constraints):
+                intersections[int(i_id)].constraints[constraint_type].append(constraint_streets)
+            else:
+                intersections[int(i_id)].constraints[constraint_type] = [constraint_streets]
+            # print("Constraints: ",intersections[int(i_id)].constraints)
     for inter in intersections:
         #delete duplicates in using_streets array
         intersections[inter.id].using_streets = list(dict.fromkeys(intersections[inter.id].using_streets))
@@ -195,21 +213,34 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
             if intersection.needs_updates:
                 # Update the green street
                 t_mod = t % intersection.schedule_duration
-                intersection.green_street = intersection.green_street_per_t_mod[t_mod]
+                intersection.green_street = None
+                if(t_mod + 4 < len(intersection.green_street_per_t_mod)):
+                    if(intersection.green_street_per_t_mod[t_mod + 4].id == intersection.green_street_per_t_mod[t_mod].id):
+                        intersection.green_street = intersection.green_street_per_t_mod[t_mod]
 
-            green_street = intersection.green_street
-            waiting_cars = green_street.waiting_cars
-            if len(waiting_cars) > 0:
-                # Drive across the intersection
-                waiting_car = waiting_cars.popleft()
-                green_street.departure_times[waiting_car] = t
-                next_street = paths[waiting_car].popleft()
-                next_street.driving_cars[waiting_car] = next_street.duration
-                street_ids_with_driving_cars.add(next_street.id)
+            if(intersection.green_street is None):
+                green_streets = []
+            else:
+                green_street = intersection.green_street
+                green_streets = [green_street]
+                if ('simultaneously_signal' in intersection.constraints):
+                    for group_street in intersection.constraints['simultaneously_signal']:
+                        if green_street == group_street[0]:
+                            green_streets = [*group_street]
 
-                intersection.num_waiting_cars -= 1
-                if intersection.num_waiting_cars == 0:
-                    intersection_ids_to_remove.add(i_intersection)
+            for street in green_streets:  
+                waiting_cars = street.waiting_cars
+                if len(waiting_cars) > 0:
+                    # Drive across the intersection
+                    waiting_car = waiting_cars.popleft()
+                    street.departure_times[waiting_car] = t
+                    next_street = paths[waiting_car].popleft()
+                    next_street.driving_cars[waiting_car] = next_street.duration
+                    street_ids_with_driving_cars.add(next_street.id)
+
+                    intersection.num_waiting_cars -= 1
+                    if intersection.num_waiting_cars == 0:
+                        intersection_ids_to_remove.add(i_intersection)
 
         intersection_ids_with_waiting_cars.difference_update(intersection_ids_to_remove)
 

@@ -316,7 +316,9 @@ if len(sys.argv) == 3:
     schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, use_seed, solution_file_path)
 else :
     schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start)
+    gl.printSchedule(schedule, streets)
 
+print("Score: ",score)
 # print(gl.grade(gl.readSolution('./seeds/I500_S998_C1000.txt.out',streets),streets, intersections, paths, total_duration, bonus_points))
 # print(gl.grade(gl.readSolution('./I200_S17200_C1000_1207889',streets),streets, intersections, paths, total_duration, bonus_points))
 
