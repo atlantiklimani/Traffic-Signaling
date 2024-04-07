@@ -1,0 +1,31 @@
+Parameters:
+ns - 20, nb - 5, ne - 2, nrb - 5, nre - 20,
+Stagnation limit - 4
+Initial shrinkage factor - 0.001, Shrinkage Factor per Iteration Reduced by - 0.99, Termianl shrinkage factor - 0.001
+Execution Time - 10, Number of loop iterations - 3772
+Score of patch: ,2002
+Score of patch: ,2002
+Score of patch: ,2002
+Score of patch: ,2002
+Score of patch: ,2002
+Score of patch: ,2002
+Score of patch: ,2002
+Score of patch: ,2002
+Score of patch: ,2002
+Score of patch: ,2002
+Real Execution Time: 10.002627849578857
+------------------------- Output File Begins Here -------------------------------------
+4
+0
+1
+rue-de-londres 2
+1
+2
+rue-d-amsterdam 7
+rue-d-athenes 2
+2
+1
+rue-de-moscou 3
+3
+1
+rue-de-rome 2
