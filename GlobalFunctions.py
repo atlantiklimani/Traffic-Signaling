@@ -1,5 +1,6 @@
 from collections import deque
 from recordclass import recordclass
+import json 
 
 Street = recordclass('Street', [
     'id',
@@ -24,6 +25,8 @@ Intersection = recordclass('Intersection', [
     'streets_usage',
     'green_street_per_t_mod',
     'needs_updates',
+    'pedestrian_phase_interval',
+    'all_red_phase_interval',
     'constraints'
 ])
 Schedule = recordclass('Schedule', [
@@ -68,12 +71,21 @@ def readInput(input_file_path):
     # filename = "Instances/" + input_file_path
     filename = "input/" + input_file_path
 
-    with open(filename) as f:
-        lines = deque(f.readlines())
+    f = open(filename, 'r')
 
-    # Parse the first line
-    total_duration, num_intersections, num_streets, \
-    num_cars, bonus_points = map(int, lines.popleft().split())
+    json_file = json.load(fp=f)
+
+    total_duration = json_file['simulation']['duration']
+    num_intersections = json_file['simulation']['intersections']
+    num_streets = json_file['simulation']['streets']
+    num_cars = json_file['simulation']['cars']
+    bonus_points = json_file['simulation']['bonus']
+    duration_to_pass_through_an_intersection = json_file['simulation']['duration_to_pass_through_an_intersection']
+    yellow_phase = json_file['simulation']['yellow_phase']
+    limit_on_minimum_cycle_length = json_file['simulation']['limit_on_minimum_cycle_length']
+    limit_on_maximum_cycle_length = json_file['simulation']['limit_on_maximum_cycle_length']
+    limit_on_minimum_green_phase_duration = json_file['simulation']['limit_on_minimum_green_phase_duration']
+    limit_on_maximum_green_phase_duration = json_file['simulation']['limit_on_maximum_green_phase_duration']
 
     intersections = tuple(Intersection(id=i,
                                        incomings=deque(),
@@ -85,6 +97,8 @@ def readInput(input_file_path):
                                        using_streets=deque(),
                                        streets_usage=dict(),
                                        needs_updates=False,
+                                       pedestrian_phase_interval=json_file['intersections'][i]['pedestrian_phase_interval'],
+                                       all_red_phase_interval=json_file['intersections'][i]['all_red_phase_interval'],                                            
                                        constraints={})
                           for i in range(num_intersections))
 
@@ -92,10 +106,15 @@ def readInput(input_file_path):
     streets = []
     name_to_street = {}
     for i_street in range(num_streets):
-        line = lines.popleft().split()
-        start, end = map(int, line[:2])
-        name = line[2]
-        duration = int(line[3])
+        # line = lines.popleft().split()
+        # start, end = map(int, line[:2])
+        # name = line[2]
+        # duration = int(line[3])
+        start = json_file['streets'][i_street]['start']
+        end = json_file['streets'][i_street]['end']
+        name = json_file['streets'][i_street]['name']
+        duration = json_file['streets'][i_street]['time']
+
         street = Street(id=i_street,
                         start=intersections[start],
                         end=intersections[end],
@@ -113,9 +132,9 @@ def readInput(input_file_path):
     # Parse the paths
     paths = []
     for i_car in range(num_cars):
-        line = lines.popleft().split()
-        path_length = int(line[0])
-        path = line[1:]
+        path_length = json_file['cars'][i_car]['path_length']
+        path = json_file['cars'][i_car]['path']
+
         assert len(path) == path_length
         for name in path:
             id_inter = name_to_street[name].end.id
@@ -128,26 +147,41 @@ def readInput(input_file_path):
         path = deque(name_to_street[name] for name in path)
         paths.append(path)
     
-    while (len(lines) > 0):
-        line = lines.popleft().split()
-        if (len (line) > 0):
-            constraint_type = line[0]
-            i_id = line[1]
-            constraint_streets = []
-            for i in range(2, len(line)):
-                for street in streets:
-                    if street.name == line[i]:
-                        constraint_streets.append(street)
-            if(f'{constraint_type}' in intersections[int(i_id)].constraints):
-                intersections[int(i_id)].constraints[constraint_type].append(constraint_streets)
+    for constraint in json_file['constraints']:
+        intersection = intersections[constraint['intersection_name']]
+        if (constraint['type'] == 'simultaneously_signal'):
+            if ('simultaneously_signal' in intersection.constraints):
+                intersection.constraints['simultaneously_signal'].append(constraint['streets'])
             else:
-                intersections[int(i_id)].constraints[constraint_type] = [constraint_streets]
-            # print("Constraints: ",intersections[int(i_id)].constraints)
+                intersection.constraints['simultaneously_signal'] = [constraint['streets']]
+        elif (constraint['type'] == 'signal_phase_order'):
+            if ('signal_phase_order' in intersection.constraints):
+                intersection.constraints['signal_phase_order'].append(constraint['streets'])
+            else:
+                intersection.constraints['signal_phase_order'] = [constraint['streets']]
+
+    # while (len(lines) > 0):
+    #     line = lines.popleft().split()
+    #     if (len (line) > 0):
+    #         constraint_type = line[0]
+    #         i_id = line[1]
+    #         constraint_streets = []
+    #         for i in range(2, len(line)):
+    #             for street in streets:
+    #                 if street.name == line[i]:
+    #                     constraint_streets.append(street)
+    #         if(f'{constraint_type}' in intersections[int(i_id)].constraints):
+    #             intersections[int(i_id)].constraints[constraint_type].append(constraint_streets)
+    #         else:
+    #             intersections[int(i_id)].constraints[constraint_type] = [constraint_streets]
+    #         # print("Constraints: ",intersections[int(i_id)].constraints)
     for inter in intersections:
         #delete duplicates in using_streets array
         intersections[inter.id].using_streets = list(dict.fromkeys(intersections[inter.id].using_streets))
     return total_duration, bonus_points, intersections, \
-           streets, name_to_street, paths
+           streets, name_to_street, paths, duration_to_pass_through_an_intersection, \
+        yellow_phase,limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, \
+        limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration
 
 def reinit(streets, intersections):
     # Reinitialize mutable data structures
@@ -165,7 +199,7 @@ def reinit(streets, intersections):
         intersection.needs_updates = False
 
 
-def grade(schedules, streets, intersections, paths, total_duration, bonus_points):
+def grade(schedules, streets, intersections, paths, total_duration, bonus_points, yellow_phase):
     reinit(streets, intersections) # we reset intersections and streets before performing a simulation
 
     #save path copies to reset them after performing the simulation
@@ -214,8 +248,8 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
                 # Update the green street
                 t_mod = t % intersection.schedule_duration
                 intersection.green_street = None
-                if(t_mod + 4 < len(intersection.green_street_per_t_mod)):
-                    if(intersection.green_street_per_t_mod[t_mod + 4].id == intersection.green_street_per_t_mod[t_mod].id):
+                if(t_mod + yellow_phase < len(intersection.green_street_per_t_mod)):
+                    if(intersection.green_street_per_t_mod[t_mod + yellow_phase].id == intersection.green_street_per_t_mod[t_mod].id):
                         intersection.green_street = intersection.green_street_per_t_mod[t_mod]
 
             if(intersection.green_street is None):

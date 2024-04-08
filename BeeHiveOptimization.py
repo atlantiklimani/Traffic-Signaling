@@ -159,7 +159,7 @@ def traffic_based_initial_solution(intersections: list[gl.Intersection]) -> list
             if street.name in intersection.using_streets:
                 order.append(street.id)
                 # Introduce randomness in green time allocation
-                random_factor = random.uniform(1, 2)  # Adjust the range as needed
+                random_factor = random.uniform(1, 5)  # Adjust the range as needed
                 green_time = 2 if len(street.waiting_cars) > threshold else 1
                 green_times[street.id] = int(green_time * random_factor)
 
@@ -214,7 +214,7 @@ def outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, 
     output.close()
     return
 
-def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, use_seed = False, solution_file_path = None):
+def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, yellow_phase, use_seed = False, solution_file_path = None):
     patches = []
     ns = 20 #number of scout bees
     nb = 5 #number of best sites
@@ -237,7 +237,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         else :    
             sol = generateSolution(intersections)         
         
-        grade = gl.grade(sol,streets, intersections, paths, total_duration, bonus_points)
+        grade = gl.grade(sol,streets, intersections, paths, total_duration, bonus_points, yellow_phase)
         patches.append(Patch(grade, sol))
     
     while (time() - terminated_time < executionTime):
@@ -266,7 +266,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                 else:
                     tempSchedule = changeGreenTimeDuration(tempSchedule, math.floor(len(intersections) * shrinkageFactor * 0.001) + 1, 1)
                     
-                tempScore = gl.grade(tempSchedule,streets, intersections, paths, total_duration, bonus_points)
+                tempScore = gl.grade(tempSchedule,streets, intersections, paths, total_duration, bonus_points, yellow_phase)
 
                 if(tempScore > patches[i].score):
                     patches[i].stg = False
@@ -283,12 +283,12 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                  
             if(patches[i].stgLim > stgLim and i != 0):
                 solution = generateSolution(intersections)      
-                grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points)
+                grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points, yellow_phase)
                 patches[i] = Patch(score=grade, scout= solution)
 
         for i in range(nb, ns):
             solution = generateSolution(intersections)      
-            grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points)
+            grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points, yellow_phase)
             patches.append(Patch(score=grade, scout= solution))
     
         if(shrinkageFactor > 0.001):
@@ -309,13 +309,16 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
 file = sys.argv[1]
 
 start = time()
-total_duration, bonus_points, intersections, streets, name_to_i_street, paths = gl.readInput(file)
+total_duration, bonus_points, intersections, streets, name_to_i_street, paths, \
+    duration_to_pass_through_an_intersection, yellow_phase, limit_on_minimum_cycle_length, \
+    limit_on_maximum_cycle_length, limit_on_minimum_green_phase_duration, \
+    limit_on_maximum_green_phase_duration = gl.readInput(file)
 if len(sys.argv) == 3:
     use_seed = sys.argv[2]
     solution_file_path = './seeds/' + sys.argv[1] + '.txt.out'
-    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, use_seed, solution_file_path)
+    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, yellow_phase, use_seed, solution_file_path)
 else :
-    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start)
+    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, yellow_phase)
     gl.printSchedule(schedule, streets)
 
 print("Score: ",score)
