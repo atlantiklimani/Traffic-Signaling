@@ -77,7 +77,7 @@ def fifthOperator(schedules, numberOfIntersections, numberOfRoads, instersection
 
     return schedules
 
-def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads):
+def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length):
     if(numberOfIntersection <= 0):
         return schedule
 
@@ -90,7 +90,17 @@ def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads):
         otherCount = 0
         while(otherCount < length and otherCount < numberOfRoads):
             semaforId = random.randint(0,length - 1)
-            schedule[rand].green_times[schedule[rand].order[semaforId]] = int(choices([1, 2, 3],weights=[10, 70, 20], k=1)[0]) 
+            # schedule[rand].green_times[schedule[rand].order[semaforId]] = int(choices([1, 2, 3],weights=[10, 70, 20], k=1)[0])
+            while True:
+                schedule[rand].green_times[schedule[rand].order[semaforId]] = random.randint(limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration)
+                if (len(schedule[rand].green_times) <= 1):
+                    break
+                intersectionCycle = 0
+                for x in schedule[rand].green_times.values():
+                    intersectionCycle += x
+                # print('Cycle: ', intersectionCycle, 'Number of incoming rodas: ',len(schedule[rand].green_times))
+                if (intersectionCycle > limit_on_minimum_cycle_length and intersectionCycle < limit_on_maximum_cycle_length):
+                    break
             otherCount += 1
         count+=1
 
@@ -144,7 +154,35 @@ def copyScheduleArray(scheduleArr):
         
     return newScheduleArr
 
-def traffic_based_initial_solution(intersections: list[gl.Intersection]) -> list[Schedule]:
+# def traffic_based_initial_solution(intersections: list[gl.Intersection], limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration) -> list[Schedule]:
+#     schedules = []
+#     median = int((limit_on_maximum_green_phase_duration + limit_on_minimum_green_phase_duration) / 4)
+#     # Calculate the global threshold first for efficiency
+#     all_waiting_cars = [len(street.waiting_cars) for intersection in intersections for street in intersection.incomings]
+#     threshold = sum(all_waiting_cars) / len(all_waiting_cars)
+
+#     for intersection in intersections:
+#         order = []
+#         green_times = {}
+
+#         # Sort streets based on the sum of lengths of driving_cars and waiting_cars
+#         sorted_streets = sorted(intersection.incomings,
+#                                 key=lambda s: len(s.driving_cars) + len(s.waiting_cars),
+#                                 reverse=True)
+
+#         for street in sorted_streets:
+#             if street.name in intersection.using_streets:
+#                 order.append(street.id)
+#                 # Introduce randomness in green time allocation
+#                 # random_factor = random.uniform(1, 5)  # Adjust the range as needed
+#                 green_time = random.randint(median, limit_on_maximum_green_phase_duration) if len(street.waiting_cars) > threshold else random.randint(limit_on_minimum_green_phase_duration, median)
+#                 green_times[street.id] = green_time
+
+#         if order:
+#             schedules.append(Schedule(intersection.id, order, green_times))
+#     return schedules
+
+def traffic_based_initial_solution(intersections: list[gl.Intersection],limit_on_minimum_green_phase_duration:int,limit_on_maximum_green_phase_duration:int,limit_on_minimum_cycle_length:int,limit_on_maximum_cycle_length:int) -> list[Schedule]:
     schedules = []
 
     # Calculate the global threshold first for efficiency
@@ -154,6 +192,7 @@ def traffic_based_initial_solution(intersections: list[gl.Intersection]) -> list
     for intersection in intersections:
         order = []
         green_times = {}
+        total_green_time =0
 
         # Sort streets based on the sum of lengths of driving_cars and waiting_cars
         sorted_streets = sorted(intersection.incomings,
@@ -164,20 +203,36 @@ def traffic_based_initial_solution(intersections: list[gl.Intersection]) -> list
             if street.name in intersection.using_streets:
                 order.append(street.id)
                 # Introduce randomness in green time allocation
-                random_factor = random.uniform(1, 5)  # Adjust the range as needed
+                random_factor = random.uniform(limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration)  # Adjust the range as needed
                 green_time = 2 if len(street.waiting_cars) > threshold else 1
+               # print(int(green_time * random_factor))
                 green_times[street.id] = int(green_time * random_factor)
+                total_green_time += green_times[street.id]
+              #  print(total_green_time)
 
+        # Apply minimum and maximum constraints on total green time for the intersection
+        total_green_time = max(min(total_green_time, limit_on_minimum_cycle_length), limit_on_maximum_cycle_length)
+        
+        # Normalize green times to fit within the min and max constraints
+        if total_green_time > 0:
+            for street_id in green_times:
+                green_times[street_id] = int(green_times[street_id] * (total_green_time / sum(green_times.values())))
+        
+        # Enforce minimum and maximum for individual street green times
+        for street_id in green_times:
+            green_times[street_id] = max(min(green_times[street_id], limit_on_maximum_green_phase_duration), limit_on_minimum_green_phase_duration)
         if order:
+            #print(intersection.id, order, green_times,intersection.pedestrian_phase,intersection.all_red_phase)
+            # schedules.append(Schedule(intersection.id, order, green_times,intersection.pedestrian_phase,intersection.all_red_phase))
             schedules.append(Schedule(intersection.id, order, green_times))
     return schedules
 
-def usage_based_initial_solution(intersections: list[gl.Intersection]) -> list[Schedule]:
+def usage_based_initial_solution(intersections: list[gl.Intersection],limit_on_minimum_green_phase_duration:int,limit_on_maximum_green_phase_duration:int,limit_on_minimum_cycle_length:int,limit_on_maximum_cycle_length:int) -> list[Schedule]:
     schedules = []
     for intersection in intersections:
         order = []
         green_times = {}
-
+        total_green_time =0
         sorted_streets = sorted(intersection.incomings, key=lambda s: intersection.streets_usage.get(s.name, 0),
                                 reverse=True)
 
@@ -185,20 +240,55 @@ def usage_based_initial_solution(intersections: list[gl.Intersection]) -> list[S
             if street.name in intersection.using_streets:
                 order.append(street.id)
                 usage = intersection.streets_usage.get(street.name, 0)
-                green_time = int(math.sqrt(usage)) if usage > 0 else 1
+                #green_time = int(math.sqrt(usage)) if usage > 0 else 1
+                green_time = min(max(limit_on_minimum_green_phase_duration, int(math.sqrt(usage))), limit_on_maximum_green_phase_duration)
+               # print(green_time)
                 green_times[street.id] = green_time
-
+                total_green_time += green_times[street.id]
+         # Apply minimum and maximum constraints on total green time for the intersection
+        total_green_time = max(min(total_green_time, limit_on_minimum_cycle_length), limit_on_maximum_cycle_length)
+        
+        # Normalize green times to fit within the min and max constraints
+        if total_green_time > 0:
+            for street_id in green_times:
+                green_times[street_id] = int(green_times[street_id] * (total_green_time / sum(green_times.values())))
+        
+        # Enforce minimum and maximum for individual street green times
+        for street_id in green_times:
+            green_times[street_id] = max(min(green_times[street_id], limit_on_maximum_green_phase_duration), limit_on_minimum_green_phase_duration)
+        
         if order:
+            # schedules.append(Schedule(intersection.id, order, green_times,intersection.pedestrian_phase,intersection.all_red_phase))
             schedules.append(Schedule(intersection.id, order, green_times))
     return schedules
 
-def generateSolution(intersections, name_to_i_street):
+# def usage_based_initial_solution(intersections: list[gl.Intersection], limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration) -> list[Schedule]:
+#     schedules = []
+#     for intersection in intersections:
+#         order = []
+#         green_times = {}
+
+#         sorted_streets = sorted(intersection.incomings, key=lambda s: intersection.streets_usage.get(s.name, 0),
+#                                 reverse=True)
+
+#         for street in sorted_streets:
+#             if street.name in intersection.using_streets:
+#                 order.append(street.id)
+#                 usage = intersection.streets_usage.get(street.name, 0)
+#                 green_time = int(math.sqrt(usage)) if usage > 0 else 1
+#                 green_times[street.id] = green_time
+
+#         if order:
+#             schedules.append(Schedule(intersection.id, order, green_times))
+#     return schedules
+
+def generateSolution(intersections, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration):
     while True:
         decideGen = random.randint(0,1)
         if(decideGen == 0):
-            solution = traffic_based_initial_solution(intersections)
+            solution = traffic_based_initial_solution(intersections, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length)
         else:
-            solution = usage_based_initial_solution(intersections)
+            solution = usage_based_initial_solution(intersections, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length)
             
         if (gl.assertOrderPhaseForSolution(solution, intersections, name_to_i_street)):
             return solution
@@ -220,7 +310,7 @@ def outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, 
     output.close()
     return
 
-def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, yellow_phase, name_to_i_street, use_seed = False, solution_file_path = None):
+def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, yellow_phase, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, use_seed = False, solution_file_path = None):
     patches = []
     ns = 20 #number of scout bees
     nb = 5 #number of best sites
@@ -230,7 +320,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     stgLim = 4 #stagnation limit for patches
     shrinkageFactor = 0.001 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
     shrinkageFactorReducedBy = 0.99 # by how much is the shrinkage factor reduceb by for iteration
-    executionTime = 10 #8 * 60 * 60
+    executionTime = 5 #8 * 60 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor 
     countIterations = 0
@@ -241,7 +331,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
             if i != 0:
                 sol = shuffleOrder(sol, math.floor(len(intersections) * 0.2) + 1,  intersections, name_to_i_street)
         else :    
-            sol = generateSolution(intersections, name_to_i_street)         
+            sol = generateSolution(intersections, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration)         
         
         grade = gl.grade(sol,streets, intersections, paths, total_duration, bonus_points, yellow_phase)
         patches.append(Patch(grade, sol))
@@ -270,7 +360,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                 elif(decideOperator >= 3 and decideOperator < 20):
                     tempSchedule = swapOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1, intersections, name_to_i_street)
                 else:
-                    tempSchedule = changeGreenTimeDuration(tempSchedule, math.floor(len(intersections) * shrinkageFactor * 0.001) + 1, 1)
+                    tempSchedule = changeGreenTimeDuration(tempSchedule, math.floor(len(intersections) * shrinkageFactor * 0.001) + 1, 1, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length)
                     
                 tempScore = gl.grade(tempSchedule,streets, intersections, paths, total_duration, bonus_points, yellow_phase)
 
@@ -288,12 +378,12 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                 patches[i].stgLim = 0
                  
             if(patches[i].stgLim > stgLim and i != 0):
-                solution = generateSolution(intersections, name_to_i_street)      
+                solution = generateSolution(intersections, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration)      
                 grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points, yellow_phase)
                 patches[i] = Patch(score=grade, scout= solution)
 
         for i in range(nb, ns):
-            solution = generateSolution(intersections, name_to_i_street)      
+            solution = generateSolution(intersections, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration)      
             grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points, yellow_phase)
             patches.append(Patch(score=grade, scout= solution))
     
@@ -323,9 +413,9 @@ total_duration, bonus_points, intersections, streets, name_to_i_street, paths, \
 if len(sys.argv) == 3:
     use_seed = sys.argv[2]
     solution_file_path = './seeds/' + sys.argv[1] + '.txt.out'
-    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, yellow_phase, name_to_i_street, use_seed, solution_file_path)
+    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, yellow_phase, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, use_seed, solution_file_path)
 else :
-    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, yellow_phase, name_to_i_street)
+    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, yellow_phase, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length)
     gl.printSchedule(schedule, streets)
 
 print("Score: ",score)
