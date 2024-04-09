@@ -96,7 +96,7 @@ def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads):
 
     return schedule
 
-def shuffleOrder(schedules,numberOfIntersection):
+def shuffleOrder(schedules,numberOfIntersection, intersections, name_to_i_street):
     if(numberOfIntersection <= 0):
         return schedules
     
@@ -104,12 +104,15 @@ def shuffleOrder(schedules,numberOfIntersection):
 
     while(count < numberOfIntersection):
         rand = random.randint(0, len(schedules) - 1)
-        random.shuffle(schedules[rand].order)
+        while True:
+            random.shuffle(schedules[rand].order)
+            if (gl.assertOrderPhaseForSchedule(schedules[rand], intersections, name_to_i_street)):
+                break
         count+=1
         
     return schedules
 
-def swapOrder(schedules, numberOfIntersections):
+def swapOrder(schedules, numberOfIntersections, intersections, name_to_i_street):
     if(numberOfIntersections <= 0):
         return schedules
     for i in range(0, numberOfIntersections):
@@ -117,14 +120,16 @@ def swapOrder(schedules, numberOfIntersections):
         incomingStreetsLength = len(schedules[rand].order)
         if(incomingStreetsLength == 1):
             continue
-        rand1 = random.randint(0, incomingStreetsLength - 1)
-        rand2 = random.randint(0, incomingStreetsLength - 1)
-        while(rand1 == rand2):
+        while True:
+            rand1 = random.randint(0, incomingStreetsLength - 1)
             rand2 = random.randint(0, incomingStreetsLength - 1)
-        temp = schedules[rand].order[rand1]
-        schedules[rand].order[rand1] = schedules[rand].order[rand2]
-        schedules[rand].order[rand2] = temp
-    
+            while(rand1 == rand2):
+                rand2 = random.randint(0, incomingStreetsLength - 1)
+            temp = schedules[rand].order[rand1]
+            schedules[rand].order[rand1] = schedules[rand].order[rand2]
+            schedules[rand].order[rand2] = temp
+            if (gl.assertOrderPhaseForSchedule(schedules[rand], intersections, name_to_i_street)):
+                break
     return schedules
 
 def copyScheduleArray(scheduleArr):
@@ -187,16 +192,17 @@ def usage_based_initial_solution(intersections: list[gl.Intersection]) -> list[S
             schedules.append(Schedule(intersection.id, order, green_times))
     return schedules
 
-def generateSolution(intersections):
-    decideGen = random.randint(0,1)
-
-    if(decideGen == 0):
-        solution = traffic_based_initial_solution(intersections)
-    else:
-        solution = usage_based_initial_solution(intersections)
-
-    return solution
-
+def generateSolution(intersections, name_to_i_street):
+    while True:
+        decideGen = random.randint(0,1)
+        if(decideGen == 0):
+            solution = traffic_based_initial_solution(intersections)
+        else:
+            solution = usage_based_initial_solution(intersections)
+            
+        if (gl.assertOrderPhaseForSolution(solution, intersections, name_to_i_street)):
+            return solution
+            
 def outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, stgLim, initialShrinkageFactor, shrinkageFactorReducedBy, shrinkageFactor, start):
     global file
 
@@ -214,7 +220,7 @@ def outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, 
     output.close()
     return
 
-def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, yellow_phase, use_seed = False, solution_file_path = None):
+def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, yellow_phase, name_to_i_street, use_seed = False, solution_file_path = None):
     patches = []
     ns = 20 #number of scout bees
     nb = 5 #number of best sites
@@ -233,9 +239,9 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         if(use_seed == 'True' and i < 5):
             sol = gl.readSolution(solution_file_path=solution_file_path, streets=streets)
             if i != 0:
-                sol = shuffleOrder(sol, math.floor(len(intersections) * 0.2) + 1)
+                sol = shuffleOrder(sol, math.floor(len(intersections) * 0.2) + 1,  intersections, name_to_i_street)
         else :    
-            sol = generateSolution(intersections)         
+            sol = generateSolution(intersections, name_to_i_street)         
         
         grade = gl.grade(sol,streets, intersections, paths, total_duration, bonus_points, yellow_phase)
         patches.append(Patch(grade, sol))
@@ -260,9 +266,9 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                 tempSchedule = copyScheduleArray(patches[i].scout)
                 decideOperator = random.randint(0,20) 
                 if(decideOperator < 3):
-                    tempSchedule = shuffleOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1)
+                    tempSchedule = shuffleOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1, intersections, name_to_i_street)
                 elif(decideOperator >= 3 and decideOperator < 20):
-                    tempSchedule = swapOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1)
+                    tempSchedule = swapOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1, intersections, name_to_i_street)
                 else:
                     tempSchedule = changeGreenTimeDuration(tempSchedule, math.floor(len(intersections) * shrinkageFactor * 0.001) + 1, 1)
                     
@@ -282,12 +288,12 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                 patches[i].stgLim = 0
                  
             if(patches[i].stgLim > stgLim and i != 0):
-                solution = generateSolution(intersections)      
+                solution = generateSolution(intersections, name_to_i_street)      
                 grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points, yellow_phase)
                 patches[i] = Patch(score=grade, scout= solution)
 
         for i in range(nb, ns):
-            solution = generateSolution(intersections)      
+            solution = generateSolution(intersections, name_to_i_street)      
             grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points, yellow_phase)
             patches.append(Patch(score=grade, scout= solution))
     
@@ -312,16 +318,18 @@ start = time()
 total_duration, bonus_points, intersections, streets, name_to_i_street, paths, \
     duration_to_pass_through_an_intersection, yellow_phase, limit_on_minimum_cycle_length, \
     limit_on_maximum_cycle_length, limit_on_minimum_green_phase_duration, \
-    limit_on_maximum_green_phase_duration = gl.readInput(file)
+    limit_on_maximum_green_phase_duration, = gl.readInput(file)
+
 if len(sys.argv) == 3:
     use_seed = sys.argv[2]
     solution_file_path = './seeds/' + sys.argv[1] + '.txt.out'
-    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, yellow_phase, use_seed, solution_file_path)
+    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, yellow_phase, name_to_i_street, use_seed, solution_file_path)
 else :
-    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, yellow_phase)
+    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, yellow_phase, name_to_i_street)
     gl.printSchedule(schedule, streets)
 
 print("Score: ",score)
+
 # print(gl.grade(gl.readSolution('./seeds/I500_S998_C1000.txt.out',streets),streets, intersections, paths, total_duration, bonus_points))
 # print(gl.grade(gl.readSolution('./I200_S17200_C1000_1207889',streets),streets, intersections, paths, total_duration, bonus_points))
 
