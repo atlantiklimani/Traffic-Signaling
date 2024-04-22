@@ -127,34 +127,6 @@ def copyScheduleArray(scheduleArr):
         
     return newScheduleArr
 
-# def traffic_based_initial_solution(intersections: list[gl.Intersection], limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration) -> list[Schedule]:
-#     schedules = []
-#     median = int((limit_on_maximum_green_phase_duration + limit_on_minimum_green_phase_duration) / 4)
-#     # Calculate the global threshold first for efficiency
-#     all_waiting_cars = [len(street.waiting_cars) for intersection in intersections for street in intersection.incomings]
-#     threshold = sum(all_waiting_cars) / len(all_waiting_cars)
-
-#     for intersection in intersections:
-#         order = []
-#         green_times = {}
-
-#         # Sort streets based on the sum of lengths of driving_cars and waiting_cars
-#         sorted_streets = sorted(intersection.incomings,
-#                                 key=lambda s: len(s.driving_cars) + len(s.waiting_cars),
-#                                 reverse=True)
-
-#         for street in sorted_streets:
-#             if street.name in intersection.using_streets:
-#                 order.append(street.id)
-#                 # Introduce randomness in green time allocation
-#                 # random_factor = random.uniform(1, 5)  # Adjust the range as needed
-#                 green_time = random.randint(median, limit_on_maximum_green_phase_duration) if len(street.waiting_cars) > threshold else random.randint(limit_on_minimum_green_phase_duration, median)
-#                 green_times[street.id] = green_time
-
-#         if order:
-#             schedules.append(Schedule(intersection.id, order, green_times))
-#     return schedules
-
 def traffic_based_initial_solution(intersections: list[gl.Intersection],limit_on_minimum_green_phase_duration:int,limit_on_maximum_green_phase_duration:int,limit_on_minimum_cycle_length:int,limit_on_maximum_cycle_length:int) -> list[Schedule]:
     schedules = []
 
@@ -230,25 +202,6 @@ def usage_based_initial_solution(intersections: list[gl.Intersection],limit_on_m
             schedules.append(Schedule(intersection.id, order, green_times))
     return schedules
 
-# def usage_based_initial_solution(intersections: list[gl.Intersection], limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration) -> list[Schedule]:
-#     schedules = []
-#     for intersection in intersections:
-#         order = []
-#         green_times = {}
-
-#         sorted_streets = sorted(intersection.incomings, key=lambda s: intersection.streets_usage.get(s.name, 0),
-#                                 reverse=True)
-
-#         for street in sorted_streets:
-#             if street.name in intersection.using_streets:
-#                 order.append(street.id)
-#                 usage = intersection.streets_usage.get(street.name, 0)
-#                 green_time = int(math.sqrt(usage)) if usage > 0 else 1
-#                 green_times[street.id] = green_time
-
-#         if order:
-#             schedules.append(Schedule(intersection.id, order, green_times))
-#     return schedules
 
 def generateSolution(intersections, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration):
     while True:
@@ -263,9 +216,7 @@ def generateSolution(intersections, name_to_i_street, limit_on_minimum_green_pha
                 random.shuffle(schedule.order)
         break
     return solution
-    
-        # if (gl.assertOrderPhaseForSolution(solution, intersections, name_to_i_street)):
-        #     return solution
+        
             
 def outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, stgLim, initialShrinkageFactor, shrinkageFactorReducedBy, shrinkageFactor, start):
     global file
