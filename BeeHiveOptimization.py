@@ -193,22 +193,21 @@ def traffic_based_initial_solution(intersections: list[gl.Intersection],limit_on
         order = []
         green_times = {}
         total_green_time =0
-
         # Sort streets based on the sum of lengths of driving_cars and waiting_cars
         sorted_streets = sorted(intersection.incomings,
                                 key=lambda s: len(s.driving_cars) + len(s.waiting_cars),
                                 reverse=True)
 
         for street in sorted_streets:
-            if street.name in intersection.using_streets:
-                order.append(street.id)
-                # Introduce randomness in green time allocation
-                random_factor = random.uniform(limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration)  # Adjust the range as needed
-                green_time = 2 if len(street.waiting_cars) > threshold else 1
-               # print(int(green_time * random_factor))
-                green_times[street.id] = int(green_time * random_factor)
-                total_green_time += green_times[street.id]
-              #  print(total_green_time)
+            # if street.name in intersection.using_streets:
+            order.append(street.id)
+            # Introduce randomness in green time allocation
+            random_factor = random.uniform(limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration)  # Adjust the range as needed
+            green_time = 2 if len(street.waiting_cars) > threshold else 1
+            # print(int(green_time * random_factor))
+            green_times[street.id] = int(green_time * random_factor)
+            total_green_time += green_times[street.id]
+            #  print(total_green_time)
 
         # Apply minimum and maximum constraints on total green time for the intersection
         total_green_time = max(min(total_green_time, limit_on_minimum_cycle_length), limit_on_maximum_cycle_length)
@@ -237,14 +236,14 @@ def usage_based_initial_solution(intersections: list[gl.Intersection],limit_on_m
                                 reverse=True)
 
         for street in sorted_streets:
-            if street.name in intersection.using_streets:
-                order.append(street.id)
-                usage = intersection.streets_usage.get(street.name, 0)
-                #green_time = int(math.sqrt(usage)) if usage > 0 else 1
-                green_time = min(max(limit_on_minimum_green_phase_duration, int(math.sqrt(usage))), limit_on_maximum_green_phase_duration)
-               # print(green_time)
-                green_times[street.id] = green_time
-                total_green_time += green_times[street.id]
+            # if street.name in intersection.using_streets:
+            order.append(street.id)
+            usage = intersection.streets_usage.get(street.name, 0)
+            #green_time = int(math.sqrt(usage)) if usage > 0 else 1
+            green_time = min(max(limit_on_minimum_green_phase_duration, int(math.sqrt(usage))), limit_on_maximum_green_phase_duration)
+            # print(green_time)
+            green_times[street.id] = green_time
+            total_green_time += green_times[street.id]
          # Apply minimum and maximum constraints on total green time for the intersection
         total_green_time = max(min(total_green_time, limit_on_minimum_cycle_length), limit_on_maximum_cycle_length)
         
@@ -289,9 +288,15 @@ def generateSolution(intersections, name_to_i_street, limit_on_minimum_green_pha
             solution = traffic_based_initial_solution(intersections, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length)
         else:
             solution = usage_based_initial_solution(intersections, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length)
-            
-        if (gl.assertOrderPhaseForSolution(solution, intersections, name_to_i_street)):
-            return solution
+
+        for schedule in solution:
+            while(not gl.assertOrderPhaseForSchedule(schedule, intersections, name_to_i_street)):
+                random.shuffle(schedule.order)
+        break
+    return solution
+    
+        # if (gl.assertOrderPhaseForSolution(solution, intersections, name_to_i_street)):
+        #     return solution
             
 def outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, stgLim, initialShrinkageFactor, shrinkageFactorReducedBy, shrinkageFactor, start):
     global file

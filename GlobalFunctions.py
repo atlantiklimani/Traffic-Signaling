@@ -243,8 +243,11 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
                 green_streets = [green_street]
                 if ('simultaneously_signal' in intersection.constraints):
                     for group_street in intersection.constraints['simultaneously_signal']:
-                        if green_street == group_street[0]:
-                            green_streets = [*group_street]
+                        for i_street_in_group in range(0, len(group_street)):
+                            if green_street == group_street[i_street_in_group]:
+                                green_street = group_street[i_street_in_group:]
+                        # if green_street == group_street[0]:
+                        #     green_streets = [*group_street]
 
             for street in green_streets:  
                 waiting_cars = street.waiting_cars
@@ -302,18 +305,24 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
     return score
 
 def assertOrder(actual, constraint, name_to_i_street):
-    # print("Actual: ", actual)
-    # print("Constraint: ", constraint)
-    # print("Name to Id: ", name_to_i_street[constraint[0]].id)
     indices = [actual.index(name_to_i_street[c].id) if name_to_i_street[c].id in actual else -1 for c in constraint]
-    indices = [x for x in indices if x != -1]
+    # indices = [x for x in indices if x != -1]
+    print('Schedule Order: ', actual, '. Schedule Constraints: ', constraint)
+
+    for i in range(0,len(indices)):
+        if indices[i] != -1:
+            indices = indices[i:]
+
+    for i in range(len(indices) - 1, 0):
+        if indices[i] != -1:
+            indices = indices[:i]        
+
     if indices == sorted(indices):
         return True
     else:
         return False
 
 def assertOrderPhaseForSolution(schedules, intersections, name_to_i_street):
-    
     for schedule in schedules:
         if 'signal_phase_order' in intersections[schedule.i_intersection].constraints: 
             if (assertOrder(
@@ -325,8 +334,7 @@ def assertOrderPhaseForSolution(schedules, intersections, name_to_i_street):
     return True
 
 def assertOrderPhaseForSchedule(schedule, intersections, name_to_i_street):
-    
-    if 'signal_phase_order' in intersections[schedule.i_intersection].constraints: 
+    if 'signal_phase_order' in intersections[schedule.i_intersection].constraints:
         if (assertOrder(
             schedule.order, 
             intersections[schedule.i_intersection].constraints['signal_phase_order'],
