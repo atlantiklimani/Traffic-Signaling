@@ -65,7 +65,10 @@ def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads, limit
         otherCount = 0
         while(otherCount < length and otherCount < numberOfRoads):
             semaforId = random.randint(0,length - 1)
-            while True:
+            initial = schedule[rand].green_times[schedule[rand].order[semaforId]] 
+            # while True:
+            loop_upper_limit = 20
+            for i in range(0, loop_upper_limit):
                 schedule[rand].green_times[schedule[rand].order[semaforId]] = random.randint(limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration)
                 if (len(schedule[rand].green_times) <= 1):
                     break
@@ -75,8 +78,10 @@ def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads, limit
                 if (intersectionCycle >= limit_on_minimum_cycle_length and intersectionCycle <= limit_on_maximum_cycle_length):
                     break
                 # print("Random Value: ",schedule[rand].green_times[schedule[rand].order[semaforId]], ". Cycle: ",intersectionCycle, '. Min: ',limit_on_minimum_cycle_length, '. Max: ',limit_on_maximum_cycle_length)
-                # print("Phase Order Not Correct - Change Green Time")
+                print("Phase Order Not Correct - Change Green Time")
 
+                if(i == loop_upper_limit - 1):
+                    schedule[rand].green_times[schedule[rand].order[semaforId]] = initial    
             otherCount += 1
         count+=1
 
@@ -90,15 +95,39 @@ def shuffleOrder(schedules,numberOfIntersection, intersections, name_to_i_street
 
     while(count < numberOfIntersection):
         rand = random.randint(0, len(schedules) - 1)
-        while True:
-            random.shuffle(schedules[rand].order)
-            if (gl.assertOrderPhaseForSchedule(schedules[rand], intersections, name_to_i_street)):
-                break
-            # print("Phase Order Not Correct - Shuffle")
+        # while True:
+        # random.shuffle(schedules[rand].order)
+        schedules[rand] = shuffleSingleOrder(schedules[rand], intersections, name_to_i_street)
+        # if (gl.assertOrderPhaseForSchedule(schedules[rand], intersections, name_to_i_street)):
+        #     break
+        # print("Phase Order Not Correct - Shuffle")
 
         count+=1
         
     return schedules
+
+def shuffleSingleOrder(schedule, intersections, name_to_i_street):
+    random.shuffle(schedule.order)
+    if 'signal_phase_order' in intersections[schedule.i_intersection].constraints:
+        if (not gl.assertOrderPhaseForSchedule(schedule, intersections, name_to_i_street)):
+            max_val = len(intersections.incomings) - len(intersections[schedule.i_intersection].constraints['signal_phase_order'])
+            rand_index = random.randint(0, max_val)
+            for street in intersections[schedule.i_intersection].constraints['signal_phase_order']:
+                street_id = name_to_i_street[street]
+                index = schedule.order.index(street_id)
+                temp_val = schedule.order[rand_index]
+                schedule.order[rand_index] = schedule.order[index]
+                schedule.order[index] = temp_val
+                rand_index += 1
+
+        print('Shuffle Single Order.')
+        if (not gl.assertOrderPhaseForSchedule(schedule, intersections, name_to_i_street)):
+            raise Exception("Order Not Attained")
+        
+        # print("Phase Order Not Correct - Shuffle Single Order")
+   
+        
+    return schedule
 
 def swapOrder(schedules, numberOfIntersections, intersections, name_to_i_street):
     if(numberOfIntersections <= 0):
@@ -108,7 +137,10 @@ def swapOrder(schedules, numberOfIntersections, intersections, name_to_i_street)
         incomingStreetsLength = len(schedules[rand].order)
         if(incomingStreetsLength == 1):
             continue
-        while True:
+        initial_order = [*schedules[rand].order]
+        upper_loop_limit = 20
+        # while True:
+        for i in range(0, upper_loop_limit):
             rand1 = random.randint(0, incomingStreetsLength - 1)
             rand2 = random.randint(0, incomingStreetsLength - 1)
             while(rand1 == rand2):
@@ -118,8 +150,9 @@ def swapOrder(schedules, numberOfIntersections, intersections, name_to_i_street)
             schedules[rand].order[rand2] = temp
             if (gl.assertOrderPhaseForSchedule(schedules[rand], intersections, name_to_i_street)):
                 break
-            # print("Phase Order Not Correct - Swap")
-
+            print("Phase Order Not Correct - Swap")
+            if (i == upper_loop_limit - 1):
+                schedules[rand].order = initial_order
     return schedules
 
 def copyScheduleArray(scheduleArr):
@@ -211,19 +244,21 @@ def usage_based_initial_solution(intersections: list[gl.Intersection],limit_on_m
 
 
 def generateSolution(intersections, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration):
-    while True:
-        decideGen = random.randint(0,1)
-        if(decideGen == 0):
-            solution = traffic_based_initial_solution(intersections, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length)
-        else:
-            solution = usage_based_initial_solution(intersections, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length)
+    # while True:
+    decideGen = random.randint(0,1)
+    if(decideGen == 0):
+        solution = traffic_based_initial_solution(intersections, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length)
+    else:
+        solution = usage_based_initial_solution(intersections, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length)
 
-        for schedule in solution:
-            while(not gl.assertOrderPhaseForSchedule(schedule, intersections, name_to_i_street)):
-                random.shuffle(schedule.order)
-                # print("Phase Order Not Correct - Generate Solution")
+    for i in range(0,len(solution)):
+        schedule = solution[i]
+        while(not gl.assertOrderPhaseForSchedule(schedule, intersections, name_to_i_street)):
+            print("Using 'shuffleSingleOrder' to change the Order")
+            solution[i] = shuffleSingleOrder(schedule, intersections, name_to_i_street)
+            # print("Phase Order Not Correct - Generate Solution")
 
-        break
+        # break
     return solution
         
             
@@ -289,9 +324,9 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
             for e in range(0,employees):
                 tempSchedule = copyScheduleArray(patches[i].scout)
                 decideOperator = random.randint(0,20) 
-                if(decideOperator < 3):
+                if(decideOperator < 10):
                     tempSchedule = shuffleOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1, intersections, name_to_i_street)
-                elif(decideOperator >= 3 and decideOperator < 20):
+                elif(decideOperator >= 10 and decideOperator < 20):
                     tempSchedule = swapOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1, intersections, name_to_i_street)
                 else:
                     tempSchedule = changeGreenTimeDuration(tempSchedule, math.floor(len(intersections) * shrinkageFactor * 0.001) + 1, 1, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length)
