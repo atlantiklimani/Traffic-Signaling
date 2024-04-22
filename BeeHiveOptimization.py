@@ -72,8 +72,11 @@ def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads, limit
                 intersectionCycle = 0
                 for x in schedule[rand].green_times.values():
                     intersectionCycle += x
-                if (intersectionCycle > limit_on_minimum_cycle_length and intersectionCycle < limit_on_maximum_cycle_length):
+                if (intersectionCycle >= limit_on_minimum_cycle_length and intersectionCycle <= limit_on_maximum_cycle_length):
                     break
+                # print("Random Value: ",schedule[rand].green_times[schedule[rand].order[semaforId]], ". Cycle: ",intersectionCycle, '. Min: ',limit_on_minimum_cycle_length, '. Max: ',limit_on_maximum_cycle_length)
+                # print("Phase Order Not Correct - Change Green Time")
+
             otherCount += 1
         count+=1
 
@@ -91,6 +94,8 @@ def shuffleOrder(schedules,numberOfIntersection, intersections, name_to_i_street
             random.shuffle(schedules[rand].order)
             if (gl.assertOrderPhaseForSchedule(schedules[rand], intersections, name_to_i_street)):
                 break
+            # print("Phase Order Not Correct - Shuffle")
+
         count+=1
         
     return schedules
@@ -113,6 +118,8 @@ def swapOrder(schedules, numberOfIntersections, intersections, name_to_i_street)
             schedules[rand].order[rand2] = temp
             if (gl.assertOrderPhaseForSchedule(schedules[rand], intersections, name_to_i_street)):
                 break
+            # print("Phase Order Not Correct - Swap")
+
     return schedules
 
 def copyScheduleArray(scheduleArr):
@@ -214,6 +221,8 @@ def generateSolution(intersections, name_to_i_street, limit_on_minimum_green_pha
         for schedule in solution:
             while(not gl.assertOrderPhaseForSchedule(schedule, intersections, name_to_i_street)):
                 random.shuffle(schedule.order)
+                # print("Phase Order Not Correct - Generate Solution")
+
         break
     return solution
         

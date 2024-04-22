@@ -161,6 +161,26 @@ def readInput(input_file_path):
         yellow_phase,limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, \
         limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration
 
+def get_artificial_street():
+    """
+    Create and return an artificial street.
+
+    Returns:
+        Street: An artificial street object with default values.
+    """
+    street = Street(
+        id=-1,
+        start=-1,
+        end=-1,
+        name="artificial_street",
+        duration=0,
+        driving_cars={},
+        waiting_cars=deque(),
+        arrival_times={},
+        departure_times={}
+    )
+    return street
+
 def reinit(streets, intersections):
     # Reinitialize mutable data structures
     for street in streets:
@@ -179,7 +199,6 @@ def reinit(streets, intersections):
 
 def grade(schedules, streets, intersections, paths, total_duration, bonus_points, yellow_phase):
     reinit(streets, intersections) # we reset intersections and streets before performing a simulation
-
     #save path copies to reset them after performing the simulation
     paths_copy = [path.copy() for path in paths]
 
@@ -195,10 +214,41 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
         green_street_per_t_mod = intersection.green_street_per_t_mod
         for street_id in schedule.order:
             green_time = schedule.green_times[street_id]
-            for _ in range(green_time):
+            
+            # Calculate green time without considering yellow phase
+            green_time_without_yellow = green_time - yellow_phase
+
+            # Consider the usage factor of green time (set to 0.7 based on measurements)
+            usage_factor=0.7
+            green_time_usage = int(usage_factor * green_time_without_yellow)
+
+            # Add streets with actual traffic during green time
+            for _ in range(green_time_usage):
                 green_street_per_t_mod.append(streets[street_id])
-            schedule_duration += green_time
+            schedule_duration += green_time_usage
+
+            # Add artificial streets for the remaining green time
+            for _ in range(green_time - green_time_usage):
+                green_street_per_t_mod.append(get_artificial_street())
+            schedule_duration += (green_time - green_time_usage)
+
+        # Add artificial streets for pedestrian_phase_interval
+        for _ in range(intersection.pedestrian_phase_interval):
+            green_street_per_t_mod.append(get_artificial_street())
+        schedule_duration += intersection.pedestrian_phase_interval
+
+        # Add artificial streets for all_red_phase_interval
+        for _ in range(intersection.all_red_phase_interval):
+            green_street_per_t_mod.append(get_artificial_street())
+        schedule_duration += intersection.all_red_phase_interval
+       
         intersection.schedule_duration = schedule_duration
+        # for street_id in schedule.order:
+        #     green_time = schedule.green_times[street_id]
+        #     for _ in range(green_time):
+        #         green_street_per_t_mod.append(streets[street_id])
+        #     schedule_duration += green_time
+        # intersection.schedule_duration = schedule_duration
 
     # intersection_ids_with_waiting_cars is restricted to intersections
     # with schedules
@@ -225,10 +275,10 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
             if intersection.needs_updates:
                 # Update the green street
                 t_mod = t % intersection.schedule_duration
-                intersection.green_street = None
-                if(t_mod + yellow_phase < len(intersection.green_street_per_t_mod)):
-                    if(intersection.green_street_per_t_mod[t_mod + yellow_phase].id == intersection.green_street_per_t_mod[t_mod].id):
-                        intersection.green_street = intersection.green_street_per_t_mod[t_mod]
+                intersection.green_street = intersection.green_street_per_t_mod[t_mod]
+                # if(t_mod + yellow_phase < len(intersection.green_street_per_t_mod)):
+                #     if(intersection.green_street_per_t_mod[t_mod + yellow_phase].id == intersection.green_street_per_t_mod[t_mod].id):
+                #         intersection.green_street = intersection.green_street_per_t_mod[t_mod]
 
             if(intersection.green_street is None):
                 green_streets = []
@@ -296,6 +346,7 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
     # The end of simulation, we reset the paths
     for i_path in range(len(paths)):
         paths[i_path] = paths_copy[i_path]
+    
     return score
 
 def assertOrder(actual, constraint, name_to_i_street):
