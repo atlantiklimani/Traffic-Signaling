@@ -98,7 +98,6 @@ def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads, limit
                 intersectionCycle = 0
                 for x in schedule[rand].green_times.values():
                     intersectionCycle += x
-                # print('Cycle: ', intersectionCycle, 'Number of incoming rodas: ',len(schedule[rand].green_times))
                 if (intersectionCycle > limit_on_minimum_cycle_length and intersectionCycle < limit_on_maximum_cycle_length):
                     break
             otherCount += 1
@@ -204,10 +203,8 @@ def traffic_based_initial_solution(intersections: list[gl.Intersection],limit_on
             # Introduce randomness in green time allocation
             random_factor = random.uniform(limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration)  # Adjust the range as needed
             green_time = 2 if len(street.waiting_cars) > threshold else 1
-            # print(int(green_time * random_factor))
             green_times[street.id] = int(green_time * random_factor)
             total_green_time += green_times[street.id]
-            #  print(total_green_time)
 
         # Apply minimum and maximum constraints on total green time for the intersection
         total_green_time = max(min(total_green_time, limit_on_minimum_cycle_length), limit_on_maximum_cycle_length)
@@ -221,7 +218,6 @@ def traffic_based_initial_solution(intersections: list[gl.Intersection],limit_on
         for street_id in green_times:
             green_times[street_id] = max(min(green_times[street_id], limit_on_maximum_green_phase_duration), limit_on_minimum_green_phase_duration)
         if order:
-            #print(intersection.id, order, green_times,intersection.pedestrian_phase,intersection.all_red_phase)
             # schedules.append(Schedule(intersection.id, order, green_times,intersection.pedestrian_phase,intersection.all_red_phase))
             schedules.append(Schedule(intersection.id, order, green_times))
     return schedules
@@ -241,7 +237,6 @@ def usage_based_initial_solution(intersections: list[gl.Intersection],limit_on_m
             usage = intersection.streets_usage.get(street.name, 0)
             #green_time = int(math.sqrt(usage)) if usage > 0 else 1
             green_time = min(max(limit_on_minimum_green_phase_duration, int(math.sqrt(usage))), limit_on_maximum_green_phase_duration)
-            # print(green_time)
             green_times[street.id] = green_time
             total_green_time += green_times[street.id]
          # Apply minimum and maximum constraints on total green time for the intersection

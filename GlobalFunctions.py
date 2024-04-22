@@ -100,12 +100,10 @@ def readInput(input_file_path):
                                        all_red_phase_interval=inter['all_red_phase_interval'],                                            
                                        constraints={})
                         for inter in json_file['intersections'])
-                        #   for i in range(num_intersections))
                         
     # Parse the streets
     streets = []
     name_to_street = {}
-    # for i_street in range(num_streets):
     for i_street in range(0, len(json_file['streets'])): 
         s = json_file['streets'][i_street]       
         start = s['start']
@@ -154,10 +152,6 @@ def readInput(input_file_path):
                 intersection.constraints['simultaneously_signal'] = [constraint['streets']]
         elif (constraint['type'] == 'signal_phase_order'):
             intersection.constraints['signal_phase_order'] = constraint['streets']
-            # if ('signal_phase_order' in intersection.constraints):
-            #     intersection.constraints['signal_phase_order'].append(constraint['streets'])
-            # else:
-            #     intersection.constraints['signal_phase_order'] = [constraint['streets']]
 
     for inter in intersections:
         #delete duplicates in using_streets array
@@ -306,8 +300,6 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
 
 def assertOrder(actual, constraint, name_to_i_street):
     indices = [actual.index(name_to_i_street[c].id) if name_to_i_street[c].id in actual else -1 for c in constraint]
-    # indices = [x for x in indices if x != -1]
-    print('Schedule Order: ', actual, '. Schedule Constraints: ', constraint)
 
     for i in range(0,len(indices)):
         if indices[i] != -1:
@@ -353,14 +345,10 @@ def printSchedule(schedules, streets):
 
 def getPrintedSchedule(schedules, streets):
     result = f'{len(schedules)}\n'
-    # print(len(schedules))
     for schedule in schedules:
-        # print(schedule.i_intersection)
-        # print(len(schedule.order))
         result += f'{schedule.i_intersection}\n'
         result += f'{len(schedule.order)}\n'
         for i in range(len(schedule.order)):
-            # print(streets[schedule.order[i]].name, schedule.green_times[schedule.order[i]])
             result += f'{streets[schedule.order[i]].name} {schedule.green_times[schedule.order[i]]}\n'
     
     return result
