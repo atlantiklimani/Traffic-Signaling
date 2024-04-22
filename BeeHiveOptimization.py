@@ -52,31 +52,6 @@ class Patch:
         self.employees = 0
         self.stg = True
 
-def firstOperator(order):
-    order = order[1:] + order[:1]
-    return order
-
-def fifthOperator(schedules, numberOfIntersections, numberOfRoads, instersections, streets):
-    if(numberOfIntersections <= 0):
-        return schedules
-    
-    maxNumOfSchedules = len(schedules)
-    for i in range(0,numberOfIntersections):
-        intersection = schedules[random.randint(0,maxNumOfSchedules)]
-        for j in range (0, numberOfRoads):
-            if(j >= len(intersection.order)):
-                break
-            else:
-                streetId = intersection.order[random.randint(0,len(intersection.order) - 1)]
-                intersection.green_times[streetId] = choices([2,3,4], weights=[85,10,5])
-        ## Street to find the next intersection
-        streetId = intersection.order[random.randint(0,len(intersection.order) - 1)]
-        nextInterectionId = streets[streetId].end
-        # print(streets[streetId], ' -------------- aouiwfhsihfauish')
-        intersection = [x for x in schedules if x.i_intersection ==  nextInterectionId][0]
-
-    return schedules
-
 def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length):
     if(numberOfIntersection <= 0):
         return schedule
@@ -90,7 +65,6 @@ def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads, limit
         otherCount = 0
         while(otherCount < length and otherCount < numberOfRoads):
             semaforId = random.randint(0,length - 1)
-            # schedule[rand].green_times[schedule[rand].order[semaforId]] = int(choices([1, 2, 3],weights=[10, 70, 20], k=1)[0])
             while True:
                 schedule[rand].green_times[schedule[rand].order[semaforId]] = random.randint(limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration)
                 if (len(schedule[rand].green_times) <= 1):
