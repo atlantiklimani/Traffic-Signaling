@@ -167,7 +167,7 @@ def copyScheduleArray(scheduleArr):
         
     return newScheduleArr
 
-def traffic_based_initial_solution(intersections: list[gl.Intersection],limit_on_minimum_green_phase_duration:int,limit_on_maximum_green_phase_duration:int,limit_on_minimum_cycle_length:int,limit_on_maximum_cycle_length:int) -> list[Schedule]:
+def traffic_based_initial_solution(intersections: list[gl.Intersection],limit_on_minimum_green_phase_duration:int,limit_on_maximum_green_phase_duration:int,limit_on_minimum_cycle_length:int,limit_on_maximum_cycle_length:int, name_to_i_street) -> list[Schedule]:
     schedules = []
 
     # Calculate the global threshold first for efficiency
@@ -179,10 +179,24 @@ def traffic_based_initial_solution(intersections: list[gl.Intersection],limit_on
         green_times = {}
         total_green_time =0
         # Sort streets based on the sum of lengths of driving_cars and waiting_cars
-        sorted_streets = sorted(intersection.incomings,
+        
+        if 'signal_phase_order' in intersection.constraints:
+            street_group_traffic = {}
+            streets = []
+            for street in intersection.constraints['signal_phase_order']:
+                street_group_traffic[street] = 0
+                streets.append(name_to_i_street.get(street))
+            for street in intersection.incomings:
+                for group in intersection.constraints['simultaneously_signal']:
+                    if street in group:
+                        street_obj = name_to_i_street(street)
+                        street_group_traffic[group[0]] += len(street_obj.driving_cars) + len(street_obj.waiting_cars)
+            sorted_streets = sorted(streets, key=lambda s:street_group_traffic.get(s.name, 0), reverse=True) 
+        else:
+            sorted_streets = sorted(intersection.incomings,
                                 key=lambda s: len(s.driving_cars) + len(s.waiting_cars),
                                 reverse=True)
-
+        
         for street in sorted_streets:
             # if street.name in intersection.using_streets:
             order.append(street.id)
@@ -208,13 +222,27 @@ def traffic_based_initial_solution(intersections: list[gl.Intersection],limit_on
             schedules.append(Schedule(intersection.id, order, green_times))
     return schedules
 
-def usage_based_initial_solution(intersections: list[gl.Intersection],limit_on_minimum_green_phase_duration:int,limit_on_maximum_green_phase_duration:int,limit_on_minimum_cycle_length:int,limit_on_maximum_cycle_length:int) -> list[Schedule]:
+def usage_based_initial_solution(intersections: list[gl.Intersection],limit_on_minimum_green_phase_duration:int,limit_on_maximum_green_phase_duration:int,limit_on_minimum_cycle_length:int,limit_on_maximum_cycle_length:int, name_to_i_street) -> list[Schedule]:
     schedules = []
     for intersection in intersections:
         order = []
         green_times = {}
         total_green_time =0
-        sorted_streets = sorted(intersection.incomings, key=lambda s: intersection.streets_usage.get(s.name, 0),
+
+        if 'signal_phase_order' in intersection.constraints:
+            street_group_usage = {}
+            streets = []
+            for street in intersection.constraints['signal_phase_order']:
+                street_group_usage[street] = 0
+                streets.append(name_to_i_street.get(street))
+            for street in intersection.incomings:
+                for group in intersection.constraints['simultaneously_signal']:
+                    if street in group:
+                        street_group_usage[group[0]] += intersection.streets_usage.get(street.name, 0)
+            intersection.streets_usage = street_group_usage                       
+            sorted_streets = sorted(streets, key=lambda s: intersection.streets_usage.get(s.name, 0), reverse=True) 
+        else:
+            sorted_streets = sorted(intersection.incomings, key=lambda s: intersection.streets_usage.get(s.name, 0),
                                 reverse=True)
 
         for street in sorted_streets:
@@ -247,9 +275,9 @@ def generateSolution(intersections, name_to_i_street, limit_on_minimum_green_pha
     # while True:
     decideGen = random.randint(0,1)
     if(decideGen == 0):
-        solution = traffic_based_initial_solution(intersections, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length)
+        solution = traffic_based_initial_solution(intersections, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, name_to_i_street)
     else:
-        solution = usage_based_initial_solution(intersections, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length)
+        solution = usage_based_initial_solution(intersections, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, name_to_i_street)
 
     for i in range(0,len(solution)):
         schedule = solution[i]
@@ -289,7 +317,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     stgLim = 4 #stagnation limit for patches
     shrinkageFactor = 0.001 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
     shrinkageFactorReducedBy = 0.99 # by how much is the shrinkage factor reduceb by for iteration
-    executionTime = 5 #8 * 60 * 60
+    executionTime = 1 #8 * 60 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor 
     countIterations = 0
