@@ -111,7 +111,8 @@ def shuffleSingleOrder(schedule, intersections, name_to_i_street):
     if 'signal_phase_order' in intersections[schedule.i_intersection].constraints:
         if (not gl.assertOrderPhaseForSchedule(schedule, intersections, name_to_i_street)):
             max_val = len(intersections.incomings) - len(intersections[schedule.i_intersection].constraints['signal_phase_order'])
-            rand_index = random.randint(0, max_val)
+            # rand_index = random.randint(0, max_val)
+            rand_index = 0
             for street in intersections[schedule.i_intersection].constraints['signal_phase_order']:
                 street_id = name_to_i_street[street]
                 index = schedule.order.index(street_id)
@@ -307,7 +308,7 @@ def outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, 
     output.close()
     return
 
-def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, yellow_phase, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, use_seed = False, solution_file_path = None):
+def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, yellow_phase, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, duration_to_pass_through_a_traffic_light, use_seed = False, solution_file_path = None):
     patches = []
     ns = 20 #number of scout bees
     nb = 5 #number of best sites
@@ -317,7 +318,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     stgLim = 4 #stagnation limit for patches
     shrinkageFactor = 0.001 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
     shrinkageFactorReducedBy = 0.99 # by how much is the shrinkage factor reduceb by for iteration
-    executionTime = 1 #8 * 60 * 60
+    executionTime = 30 #8 * 60 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor 
     countIterations = 0
@@ -330,7 +331,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         else :    
             sol = generateSolution(intersections, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration)         
         
-        grade = gl.grade(sol,streets, intersections, paths, total_duration, bonus_points, yellow_phase)
+        grade = gl.grade(sol,streets, intersections, paths, total_duration, bonus_points, yellow_phase, duration_to_pass_through_a_traffic_light)
         patches.append(Patch(grade, sol))
     
     while (time() - terminated_time < executionTime):
@@ -351,7 +352,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
 
             for e in range(0,employees):
                 tempSchedule = copyScheduleArray(patches[i].scout)
-                decideOperator = random.randint(0,20) 
+                decideOperator = random.randint(0,30) 
                 if(decideOperator < 10):
                     tempSchedule = shuffleOrder(tempSchedule, math.floor(len(intersections) * shrinkageFactor) + 1, intersections, name_to_i_street)
                 elif(decideOperator >= 10 and decideOperator < 20):
@@ -359,7 +360,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                 else:
                     tempSchedule = changeGreenTimeDuration(tempSchedule, math.floor(len(intersections) * shrinkageFactor * 0.001) + 1, 1, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length)
                     
-                tempScore = gl.grade(tempSchedule,streets, intersections, paths, total_duration, bonus_points, yellow_phase)
+                tempScore = gl.grade(tempSchedule,streets, intersections, paths, total_duration, bonus_points, yellow_phase, duration_to_pass_through_a_traffic_light)
 
                 if(tempScore > patches[i].score):
                     patches[i].stg = False
@@ -376,12 +377,12 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                  
             if(patches[i].stgLim > stgLim and i != 0):
                 solution = generateSolution(intersections, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration)      
-                grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points, yellow_phase)
+                grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points, yellow_phase, duration_to_pass_through_a_traffic_light)
                 patches[i] = Patch(score=grade, scout= solution)
 
         for i in range(nb, ns):
             solution = generateSolution(intersections, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration)      
-            grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points, yellow_phase)
+            grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points, yellow_phase, duration_to_pass_through_a_traffic_light)
             patches.append(Patch(score=grade, scout= solution))
     
         if(shrinkageFactor > 0.001):
@@ -403,19 +404,22 @@ file = sys.argv[1]
 
 start = time()
 total_duration, bonus_points, intersections, streets, name_to_i_street, paths, \
-    duration_to_pass_through_an_intersection, yellow_phase, limit_on_minimum_cycle_length, \
+    duration_to_pass_through_a_traffic_light, yellow_phase, limit_on_minimum_cycle_length, \
     limit_on_maximum_cycle_length, limit_on_minimum_green_phase_duration, \
     limit_on_maximum_green_phase_duration, = gl.readInput(file)
 
-if len(sys.argv) == 3:
-    use_seed = sys.argv[2]
-    solution_file_path = './seeds/' + sys.argv[1] + '.txt.out'
-    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, yellow_phase, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, use_seed, solution_file_path)
-else :
-    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, yellow_phase, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length)
-    gl.printSchedule(schedule, streets)
+manualSolution = gl.readSolutionFromJson('./output/manual_output/pr_manual_output.json', name_to_i_street, intersections)
+score = gl.grade(manualSolution, streets, intersections, paths, total_duration, bonus_points, yellow_phase, duration_to_pass_through_a_traffic_light)
+print("Real Score: ",score)
+# if len(sys.argv) == 3:
+#     use_seed = sys.argv[2]
+#     solution_file_path = './seeds/' + sys.argv[1] + '.txt.out'
+#     schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, yellow_phase, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, duration_to_pass_through_a_traffic_light, use_seed, solution_file_path)
+# else :
+#     schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, yellow_phase, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, duration_to_pass_through_a_traffic_light)
+#     gl.printSchedule(schedule, streets)
 
-print("Score: ",score)
+# print("Score: ",score)
 
 # print(gl.grade(gl.readSolution('./seeds/I500_S998_C1000.txt.out',streets),streets, intersections, paths, total_duration, bonus_points))
 # print(gl.grade(gl.readSolution('./I200_S17200_C1000_1207889',streets),streets, intersections, paths, total_duration, bonus_points))

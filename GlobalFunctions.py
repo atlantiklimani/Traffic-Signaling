@@ -16,6 +16,7 @@ Street = recordclass('Street', [
 
 Intersection = recordclass('Intersection', [
     'id',
+    'name',
     'incomings',
     'outgoings',
     'green_street',
@@ -67,6 +68,38 @@ def readSolution(solution_file_path, streets):
     
     return schedules
 
+def readSolutionFromJson(solution_file_path, name_to_i_street, intersections):
+    
+    with open(solution_file_path) as f:
+        solution = json.load(fp=f)
+
+    _intersections = solution['intersections']
+
+    schedules = []
+    for i in range(0,len(_intersections)):
+        i_intersection = _intersections[i]
+        num_phases = len(i_intersection['phases']) 
+        order = []
+        green_times = {}
+        for j in range(0, num_phases):
+            street_name = list(i_intersection['phases'][j]['streets'][0].keys())[0]
+            green_time = list(i_intersection['phases'][j]['streets'][0].values())[0]
+            
+            street_id = name_to_i_street.get(street_name).id
+            order.append(street_id)
+            green_times[street_id] = green_time
+
+        interesection_id = -2
+        for inter in intersections:
+            if (inter.name == i_intersection['intersection_name']):
+                interesection_id = inter.id
+
+        schedules.append(Schedule(i_intersection=interesection_id,
+                                order=order,
+                                green_times=green_times))
+    
+    return schedules
+
 def readInput(input_file_path):
     # filename = "Instances/" + input_file_path
     filename = "input/" + input_file_path
@@ -80,13 +113,14 @@ def readInput(input_file_path):
     num_streets = json_file['simulation']['streets']
     num_cars = json_file['simulation']['cars']
     bonus_points = json_file['simulation']['bonus']
-    duration_to_pass_through_an_intersection = json_file['simulation']['duration_to_pass_through_an_intersection']
+    duration_to_pass_through_a_traffic_light = json_file['simulation']['duration_to_pass_through_a_traffic_light']
     yellow_phase = json_file['simulation']['yellow_phase']
     limit_on_minimum_cycle_length = json_file['simulation']['limit_on_minimum_cycle_length']
     limit_on_maximum_cycle_length = json_file['simulation']['limit_on_maximum_cycle_length']
     limit_on_minimum_green_phase_duration = json_file['simulation']['limit_on_minimum_green_phase_duration']
     limit_on_maximum_green_phase_duration = json_file['simulation']['limit_on_maximum_green_phase_duration']
-    intersections = tuple(Intersection(id=inter['name'],
+    intersections = tuple(Intersection(id=inter['id'],
+                                       name = inter['name'],
                                        incomings=deque(),
                                        outgoings=deque(),
                                        green_street=None,
@@ -132,8 +166,13 @@ def readInput(input_file_path):
         path = json_file['cars'][i_car]['path']
 
         assert len(path) == path_length
+        print(path)
         for name in path:
+            print("Name: ", name)
+            print("Path: ", path)
+            print("Id: ", i_car)
             id_inter = name_to_street[name].end.id
+            print(id_inter)
             intersections[id_inter].using_streets.append(name)
             if name in intersections[id_inter].streets_usage:
                 intersections[id_inter].streets_usage[name] += 1
@@ -144,7 +183,13 @@ def readInput(input_file_path):
         paths.append(path)
     
     for constraint in json_file['constraints']:
-        intersection = intersections[constraint['intersection_name']]
+        x_id = 0
+        for x in intersections:
+             if x.name == constraint['intersection_name']:
+                 x_id = x.id
+                 break
+
+        intersection = intersections[x_id]
         if (constraint['type'] == 'simultaneously_signal'):
             if ('simultaneously_signal' in intersection.constraints):
                 intersection.constraints['simultaneously_signal'].append(constraint['streets'])
@@ -157,7 +202,7 @@ def readInput(input_file_path):
         #delete duplicates in using_streets array
         intersections[inter.id].using_streets = list(dict.fromkeys(intersections[inter.id].using_streets))
     return total_duration, bonus_points, intersections, \
-           streets, name_to_street, paths, duration_to_pass_through_an_intersection, \
+           streets, name_to_street, paths, duration_to_pass_through_a_traffic_light, \
         yellow_phase,limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, \
         limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration
 
@@ -197,7 +242,7 @@ def reinit(streets, intersections):
         intersection.needs_updates = False
 
 
-def grade(schedules, streets, intersections, paths, total_duration, bonus_points, yellow_phase):
+def grade(schedules, streets, intersections, paths, total_duration, bonus_points, yellow_phase, duration_to_pass_through_a_traffic_light):
     reinit(streets, intersections) # we reset intersections and streets before performing a simulation
     #save path copies to reset them after performing the simulation
     paths_copy = [path.copy() for path in paths]
@@ -219,7 +264,8 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
             green_time_without_yellow = green_time - yellow_phase
 
             # Consider the usage factor of green time (set to 0.7 based on measurements)
-            usage_factor=0.7
+            # usage_factor=0.7
+            usage_factor = 1 / duration_to_pass_through_a_traffic_light
             green_time_usage = int(usage_factor * green_time_without_yellow)
 
             # Add streets with actual traffic during green time
