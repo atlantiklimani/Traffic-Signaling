@@ -166,13 +166,8 @@ def readInput(input_file_path):
         path = json_file['cars'][i_car]['path']
 
         assert len(path) == path_length
-        print(path)
         for name in path:
-            print("Name: ", name)
-            print("Path: ", path)
-            print("Id: ", i_car)
             id_inter = name_to_street[name].end.id
-            print(id_inter)
             intersections[id_inter].using_streets.append(name)
             if name in intersections[id_inter].streets_usage:
                 intersections[id_inter].streets_usage[name] += 1
@@ -397,14 +392,16 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
 
 def assertOrder(actual, constraint, name_to_i_street):
     indices = [actual.index(name_to_i_street[c].id) if name_to_i_street[c].id in actual else -1 for c in constraint]
-
+    
     for i in range(0,len(indices)):
         if indices[i] != -1:
             indices = indices[i:]
+            break
 
-    for i in range(len(indices) - 1, 0):
+    for i in range(len(indices) - 1, 0, -1):
         if indices[i] != -1:
-            indices = indices[:i]        
+            indices = indices[:i+1] 
+            break       
 
     if indices == sorted(indices):
         return True
@@ -449,3 +446,60 @@ def getPrintedSchedule(schedules, streets):
             result += f'{streets[schedule.order[i]].name} {schedule.green_times[schedule.order[i]]}\n'
     
     return result
+
+def print_json_solution(patches, schedules, streets, intersections, file, code):
+    street_id_to_name = {}
+    for street in streets:
+        street_id_to_name[street.id] = street.name
+
+    rruga_perfaqsuese_dhe_rruget_antare = {}
+
+    intersection_id_to_pedestrian_phase = {}
+    intersection_id_to_all_red_phase = {}
+    intersection_id_to_name = {}
+    for i in intersections:
+        intersection_id_to_name[i.id] = i.name
+        intersection_id_to_all_red_phase[i.id] = i.all_red_phase_interval
+        intersection_id_to_pedestrian_phase[i.id] = i.pedestrian_phase_interval
+
+        if 'simultaneously_signal' in i.constraints:
+            for rruget in i.constraints["simultaneously_signal"]:
+                rruga_perfaqsuese_dhe_rruget_antare[rruget[0]] = rruget
+
+    # for r, i in rruga_perfaqsuese_dhe_rruget_antare.items():
+    #     print(r, i)
+    # if constraint['type'] == 'simultaneously_signal' and 'simultaneously_signal' in i.constraints:
+    #     print(constraint['streets'])
+
+    solution = {}
+    solution["number_of_intersections"] = len(schedules)
+    solution["intersections"] = []
+
+    for schedule in schedules:
+        intersection = {}
+        intersection["intersection_name"] = intersection_id_to_name[schedule.i_intersection]
+        intersection["all_red_phase_interval"] = intersection_id_to_all_red_phase[schedule.i_intersection]
+        intersection["pedestrian_phase_interval"] = intersection_id_to_pedestrian_phase[schedule.i_intersection]
+
+        i = 1
+        phases = []
+        for order in schedule.order:
+            phase_street = {}
+            phase_street["phase"] = i
+            phase_street["streets"] = []
+            if street_id_to_name[order] not in rruga_perfaqsuese_dhe_rruget_antare:
+                phase_street["streets"].append({street_id_to_name[order]: schedule.green_times[order]})
+            else:
+                rruget_e_selektuara = rruga_perfaqsuese_dhe_rruget_antare[street_id_to_name[order]]
+                for rruga in rruget_e_selektuara:
+                    phase_street["streets"].append({rruga: schedule.green_times[order]})
+            i += 1
+            phases.append(phase_street)
+
+        intersection["phases"] = phases
+        solution["intersections"].append(intersection)
+
+    json_object = json.dumps(solution, indent=4)
+    jsonOutputFile =  open(f"output/{file}/{file}_{patches[0].score}_{code}.json", "a") 
+    jsonOutputFile.write(json_object)
+    jsonOutputFile.close()

@@ -77,8 +77,7 @@ def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads, limit
                     intersectionCycle += x
                 if (intersectionCycle >= limit_on_minimum_cycle_length and intersectionCycle <= limit_on_maximum_cycle_length):
                     break
-                # print("Random Value: ",schedule[rand].green_times[schedule[rand].order[semaforId]], ". Cycle: ",intersectionCycle, '. Min: ',limit_on_minimum_cycle_length, '. Max: ',limit_on_maximum_cycle_length)
-                print("Phase Order Not Correct - Change Green Time")
+                print("Phase Green Time Boundaries Not Correct - Change Green Time")
 
                 if(i == loop_upper_limit - 1):
                     schedule[rand].green_times[schedule[rand].order[semaforId]] = initial    
@@ -95,13 +94,9 @@ def shuffleOrder(schedules,numberOfIntersection, intersections, name_to_i_street
 
     while(count < numberOfIntersection):
         rand = random.randint(0, len(schedules) - 1)
-        # while True:
-        # random.shuffle(schedules[rand].order)
-        schedules[rand] = shuffleSingleOrder(schedules[rand], intersections, name_to_i_street)
-        # if (gl.assertOrderPhaseForSchedule(schedules[rand], intersections, name_to_i_street)):
-        #     break
-        # print("Phase Order Not Correct - Shuffle")
 
+        schedules[rand] = shuffleSingleOrder(schedules[rand], intersections, name_to_i_street)
+ 
         count+=1
         
     return schedules
@@ -110,11 +105,11 @@ def shuffleSingleOrder(schedule, intersections, name_to_i_street):
     random.shuffle(schedule.order)
     if 'signal_phase_order' in intersections[schedule.i_intersection].constraints:
         if (not gl.assertOrderPhaseForSchedule(schedule, intersections, name_to_i_street)):
-            max_val = len(intersections.incomings) - len(intersections[schedule.i_intersection].constraints['signal_phase_order'])
+            # max_val = len(intersections[schedule.i_intersection].incomings) - len(intersections[schedule.i_intersection].constraints['signal_phase_order'])
             # rand_index = random.randint(0, max_val)
             rand_index = 0
             for street in intersections[schedule.i_intersection].constraints['signal_phase_order']:
-                street_id = name_to_i_street[street]
+                street_id = name_to_i_street.get(street).id
                 index = schedule.order.index(street_id)
                 temp_val = schedule.order[rand_index]
                 schedule.order[rand_index] = schedule.order[index]
@@ -124,9 +119,6 @@ def shuffleSingleOrder(schedule, intersections, name_to_i_street):
         print('Shuffle Single Order.')
         if (not gl.assertOrderPhaseForSchedule(schedule, intersections, name_to_i_street)):
             raise Exception("Order Not Attained")
-        
-        # print("Phase Order Not Correct - Shuffle Single Order")
-   
         
     return schedule
 
@@ -140,8 +132,8 @@ def swapOrder(schedules, numberOfIntersections, intersections, name_to_i_street)
             continue
         initial_order = [*schedules[rand].order]
         upper_loop_limit = 20
-        # while True:
         for i in range(0, upper_loop_limit):
+            print("Applying Swap")
             rand1 = random.randint(0, incomingStreetsLength - 1)
             rand2 = random.randint(0, incomingStreetsLength - 1)
             while(rand1 == rand2):
@@ -190,7 +182,7 @@ def traffic_based_initial_solution(intersections: list[gl.Intersection],limit_on
             for street in intersection.incomings:
                 for group in intersection.constraints['simultaneously_signal']:
                     if street in group:
-                        street_obj = name_to_i_street(street)
+                        street_obj = name_to_i_street.get(street)
                         street_group_traffic[group[0]] += len(street_obj.driving_cars) + len(street_obj.waiting_cars)
             sorted_streets = sorted(streets, key=lambda s:street_group_traffic.get(s.name, 0), reverse=True) 
         else:
@@ -283,9 +275,8 @@ def generateSolution(intersections, name_to_i_street, limit_on_minimum_green_pha
     for i in range(0,len(solution)):
         schedule = solution[i]
         while(not gl.assertOrderPhaseForSchedule(schedule, intersections, name_to_i_street)):
-            print("Using 'shuffleSingleOrder' to change the Order")
             solution[i] = shuffleSingleOrder(schedule, intersections, name_to_i_street)
-            # print("Phase Order Not Correct - Generate Solution")
+            print("Phase Order Not Correct - Generate Solution")
 
         # break
     return solution
@@ -297,7 +288,8 @@ def outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, 
     if not os.path.exists(f'output/{file}'):
         os.mkdir(f'output/{file}')
     
-    output = open(f'output/{file}/{file}_{patches[0].score}_{"".join(random.choices(string.ascii_lowercase, k= 3))}', 'a')
+    code = "".join(random.choices(string.ascii_lowercase, k= 3))
+    output = open(f'output/{file}/{file}_{patches[0].score}_{code}', 'a')
     output.write(f'Parameters:\nns - {ns}, nb - {nb}, ne - {ne}, nrb - {nrb}, nre - {nre},\nStagnation limit - {stgLim}\nInitial shrinkage factor - {initialShrinkageFactor}, Shrinkage Factor per Iteration Reduced by - {shrinkageFactorReducedBy}, Termianl shrinkage factor - {shrinkageFactor:.3f}'
     f'\nExecution Time - {executionTime}, Number of loop iterations - {countIterations}\n')
     for i in range(0,10):
@@ -306,6 +298,9 @@ def outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, 
     output.write("------------------------- Output File Begins Here -------------------------------------\n")
     output.write(gl.getPrintedSchedule(patches[0].scout, streets=streets))
     output.close()
+
+    gl.print_json_solution(patches=patches, schedules=patches[0].scout, streets=streets, intersections=intersections, file= file, code=code )
+
     return
 
 def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, yellow_phase, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, duration_to_pass_through_a_traffic_light, use_seed = False, solution_file_path = None):
@@ -318,7 +313,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     stgLim = 4 #stagnation limit for patches
     shrinkageFactor = 0.001 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
     shrinkageFactorReducedBy = 0.99 # by how much is the shrinkage factor reduceb by for iteration
-    executionTime = 30 #8 * 60 * 60
+    executionTime = 1 #8 * 60 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor 
     countIterations = 0
@@ -333,9 +328,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         
         grade = gl.grade(sol,streets, intersections, paths, total_duration, bonus_points, yellow_phase, duration_to_pass_through_a_traffic_light)
         patches.append(Patch(grade, sol))
-    
     while (time() - terminated_time < executionTime):
-        
         patches.sort(reverse=True, key=sortKey)
         patches = patches[0: ns]
 
@@ -408,18 +401,19 @@ total_duration, bonus_points, intersections, streets, name_to_i_street, paths, \
     limit_on_maximum_cycle_length, limit_on_minimum_green_phase_duration, \
     limit_on_maximum_green_phase_duration, = gl.readInput(file)
 
-manualSolution = gl.readSolutionFromJson('./output/manual_output/pr_manual_output.json', name_to_i_street, intersections)
-score = gl.grade(manualSolution, streets, intersections, paths, total_duration, bonus_points, yellow_phase, duration_to_pass_through_a_traffic_light)
-print("Real Score: ",score)
-# if len(sys.argv) == 3:
-#     use_seed = sys.argv[2]
-#     solution_file_path = './seeds/' + sys.argv[1] + '.txt.out'
-#     schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, yellow_phase, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, duration_to_pass_through_a_traffic_light, use_seed, solution_file_path)
-# else :
-#     schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, yellow_phase, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, duration_to_pass_through_a_traffic_light)
-#     gl.printSchedule(schedule, streets)
+# manualSolution = gl.readSolutionFromJson('./output/manual_output/pr_manual_output.json', name_to_i_street, intersections)
+# score = gl.grade(manualSolution, streets, intersections, paths, total_duration, bonus_points, yellow_phase, duration_to_pass_through_a_traffic_light)
+# print("Real Score: ",score)
+if len(sys.argv) == 3:
+    use_seed = sys.argv[2]
+    solution_file_path = './seeds/' + sys.argv[1] + '.txt.out'
+    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, yellow_phase, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, duration_to_pass_through_a_traffic_light, use_seed, solution_file_path)
+else :
+    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, yellow_phase, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, duration_to_pass_through_a_traffic_light)
+    gl.printSchedule(schedule, streets)
+    # gl.print_json_solution(schedule, streets, intersections)
 
-# print("Score: ",score)
+print("Score: ",score)
 
 # print(gl.grade(gl.readSolution('./seeds/I500_S998_C1000.txt.out',streets),streets, intersections, paths, total_duration, bonus_points))
 # print(gl.grade(gl.readSolution('./I200_S17200_C1000_1207889',streets),streets, intersections, paths, total_duration, bonus_points))
