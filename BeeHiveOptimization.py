@@ -176,7 +176,10 @@ def traffic_based_initial_solution(intersections: list[gl.Intersection],limit_on
         if 'signal_phase_order' in intersection.constraints:
             street_group_traffic = {}
             streets = []
-            for street in intersection.constraints['signal_phase_order']:
+            street_mps = [group[0] for group in intersection.constraints['simultaneously_signal']]
+
+            # for street in intersection.constraints['signal_phase_order']:
+            for street in street_mps:
                 street_group_traffic[street] = 0
                 streets.append(name_to_i_street.get(street))
             for street in intersection.incomings:
@@ -225,7 +228,10 @@ def usage_based_initial_solution(intersections: list[gl.Intersection],limit_on_m
         if 'signal_phase_order' in intersection.constraints:
             street_group_usage = {}
             streets = []
-            for street in intersection.constraints['signal_phase_order']:
+            street_mps = [group[0] for group in intersection.constraints['simultaneously_signal']]
+
+            # for street in intersection.constraints['signal_phase_order']:
+            for street in street_mps:
                 street_group_usage[street] = 0
                 streets.append(name_to_i_street.get(street))
             for street in intersection.incomings:
