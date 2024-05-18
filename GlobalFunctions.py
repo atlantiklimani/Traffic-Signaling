@@ -134,7 +134,13 @@ def readInput(input_file_path):
                                        all_red_phase_interval=inter['all_red_phase_interval'],                                            
                                        constraints={})
                         for inter in json_file['intersections'])
-                        
+
+    i_id_to_intersection = {}
+    for inter in json_file['intersections']:
+        i_id_to_intersection[inter["id"]] = {
+            "pedestrian_phase_interval": inter["pedestrian_phase_interval"],
+            "all_red_phase_interval": inter["all_red_phase_interval"]
+        }  
     # Parse the streets
     streets = []
     name_to_street = {}
@@ -178,12 +184,15 @@ def readInput(input_file_path):
         paths.append(path)
     
     for constraint in json_file['constraints']:
-        x_id = 0
+        if(constraint['intersection_name'] == 'BillClinton'):
+            print("C: ",constraint)
+        x_id = -1
         for x in intersections:
              if x.name == constraint['intersection_name']:
                  x_id = x.id
                  break
-
+        if (x_id == -1):
+            continue
         intersection = intersections[x_id]
         if (constraint['type'] == 'simultaneously_signal'):
             if ('simultaneously_signal' in intersection.constraints):
@@ -193,13 +202,16 @@ def readInput(input_file_path):
         elif (constraint['type'] == 'signal_phase_order'):
             intersection.constraints['signal_phase_order'] = constraint['streets']
 
+        if(constraint['intersection_name'] == 'BillClinton'):
+            print("I: ",intersection.constraints)
+
     for inter in intersections:
         #delete duplicates in using_streets array
         intersections[inter.id].using_streets = list(dict.fromkeys(intersections[inter.id].using_streets))
     return total_duration, bonus_points, intersections, \
            streets, name_to_street, paths, duration_to_pass_through_a_traffic_light, \
         yellow_phase,limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, \
-        limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration
+        limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, i_id_to_intersection
 
 def get_artificial_street():
     """
