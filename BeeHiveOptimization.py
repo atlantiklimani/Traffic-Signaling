@@ -225,6 +225,15 @@ def traffic_based_initial_solution(intersections: list[gl.Intersection],limit_on
         
         print("Total Green Time: ",total_green_time)
         # Normalize green times to fit within the min and max constraints
+
+
+        # Enforce minimum and maximum for individual street green times
+        other_total2 = 0
+        for street_id in green_times:
+            green_times[street_id] = max(min(green_times[street_id], limit_on_maximum_green_phase_duration), limit_on_minimum_green_phase_duration)
+            other_total2 += green_times[street_id]
+        print("Other Total2: ", other_total2)
+
         other_total = 0
         green_time_sum = sum(green_times.values())
         if total_green_time > 0:
@@ -233,12 +242,6 @@ def traffic_based_initial_solution(intersections: list[gl.Intersection],limit_on
                 other_total += green_times[street_id]
         print("Other Total: ", other_total)
 
-        # Enforce minimum and maximum for individual street green times
-        other_total2 = 0
-        for street_id in green_times:
-            green_times[street_id] = max(min(green_times[street_id], limit_on_maximum_green_phase_duration), limit_on_minimum_green_phase_duration)
-            other_total2 += green_times[street_id]
-        print("Other Total2: ", other_total2)
         if order:
             # schedules.append(Schedule(intersection.id, order, green_times,intersection.pedestrian_phase,intersection.all_red_phase))
             schedules.append(Schedule(intersection.id, order, green_times))
@@ -303,7 +306,7 @@ def usage_based_initial_solution(intersections: list[gl.Intersection],limit_on_m
 def generateSolution(intersections, name_to_i_street, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration):
     # while True:
     # decideGen = random.randint(0,1)
-    decideGen = 0
+    decideGen = 1
     if(decideGen == 0):
         solution = traffic_based_initial_solution(intersections, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, name_to_i_street)
     else:
@@ -368,8 +371,8 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     while (time() - terminated_time < executionTime):
         patches.sort(reverse=True, key=sortKey)
         patches = patches[0: ns]
-        outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, stgLim, initialShrinkageFactor, shrinkageFactorReducedBy, shrinkageFactor, start)
-        return patches[0].scout, patches[0].score
+        # outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, stgLim, initialShrinkageFactor, shrinkageFactorReducedBy, shrinkageFactor, start)
+        # return patches[0].scout, patches[0].score
 
         for i in range(0,nb):
             employees = 0
