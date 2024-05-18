@@ -77,12 +77,9 @@ def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads, limit
                 elif (new_green_time > limit_on_maximum_green_phase_duration):
                     new_green_time = limit_on_maximum_green_phase_duration
                 schedule[rand].green_times[schedule[rand].order[semaforId]] = new_green_time
-                # print("Intersection Id: ", type(schedule[rand].i_intersection))
                 # schedule[rand].green_times[schedule[rand].order[semaforId]] = random.randint(limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration)
                 if (len(schedule[rand].green_times) <= 1):
                     break
-                print("Pedestrian Phase:", i_id_to_intersection[schedule[rand].i_intersection]['pedestrian_phase_interval'])
-                print("All Red Phase: ", i_id_to_intersection[schedule[rand].i_intersection]['all_red_phase_interval'])
                 intersectionCycle = i_id_to_intersection[schedule[rand].i_intersection]['pedestrian_phase_interval']
                 intersectionCycle += i_id_to_intersection[schedule[rand].i_intersection]['all_red_phase_interval']
                 for x in schedule[rand].green_times.values():
