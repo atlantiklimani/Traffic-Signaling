@@ -53,7 +53,7 @@ class Patch:
         self.stg = True
 
 def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads, limit_on_minimum_green_phase_duration, limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length, limit_on_maximum_cycle_length, i_id_to_intersection):
-    constant = 3
+    constant = 1
     if(numberOfIntersection <= 0):
         return schedule
 
@@ -226,7 +226,6 @@ def traffic_based_initial_solution(intersections: list[gl.Intersection],limit_on
         print("Total Green Time: ",total_green_time)
         # Normalize green times to fit within the min and max constraints
 
-
         # Enforce minimum and maximum for individual street green times
         other_total2 = 0
         for street_id in green_times:
@@ -241,6 +240,13 @@ def traffic_based_initial_solution(intersections: list[gl.Intersection],limit_on
                 green_times[street_id] = int(green_times[street_id] * (total_green_time / green_time_sum))
                 other_total += green_times[street_id]
         print("Other Total: ", other_total)
+
+        # Enforce minimum and maximum for individual street green times
+        other_total2 = 0
+        for street_id in green_times:
+            green_times[street_id] = max(min(green_times[street_id], limit_on_maximum_green_phase_duration), limit_on_minimum_green_phase_duration)
+            other_total2 += green_times[street_id]
+        print("Other Total2: ", other_total2)
 
         if order:
             # schedules.append(Schedule(intersection.id, order, green_times,intersection.pedestrian_phase,intersection.all_red_phase))
@@ -353,7 +359,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     stgLim = 4 #stagnation limit for patches
     shrinkageFactor = 0.001 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
     shrinkageFactorReducedBy = 0.99 # by how much is the shrinkage factor reduceb by for iteration
-    executionTime = 1 #8 * 60 * 60
+    executionTime = 60 #8 * 60 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor 
     countIterations = 0
@@ -371,8 +377,6 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     while (time() - terminated_time < executionTime):
         patches.sort(reverse=True, key=sortKey)
         patches = patches[0: ns]
-        # outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, stgLim, initialShrinkageFactor, shrinkageFactorReducedBy, shrinkageFactor, start)
-        # return patches[0].scout, patches[0].score
 
         for i in range(0,nb):
             employees = 0
