@@ -173,12 +173,12 @@ def traffic_based_initial_solution(intersections: list[gl.Intersection],limit_on
         total_green_time =0
         # Sort streets based on the sum of lengths of driving_cars and waiting_cars
         
-        if 'signal_phase_order' in intersection.constraints:
+        if 'simultaneously_signal' in intersection.constraints:
             street_group_traffic = {}
             streets = []
             street_mps = [group[0] for group in intersection.constraints['simultaneously_signal']]
 
-            # for street in intersection.constraints['signal_phase_order']:
+            ## for street in intersection.constraints['signal_phase_order']:
             for street in street_mps:
                 street_group_traffic[street] = 0
                 streets.append(name_to_i_street.get(street))
@@ -225,12 +225,12 @@ def usage_based_initial_solution(intersections: list[gl.Intersection],limit_on_m
         green_times = {}
         total_green_time =0
 
-        if 'signal_phase_order' in intersection.constraints:
+        if 'simultaneously_signal' in intersection.constraints:
             street_group_usage = {}
             streets = []
             street_mps = [group[0] for group in intersection.constraints['simultaneously_signal']]
 
-            # for street in intersection.constraints['signal_phase_order']:
+            ## for street in intersection.constraints['signal_phase_order']:
             for street in street_mps:
                 street_group_usage[street] = 0
                 streets.append(name_to_i_street.get(street))
