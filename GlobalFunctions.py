@@ -254,6 +254,9 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
     #save path copies to reset them after performing the simulation
     paths_copy = [path.copy() for path in paths]
 
+    num_cars_completed=0
+    sum_waiting_cars=0
+    waiting_cars_iteration=0
     # Iterate through the schedules and initialize the intersections.
     intersection_ids_with_schedules = set()
     for schedule in schedules:
@@ -348,6 +351,9 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
 
             for street in green_streets:  
                 waiting_cars = street.waiting_cars
+                
+                waiting_cars_iteration =waiting_cars_iteration+1
+                sum_waiting_cars=sum_waiting_cars+len(waiting_cars)
                 if len(waiting_cars) > 0:
                     # Drive across the intersection
                     waiting_car = waiting_cars.popleft()
@@ -380,6 +386,7 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
                     del driving_cars[car]
                     if len(paths[car]) == 0:
                         # car finished its path
+                        num_cars_completed+=1
                         score += bonus_points
                         score += total_duration - t - 1
                     else:
@@ -400,7 +407,7 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
     for i_path in range(len(paths)):
         paths[i_path] = paths_copy[i_path]
     
-    return score
+    return score,num_cars_completed,sum_waiting_cars/waiting_cars_iteration
 
 def assertOrder(actual, constraint, name_to_i_street):
     indices = [actual.index(name_to_i_street[c].id) if name_to_i_street[c].id in actual else -1 for c in constraint]

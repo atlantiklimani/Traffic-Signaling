@@ -1,0 +1,48 @@
+Parameters:
+ns - 20, nb - 5, ne - 2, nrb - 5, nre - 20,
+Stagnation limit - 4
+Initial shrinkage factor - 0.001, Shrinkage Factor per Iteration Reduced by - 0.99, Termianl shrinkage factor - 0.001
+Execution Time - 60, Number of loop iterations - 58
+Score of patch: ,113237
+Score of patch: ,113237
+Score of patch: ,113127
+Score of patch: ,112756
+Score of patch: ,112756
+Score of patch: ,112754
+Score of patch: ,112695
+Score of patch: ,112693
+Score of patch: ,112605
+Score of patch: ,112605
+Real Execution Time: 60.17229652404785
+------------------------- Output File Begins Here -------------------------------------
+6
+0
+3
+Tuneli_BillClinton_ShtjefenGjeqovi 18
+Lakrishte_BillClinton_Santea 41
+Lakrishte_BillClinton_ShtjefenGjeqovi 27
+1
+3
+Katedralja_Santea_RobertDoll 23
+BillClinton_Santea_Katedralja 36
+BillClinton_Santea_RobertDoll 24
+2
+4
+PTK_Katedralja_PTK 20
+Parking_Katedralja_PTK 20
+Menza_Katedralja_Santea 29
+Menza_Katedralja_PTK 24
+4
+3
+Teknik_Qerimi_Teknik 40
+EnverMaloku_Qerimi_EnverMaloku 25
+Menza_Qerimi_Menza 22
+16
+4
+MAShTI_Menza_Teknik 24
+MAShTI_Menza_Qerimi 15
+Katedralja_Menza_Katedralja 22
+Qerimi_Menza_Qerimi 15
+18
+1
+TahirZajmi_Lakrishte_BillClinton 70
