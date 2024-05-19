@@ -73,7 +73,7 @@ def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads, limit
             loop_upper_limit = 20
             for i in range(0, loop_upper_limit):
                 current_green_time = schedule[rand].green_times[schedule[rand].order[semaforId]]
-                new_green_time = current_green_time + (int)(math.pow(-1, random.randint(0, 1))) * constant
+                new_green_time = current_green_time + (int)(math.pow(-1, random.randint(0, 1))) * random.randint(1, constant)
                 if (new_green_time < limit_on_minimum_green_phase_duration):
                     new_green_time = limit_on_minimum_green_phase_duration
                 elif (new_green_time > limit_on_maximum_green_phase_duration):
@@ -130,7 +130,7 @@ def shuffleSingleOrder(schedule, intersections, name_to_i_street):
                 schedule.order[index] = temp_val
                 rand_index += 1
 
-        print('Shuffle Single Order.')
+        # print('Shuffle Single Order.')
         if (not gl.assertOrderPhaseForSchedule(schedule, intersections, name_to_i_street)):
             raise Exception("Order Not Attained")
 
@@ -148,7 +148,7 @@ def swapOrder(schedules, numberOfIntersections, intersections, name_to_i_street)
         initial_order = [*schedules[rand].order]
         upper_loop_limit = 20
         for i in range(0, upper_loop_limit):
-            print("Applying Swap")
+            # print("Applying Swap")
             rand1 = random.randint(0, incomingStreetsLength - 1)
             rand2 = random.randint(0, incomingStreetsLength - 1)
             while (rand1 == rand2):
@@ -158,9 +158,10 @@ def swapOrder(schedules, numberOfIntersections, intersections, name_to_i_street)
             schedules[rand].order[rand2] = temp
             if (gl.assertOrderPhaseForSchedule(schedules[rand], intersections, name_to_i_street)):
                 break
-            print("Phase Order Not Correct - Swap")
             if (i == upper_loop_limit - 1):
                 schedules[rand].order = initial_order
+        print("Phase Order Not Correct - Swap - Initial Order Returned")
+        
     return schedules
 
 
@@ -386,7 +387,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     stgLim = 4  # stagnation limit for patches
     shrinkageFactor = 0.001  # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
     shrinkageFactorReducedBy = 0.99  # by how much is the shrinkage factor reduceb by for iteration
-    executionTime = 60  # 8 * 60 * 60
+    executionTime = 10  # 8 * 60 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor
     countIterations = 0
