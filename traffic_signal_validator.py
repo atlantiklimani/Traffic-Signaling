@@ -126,7 +126,7 @@ def are_green_time_durations_valid(input_data: dict, output_data: dict) -> bool:
     green_time_duration_error = True
 
     for intersection in output_intersections:
-        if len(intersection['phases']) > 1:
+        if len(intersection['phases']) >= 1:
             street_representatives = [
                 list(phase['streets'][0].values())[0]
                 for phase in intersection['phases']
