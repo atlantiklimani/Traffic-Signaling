@@ -529,9 +529,9 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
             grade, completed_cars4, avg_cars4 = gl.grade(solution, streets, intersections, paths, total_duration,
                                                          bonus_points, yellow_phase,
                                                          duration_to_pass_through_a_traffic_light)
-            gl.grade_for_simulation(solution, streets, intersections, paths, total_duration,
-                                                         bonus_points, yellow_phase,
-                                                         duration_to_pass_through_a_traffic_light)
+            # gl.grade_for_simulation(solution, streets, intersections, paths, total_duration,
+            #                                              bonus_points, yellow_phase,
+            #                                              duration_to_pass_through_a_traffic_light,grade)
             patches.append(Patch(score=grade, scout=solution, cars=completed_cars4, avg=avg_cars4))
 
         if (shrinkageFactor > 0.001):
@@ -543,7 +543,9 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         # patches = patches[0: ns]
 
     patches.sort(reverse=True, key=sortKey)
-
+    gl.grade_for_simulation(patches[0].scout, streets, intersections, paths, total_duration,
+                                                         bonus_points, yellow_phase,
+                                                         duration_to_pass_through_a_traffic_light,grade)
     outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, stgLim, initialShrinkageFactor,
                  shrinkageFactorReducedBy, shrinkageFactor, start,patches[0].cars, patches[0].avg,patches[0].score)
 

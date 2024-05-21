@@ -483,7 +483,7 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
     return score, num_cars_completed, sum_waiting_cars / waiting_cars_iteration
 
 def grade_for_simulation(schedules, streets, intersections, paths, total_duration, bonus_points, yellow_phase,
-          duration_to_pass_through_a_traffic_light):
+          duration_to_pass_through_a_traffic_light,score_grade):
     reinit(streets, intersections)  # we reset intersections and streets before performing a simulation
     # save path copies to reset them after performing the simulation
     paths_copy = [path.copy() for path in paths]
@@ -719,7 +719,7 @@ def grade_for_simulation(schedules, streets, intersections, paths, total_duratio
                 street_ids_to_remove.add(i_street)
         street_ids_with_driving_cars.difference_update(street_ids_to_remove)
     #print(dict)
-    with open('simulation.json',"w") as outfile:
+    with open(f'simulation{score_grade}.json',"w") as outfile:
         json.dump(dict, outfile)
     # The end of simulation, we reset the paths
     for i_path in range(len(paths)):
