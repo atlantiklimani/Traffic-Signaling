@@ -39,11 +39,13 @@ def save_paths_in_csv(valid_paths: list[list[str]], output_path: str) -> None:
     df.to_csv(output_path, index=False)
 
 
-def main(possible_paths_path: str, raw_files_dir: str) -> None:
+def main(possible_paths_path: str, raw_files_dir: str, output_dir: str) -> None:
     if not os.path.exists(possible_paths_path):
         raise FileNotFoundError(f'The possible paths file was not found: {possible_paths_path}')
     if not os.path.exists(raw_files_dir):
-        raise FileNotFoundError(f'The file was not found: {raw_files_dir}')
+        raise FileNotFoundError(f'The folder was not found: {raw_files_dir}')
+    if not os.path.exists(output_dir):
+        raise FileNotFoundError(f'The folder was not found: {output_dir}')
 
     possible_paths_df = pd.read_csv(possible_paths_path)
     paths = []
@@ -56,8 +58,10 @@ def main(possible_paths_path: str, raw_files_dir: str) -> None:
 
         valid_paths = get_valid_paths(processed_contents, paths)
 
-        output_path = file_path.replace('.txt', '.csv')
+        file_name = os.path.basename(file_path).replace('.txt', '.csv')
+        output_path = os.path.join(output_dir, file_name)
         save_paths_in_csv(valid_paths, output_path)
+
         print(f"Saved valid paths to {output_path}")
 
 
@@ -65,6 +69,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--possible_paths_file_path', type=str, required=True)
     parser.add_argument('-f', '--raw_files_dir', type=str, required=True)
+    parser.add_argument('-o', '--output_dir', type=str, required=True)
 
     args = parser.parse_args()
-    main(args.possible_paths_file_path, args.raw_files_dir)
+    main(args.possible_paths_file_path, args.raw_files_dir, args.output_dir)
