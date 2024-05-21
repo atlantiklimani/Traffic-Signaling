@@ -408,7 +408,7 @@ def generateSolution(intersections, name_to_i_street, limit_on_minimum_green_pha
 
 
 def outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, stgLim, initialShrinkageFactor,
-                 shrinkageFactorReducedBy, shrinkageFactor, start):
+                 shrinkageFactorReducedBy, shrinkageFactor, start,completed_cars,avg_cars,score):
     global file
 
     if not os.path.exists(f'output/{file}'):
@@ -427,7 +427,7 @@ def outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, 
     output.close()
 
     gl.print_json_solution(patches=patches, schedules=patches[0].scout, streets=streets, intersections=intersections,
-                           file=file, code=code)
+                           file=file, code=code,completed_cars=completed_cars,avg_cars=avg_cars,score=score)
 
     return
 
@@ -542,7 +542,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     patches.sort(reverse=True, key=sortKey)
 
     outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, stgLim, initialShrinkageFactor,
-                 shrinkageFactorReducedBy, shrinkageFactor, start)
+                 shrinkageFactorReducedBy, shrinkageFactor, start,patches[0].cars, patches[0].avg,patches[0].score)
 
     return patches[0].scout, patches[0].score, patches[0].cars, patches[0].avg
 

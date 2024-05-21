@@ -461,7 +461,7 @@ def getPrintedSchedule(schedules, streets):
     return result
 
 
-def print_json_solution(patches, schedules, streets, intersections, file, code):
+def print_json_solution(patches, schedules, streets, intersections, file, code,completed_cars,avg_cars,score):
     street_id_to_name = {}
     for street in streets:
         street_id_to_name[street.id] = street.name
@@ -487,6 +487,9 @@ def print_json_solution(patches, schedules, streets, intersections, file, code):
 
     solution = {}
     solution["number_of_intersections"] = len(schedules)
+    solution["score"] = score
+    solution["cars_completed"] = completed_cars
+    solution["average_waiting_cars"] = avg_cars
     solution["intersections"] = []
 
     for schedule in schedules:
