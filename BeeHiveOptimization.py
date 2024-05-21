@@ -445,7 +445,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     stgLim = 4  # stagnation limit for patches
     shrinkageFactor = 0.001  # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
     shrinkageFactorReducedBy = 0.99  # by how much is the shrinkage factor reduceb by for iteration
-    executionTime = 60 * 30  # 8 * 60 * 60
+    executionTime =  30  # 8 * 60 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor
     countIterations = 0
@@ -527,6 +527,9 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
             solution = generateSolution(intersections, name_to_i_street, limit_on_minimum_green_phase_duration,
                                         limit_on_maximum_green_phase_duration)
             grade, completed_cars4, avg_cars4 = gl.grade(solution, streets, intersections, paths, total_duration,
+                                                         bonus_points, yellow_phase,
+                                                         duration_to_pass_through_a_traffic_light)
+            gl.grade_for_simulation(solution, streets, intersections, paths, total_duration,
                                                          bonus_points, yellow_phase,
                                                          duration_to_pass_through_a_traffic_light)
             patches.append(Patch(score=grade, scout=solution, cars=completed_cars4, avg=avg_cars4))
