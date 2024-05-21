@@ -20,6 +20,8 @@ def load_json(json_path: str) -> dict:
 
 
 def are_phase_orders_valid(input_data: dict, output_data: dict) -> bool:
+    # TODO: add cyclic
+
     def check_contiguous_order(first_list: list[str], second_list: list[str]) -> bool:
         try:
             start_index = first_list.index(second_list[0])

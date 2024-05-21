@@ -6,6 +6,7 @@ import sys
 from copy import deepcopy
 from random import choices
 from time import time
+
 import numpy as np
 from recordclass import recordclass
 
@@ -73,7 +74,8 @@ def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads, limit
             loop_upper_limit = 20
             for i in range(0, loop_upper_limit):
                 current_green_time = schedule[rand].green_times[schedule[rand].order[semaforId]]
-                new_green_time = current_green_time + (int)(math.pow(-1, random.randint(0, 1))) * random.randint(1, constant)
+                new_green_time = current_green_time + (int)(math.pow(-1, random.randint(0, 1))) * random.randint(1,
+                                                                                                                 constant)
                 if (new_green_time < limit_on_minimum_green_phase_duration):
                     new_green_time = limit_on_minimum_green_phase_duration
                 elif (new_green_time > limit_on_maximum_green_phase_duration):
@@ -161,7 +163,7 @@ def swapOrder(schedules, numberOfIntersections, intersections, name_to_i_street)
             if (i == upper_loop_limit - 1):
                 schedules[rand].order = initial_order
         print("Phase Order Not Correct - Swap - Initial Order Returned")
-        
+
     return schedules
 
 
@@ -177,23 +179,24 @@ def copyScheduleArray(scheduleArr):
 
     return newScheduleArr
 
+
 def scale_list(original_map: dict, n_min, n_max, sum_min, sum_max):
-    if(len(original_map.values()) == 0):
+    if (len(original_map.values()) == 0):
         return original_map
-    
+
     current_min = min(original_map.values())
     current_max = max(original_map.values())
 
     scaling_factor = (n_max - n_min)
 
-    if(current_min != current_max):
+    if (current_min != current_max):
         scaling_factor = (n_max - n_min) / (current_max - current_min)
 
     for key in original_map:
         original_map[key] = int(n_min + (original_map[key] - current_min) * scaling_factor)
 
     scaled_sum = sum(original_map.values())
- 
+
     if scaled_sum < sum_min:
         scaling_factor = 1.1
     elif scaled_sum > sum_max:
@@ -214,6 +217,7 @@ def scale_list(original_map: dict, n_min, n_max, sum_min, sum_max):
 
     return original_map
 
+
 def transform_array(arr, limit_cycle):
     # First, scale the numbers so they are between 15 and 70
     arr_scaled = 15 + arr * 55
@@ -231,8 +235,9 @@ def transform_array(arr, limit_cycle):
 
     return arr_scaled
 
+
 def adjust_array(arr):
-    change = random.randint(3,8)
+    change = random.randint(3, 8)
     # Make sure the array has at least two elements
     if len(arr) < 2:
         return arr
@@ -284,7 +289,7 @@ def traffic_based_initial_solution(intersections: list[gl.Intersection], limit_o
             for street in sorted_streets:
                 order.append(street.id)
 
-            street_usage  = {
+            street_usage = {
                 street: usage
                 for street, usage in street_group_traffic.items()
             }
@@ -294,25 +299,24 @@ def traffic_based_initial_solution(intersections: list[gl.Intersection], limit_o
             propotions = []
             for _usage in list(street_usage.values()):
                 if total_usage == 0:
-                    propotions.append(1/len(list(street_usage.values())))
+                    propotions.append(1 / len(list(street_usage.values())))
                 else:
                     propotions.append(_usage / total_usage)
 
-            green_times = transform_array(np.array(propotions), limit_on_maximum_cycle_length - intersection.pedestrian_phase_interval - intersection.all_red_phase_interval)
+            green_times = transform_array(np.array(propotions),
+                                          limit_on_maximum_cycle_length - intersection.pedestrian_phase_interval - intersection.all_red_phase_interval)
 
             green_times = adjust_array(green_times)
 
             green_time_dict = dict()
             for _order, _green_time in zip(order, green_times):
                 green_time_dict[_order] = int(_green_time)
-            
 
             # print('Green Times: ',green_time_dict)
             # print("Order: ", order)
             if sum(green_time_dict.values()) > 120:
                 print("Times: ", green_times, " SUM: ", sum(green_times))
 
-            
         if order:
             # schedules.append(Schedule(intersection.id, order, green_times,intersection.pedestrian_phase,intersection.all_red_phase))
             schedules.append(Schedule(intersection.id, order, green_time_dict))
@@ -382,7 +386,7 @@ def usage_based_initial_solution(intersections: list[gl.Intersection], limit_on_
 def generateSolution(intersections, name_to_i_street, limit_on_minimum_green_phase_duration,
                      limit_on_maximum_green_phase_duration):
     # while True:
-    decideGen = random.randint(0,1)
+    decideGen = random.randint(0, 1)
     # decideGen = 0
     if (decideGen == 0):
         solution = traffic_based_initial_solution(intersections, limit_on_minimum_green_phase_duration,
@@ -441,7 +445,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     stgLim = 4  # stagnation limit for patches
     shrinkageFactor = 0.001  # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
     shrinkageFactorReducedBy = 0.99  # by how much is the shrinkage factor reduceb by for iteration
-    executionTime = 30  # 8 * 60 * 60
+    executionTime = 60 * 30  # 8 * 60 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor
     countIterations = 0

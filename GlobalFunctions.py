@@ -154,8 +154,8 @@ def readInput(input_file_path):
         paths.append(path)
 
     for constraint in json_file['constraints']:
-        if (constraint['intersection_name'] == 'BillClinton'):
-            print("C: ", constraint)
+        # if (constraint['intersection_name'] == 'BillClinton'):
+        #     print("C: ", constraint)
         x_id = -1
         for x in intersections:
             if x.name == constraint['intersection_name']:
@@ -172,8 +172,8 @@ def readInput(input_file_path):
         elif (constraint['type'] == 'signal_phase_order'):
             intersection.constraints['signal_phase_order'] = constraint['streets']
 
-        if (constraint['intersection_name'] == 'BillClinton'):
-            print("I: ", intersection.constraints)
+        # if (constraint['intersection_name'] == 'BillClinton'):
+        #     print("I: ", intersection.constraints)
 
     for inter in intersections:
         # delete duplicates in using_streets array
@@ -221,6 +221,13 @@ def reinit(streets, intersections):
         intersection.needs_updates = False
 
 
+
+# Function to find a street by name
+def find_street_by_name(streets, name):
+    for street in streets:
+        if street.name == name:
+            return street
+    return None
 def grade(schedules, streets, intersections, paths, total_duration, bonus_points, yellow_phase,
           duration_to_pass_through_a_traffic_light):
     reinit(streets, intersections)  # we reset intersections and streets before performing a simulation
@@ -309,22 +316,44 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
                 #     if(intersection.green_street_per_t_mod[t_mod + yellow_phase].id == intersection.green_street_per_t_mod[t_mod].id):
                 #         intersection.green_street = intersection.green_street_per_t_mod[t_mod]
 
-            if (intersection.green_street is None):
+            if intersection.green_street is None:
                 green_streets = []
             else:
                 green_street = intersection.green_street
                 green_streets = [green_street]
-                if ('simultaneously_signal' in intersection.constraints):
-                    for group_street in intersection.constraints['simultaneously_signal']:
-                        for i_street_in_group in range(0, len(group_street)):
-                            if green_street == group_street[i_street_in_group]:
-                                green_street = group_street[i_street_in_group:]
-                        # if green_street == group_street[0]:
-                        #     green_streets = [*group_street]
+                if 'simultaneously_signal' in intersection.constraints:
+                    group_of_streets=intersection.constraints['simultaneously_signal']
+                    is_found=False
+                    for group in group_of_streets:
+                        if green_street.name in group:
+                            for street_name in group:
+                                if street_name!=green_street.name:
+                                    current_street=find_street_by_name(streets,street_name)
+                                    # if current_street is None:
+                                    #     print("Test")
+                                    # try:
+                                    #     if current_street == 'None':
+                                    #         continue
+                                    #     pass
+                                    # except Exception as e:
+                                    #     # Code that runs if any other exception occurs
+                                    #     print(f"An unexpected error occurred: {e}")
+                                    # else:
+                                    #     # Code that runs if no exceptions occur
+                                    #     print("No errors occurred")
+                                    # finally:
+                                    #     # Code that runs no matter what (whether an exception occurred or not)
+                                    #     print("This will always execute")
+
+                                    green_streets.append(current_street)
+                            is_found=True
+                        if is_found:
+                            break
 
             for street in green_streets:
+                if len(street.waiting_cars) == 0:
+                    continue
                 waiting_cars = street.waiting_cars
-
                 waiting_cars_iteration = waiting_cars_iteration + 1
                 sum_waiting_cars = sum_waiting_cars + len(waiting_cars)
                 if len(waiting_cars) > 0:
@@ -379,7 +408,6 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
     # The end of simulation, we reset the paths
     for i_path in range(len(paths)):
         paths[i_path] = paths_copy[i_path]
-
     return score, num_cars_completed, sum_waiting_cars / waiting_cars_iteration
 
 

@@ -4,7 +4,7 @@
         "intersections": 72,
         "streets": 304,
         "cars": 4324,
-        "bonus": 100,
+        "bonus": 0,
         "duration_to_pass_through_a_traffic_light": 1.42,
         "yellow_phase": 4,
         "limit_on_minimum_cycle_length": 60,
@@ -45,7 +45,7 @@
         },
         {
             "id": 5,
-            "name": "Rruga B",
+            "name": "RrugaB",
             "pedestrian_phase_interval": 20,
             "all_red_phase_interval": 0
         },
@@ -2178,7 +2178,7 @@
         {
             "start": 22,
             "end": 23,
-            "name": "ElezBerisha_RrugaEUglarit_ElezBerishai",
+            "name": "ElezBerisha_RrugaEUglarit_ElezBerisha",
             "time": 27
         },
         {
@@ -11422,7 +11422,7 @@
                 "TahirZajmi_TerminaliDoganor_TreguIMadh",
                 "TerminaliDoganor_TreguIMadh_ElezBerisha",
                 "TreguIMadh_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -11433,7 +11433,7 @@
                 "TahirZajmi_TerminaliDoganor_TreguIMadh",
                 "TerminaliDoganor_TreguIMadh_ElezBerisha",
                 "TreguIMadh_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -11444,7 +11444,7 @@
                 "TahirZajmi_TerminaliDoganor_TreguIMadh",
                 "TerminaliDoganor_TreguIMadh_ElezBerisha",
                 "TreguIMadh_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -11455,7 +11455,7 @@
                 "TahirZajmi_TerminaliDoganor_TreguIMadh",
                 "TerminaliDoganor_TreguIMadh_ElezBerisha",
                 "TreguIMadh_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -11466,7 +11466,7 @@
                 "TahirZajmi_TerminaliDoganor_TreguIMadh",
                 "TerminaliDoganor_TreguIMadh_ElezBerisha",
                 "TreguIMadh_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -11477,7 +11477,7 @@
                 "TahirZajmi_TerminaliDoganor_TreguIMadh",
                 "TerminaliDoganor_TreguIMadh_ElezBerisha",
                 "TreguIMadh_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -11488,7 +11488,7 @@
                 "TahirZajmi_TerminaliDoganor_TreguIMadh",
                 "TerminaliDoganor_TreguIMadh_ElezBerisha",
                 "TreguIMadh_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -11499,7 +11499,7 @@
                 "TahirZajmi_TerminaliDoganor_TreguIMadh",
                 "TerminaliDoganor_TreguIMadh_ElezBerisha",
                 "TreguIMadh_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -19913,7 +19913,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -19921,7 +19921,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -19929,7 +19929,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -19937,7 +19937,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -19945,7 +19945,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -19953,7 +19953,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -19961,7 +19961,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -19969,7 +19969,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -19977,7 +19977,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -19985,7 +19985,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -19993,7 +19993,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -20001,7 +20001,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -20009,7 +20009,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -20017,7 +20017,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -20025,7 +20025,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -20033,7 +20033,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -20041,7 +20041,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -20049,7 +20049,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -20057,7 +20057,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -20065,7 +20065,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -20073,7 +20073,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -20081,7 +20081,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -20089,7 +20089,7 @@
             "path_length": 3,
             "path": [
                 "Interex_ElezBerisha_RrugaEUglarit",
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -37355,119 +37355,119 @@
         {
             "path_length": 2,
             "path": [
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
         {
             "path_length": 2,
             "path": [
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
         {
             "path_length": 2,
             "path": [
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
         {
             "path_length": 2,
             "path": [
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
         {
             "path_length": 2,
             "path": [
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
         {
             "path_length": 2,
             "path": [
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
         {
             "path_length": 2,
             "path": [
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
         {
             "path_length": 2,
             "path": [
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
         {
             "path_length": 2,
             "path": [
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
         {
             "path_length": 2,
             "path": [
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
         {
             "path_length": 2,
             "path": [
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
         {
             "path_length": 2,
             "path": [
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
         {
             "path_length": 2,
             "path": [
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
         {
             "path_length": 2,
             "path": [
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
         {
             "path_length": 2,
             "path": [
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
         {
             "path_length": 2,
             "path": [
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
         {
             "path_length": 2,
             "path": [
-                "ElezBerisha_RrugaEUglarit_ElezBerishai",
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
                 "RrugaEUglarit_ElezBerisha_TreguIMadh"
             ]
         },
@@ -38624,14 +38624,14 @@
             "streets": [
                 "BillClinton_Santea_RobertDoll",
                 "BillClinton_Santea_BillClinton",
-                "RobertDoll_Santea_Katedralja"
+                "Katedralja_Santea_RobertDoll",
+                "RobertDoll_Santea_BillClinton"
             ]
         },
         {
             "type": "simultaneously_signal",
             "intersection_name": "Santea",
             "streets": [
-                "Katedralja_Santea_RobertDoll",
                 "RobertDoll_Santea_BillClinton",
                 "RobertDoll_Santea_Katedralja"
             ]
@@ -38649,6 +38649,7 @@
             "intersection_name": "Katedralja",
             "streets": [
                 "Menza_Katedralja_Santea",
+                "Menza_Katedralja_Parking",
                 "Santea_Katedralja_Menza",
                 "Santea_Katedralja_PTK",
                 "PTK_Katedralja_Menza"
@@ -38659,9 +38660,9 @@
             "intersection_name": "Katedralja",
             "streets": [
                 "Menza_Katedralja_PTK",
+                "Menza_Katedralja_Menza",
                 "Santea_Katedralja_Santea",
                 "Santea_Katedralja_Parking",
-                "Menza_Katedralja_Menza",
                 "Santea_Katedralja_PTK",
                 "PTK_Katedralja_Menza",
                 "Parking_Katedralja_Santea"
@@ -38673,8 +38674,10 @@
             "streets": [
                 "PTK_Katedralja_PTK",
                 "PTK_Katedralja_Santea",
+                "PTK_Katedralja_Parking",
                 "PTK_Katedralja_Menza",
                 "Santea_Katedralja_PTK",
+                "Parking_Katedralja_Parking",
                 "Parking_Katedralja_Menza"
             ]
         },
@@ -38683,7 +38686,8 @@
             "intersection_name": "Katedralja",
             "streets": [
                 "Parking_Katedralja_PTK",
-                "Parking_Katedralja_Santea"
+                "Santea_Katedralja_PTK",
+                "PTK_Katedralja_Menza"
             ]
         },
         {
@@ -38698,10 +38702,21 @@
             "type": "simultaneously_signal",
             "intersection_name": "PTK",
             "streets": [
-                "Katedralja_PTK_ImzotNikeprela",
-                "Katedralja_PTK_28Nentori",
                 "Katedralja_PTK_BulevardiDK",
-                "Katedralja_PTK_Katedralja"
+                "Katedralja_PTK_Katedralja",
+                "Katedralja_PTK_ImzotNikeprela",
+                "Katedralja_PTK_28Nentori"
+            ]
+        },
+        {
+            "type": "simultaneously_signal",
+            "intersection_name": "PTK",
+            "streets": [
+                "BulevardiDK_PTK_Katedralja",
+                "BulevardiDK_PTK_28Nentori",
+                "BulevardiDK_PTK_ImzotNikeprela",
+                "BulevardiDK_PTK_BulevardiDK",
+                "28Nentori_PTK_BulevardiDK"
             ]
         },
         {
@@ -38714,29 +38729,6 @@
                 "ImzotNikeprela_PTK_Katedralja",
                 "ImzotNikeprela_PTK_28Nentori",
                 "ImzotNikeprela_PTK_BulevardiDK"
-            ]
-        },
-        {
-            "type": "simultaneously_signal",
-            "intersection_name": "PTK",
-            "streets": [
-                "BulevardiDK_PTK_28Nentori",
-                "BulevardiDK_PTK_ImzotNikeprela",
-                "BulevardiDK_PTK_Katedralja",
-                "BulevardiDK_PTK_BulevardiDK",
-                "28Nentori_PTK_BulevardiDK"
-            ]
-        },
-        {
-            "type": "simultaneously_signal",
-            "intersection_name": "MASHTI",
-            "streets": [
-                "Menza_MAShTI_Parlamenti",
-                "Menza_MAShTI_Menza",
-                "Menza_MAShTI_FakultetiEkonomik",
-                "Menza_MAShTI_KarlGega",
-                "Parlamenti_MAShTI_Menza",
-                "Parlamenti_MAShTI_FakultetiEkonomik"
             ]
         },
         {
@@ -38798,7 +38790,19 @@
         },
         {
             "type": "simultaneously_signal",
-            "intersection_name": "MASHTI",
+            "intersection_name": "MAShTI",
+            "streets": [
+                "Menza_MAShTI_Parlamenti",
+                "Menza_MAShTI_Menza",
+                "Menza_MAShTI_FakultetiEkonomik",
+                "Menza_MAShTI_KarlGega",
+                "Parlamenti_MAShTI_Menza",
+                "Parlamenti_MAShTI_FakultetiEkonomik"
+            ]
+        },
+        {
+            "type": "simultaneously_signal",
+            "intersection_name": "MAShTI",
             "streets": [
                 "Parlamenti_MAShTI_KarlGega",
                 "Parlamenti_MAShTI_Parlamenti",
@@ -38809,7 +38813,7 @@
         },
         {
             "type": "simultaneously_signal",
-            "intersection_name": "MASHTI",
+            "intersection_name": "MAShTI",
             "streets": [
                 "FakultetiEkonomik_MAShTI_Parlamenti",
                 "FakultetiEkonomik_MAShTI_KarlGega",
@@ -38821,7 +38825,7 @@
         },
         {
             "type": "signal_phase_order",
-            "intersection_name": "MASHTI",
+            "intersection_name": "MAShTI",
             "streets": [
                 "Menza_MAShTI_Parlamenti",
                 "Parlamenti_MAShTI_KarlGega"
@@ -38994,6 +38998,7 @@
                 "UkshinHoti_BQK_UkshinHoti",
                 "UkshinHoti_BQK_Garibaldi",
                 "UkshinHoti_BQK_LuanHaradinaj",
+                "LuanHaradinaj_BQK_LuanHaradinaj",
                 "LuanHaradinaj_BQK_Grandi",
                 "LuanHaradinaj_BQK_UkshinHoti",
                 "LuanHaradinaj_BQK_Garibaldi"
@@ -39068,8 +39073,7 @@
                 "Teknik_Qerimi_Menza",
                 "Teknik_Qerimi_HajrullahAbdullahu",
                 "Teknik_Qerimi_EnverMaloku",
-                "Menza_Qerimi_Teknik",
-                "EnverMaloku_Qerimi_HajrullahAbdullahu"
+                "Menza_Qerimi_Teknik"
             ]
         },
         {
@@ -39092,8 +39096,7 @@
                 "Menza_Qerimi_Teknik",
                 "Menza_Qerimi_EnverMaloku",
                 "Menza_Qerimi_HajrullahAbdullahu",
-                "Teknik_Qerimi_EnverMaloku",
-                "EnverMaloku_Qerimi_HajrullahAbdullahu"
+                "Teknik_Qerimi_EnverMaloku"
             ]
         },
         {
@@ -39111,10 +39114,10 @@
             "type": "simultaneously_signal",
             "intersection_name": "Teknik",
             "streets": [
+                "RrugaB_Teknik_FehmiLladrovci",
                 "RrugaB_Teknik_RrugaB",
                 "RrugaB_Teknik_Menza",
                 "RrugaB_Teknik_Qerimi",
-                "RrugaB_Teknik_FehmiLladrovci",
                 "FehmiLladrovci_Teknik_RrugaB"
             ]
         },
@@ -39155,7 +39158,7 @@
                 "MaxiMarket_RrugaB_Teknik",
                 "MaxiMarket_RrugaB_BibajSport",
                 "BibajSport_RrugaB_Teknik",
-                "BibajSport_RrugaB_Maximarket"
+                "BibajSport_RrugaB_MaxiMarket"
             ]
         },
         {
@@ -39215,6 +39218,7 @@
             "intersection_name": "TerminaliDoganor",
             "streets": [
                 "TahirZajmi_TerminaliDoganor_DeshmoretEPonoshecit",
+                "TahirZajmi_TerminaliDoganor_TahirZajmi",
                 "TahirZajmi_TerminaliDoganor_TreguIMadh",
                 "DeshmoretEPonoshecit_TerminaliDoganor_TahirZajmi"
             ]
@@ -39249,6 +39253,7 @@
             "intersection_name": "TreguIMadh",
             "streets": [
                 "TerminaliDoganor_TreguIMadh_KlanKosova",
+                "TerminaliDoganor_TreguIMadh_TerminaliDoganor",
                 "TerminaliDoganor_TreguIMadh_ElezBerisha",
                 "KlanKosova_TreguIMadh_TerminaliDoganor"
             ]
@@ -39283,15 +39288,16 @@
             "intersection_name": "ElezBerisha",
             "streets": [
                 "TreguIMadh_ElezBerisha_Interex",
-                "TreguIMadh_ElezBerisha_RrugaEUglarit"
+                "TreguIMadh_ElezBerisha_TreguIMadh",
+                "TreguIMadh_ElezBerisha_RrugaEUglarit",
+                "Interex_ElezBerisha_TreguIMadh"
             ]
         },
         {
             "type": "simultaneously_signal",
             "intersection_name": "ElezBerisha",
             "streets": [
-                "TreguIMadh_ElezBerisha_Interex",
-                "TreguIMadh_ElezBerisha_RrugaEUglarit",
+                "Interex_ElezBerisha_RrugaEUglarit",
                 "Interex_ElezBerisha_TreguIMadh"
             ]
         },
@@ -39317,7 +39323,9 @@
             "intersection_name": "RrugaEUglarit",
             "streets": [
                 "ElezBerisha_RrugaEUglarit_KompleksiLinda3",
-                "ElezBerisha_RrugaEUglarit_HajrullahZymi"
+                "ElezBerisha_RrugaEUglarit_ElezBerisha",
+                "ElezBerisha_RrugaEUglarit_HajrullahZymi",
+                "KompleksiLinda3_RrugaEUglarit_ElezBerisha"
             ]
         },
         {
@@ -39350,7 +39358,9 @@
             "intersection_name": "HajrullahZymi",
             "streets": [
                 "RrethiRrugaEPejes_HajrullahZymi_Dardania",
-                "RrethiRrugaEPejes_HajrullahZymi_RrugaEUglarit"
+                "RrethiRrugaEPejes_HajrullahZymi_RrethiRrugaEPejes",
+                "RrethiRrugaEPejes_HajrullahZymi_RrugaEUglarit",
+                "Dardania_HajrullahZymi_RrethiRrugaEPejes"
             ]
         },
         {

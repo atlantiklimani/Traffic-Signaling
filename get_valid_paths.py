@@ -21,13 +21,7 @@ def get_valid_paths(processed_contents: list[list[str]], paths: list[str]) -> li
     valid_paths = []
 
     for street_block in processed_contents:
-        include_street_block = True
-
-        for street in street_block:
-            if street not in paths:
-                include_street_block = False
-
-        if include_street_block:
+        if " ".join(street_block) in paths:
             valid_paths.append(street_block)
 
     return valid_paths
@@ -39,37 +33,33 @@ def save_paths_in_csv(valid_paths: list[list[str]], output_path: str) -> None:
     df.to_csv(output_path, index=False)
 
 
-def main(possible_paths_path: str, raw_files_dir: str, output_dir: str) -> None:
+def main(possible_paths_path: str, raw_files_dir: str) -> None:
     if not os.path.exists(possible_paths_path):
         raise FileNotFoundError(f'The possible paths file was not found: {possible_paths_path}')
     if not os.path.exists(raw_files_dir):
         raise FileNotFoundError(f'The folder was not found: {raw_files_dir}')
-    if not os.path.exists(output_dir):
-        raise FileNotFoundError(f'The folder was not found: {output_dir}')
 
     possible_paths_df = pd.read_csv(possible_paths_path)
-    paths = []
-    for item in possible_paths_df['Path']:
-        paths.extend(item.split())
+    paths = possible_paths_df['Path'].tolist()
 
+    all_valid_paths = []
     for file_path in glob.glob(os.path.join(raw_files_dir, '*.txt')):
         file_contents = read_txt_file(file_path)
         processed_contents = process_file_contents(file_contents)
 
         valid_paths = get_valid_paths(processed_contents, paths)
+        all_valid_paths.extend(valid_paths)
 
-        file_name = os.path.basename(file_path).replace('.txt', '.csv')
-        output_path = os.path.join(output_dir, file_name)
-        save_paths_in_csv(valid_paths, output_path)
+    output_path = 'possible_paths_dir/possible_paths_taxi.csv'
+    save_paths_in_csv(all_valid_paths, output_path)
 
-        print(f"Saved valid paths to {output_path}")
+    print(f"Saved valid paths to {output_path}")
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--possible_paths_file_path', type=str, required=True)
     parser.add_argument('-f', '--raw_files_dir', type=str, required=True)
-    parser.add_argument('-o', '--output_dir', type=str, required=True)
 
     args = parser.parse_args()
-    main(args.possible_paths_file_path, args.raw_files_dir, args.output_dir)
+    main(args.possible_paths_file_path, args.raw_files_dir)
