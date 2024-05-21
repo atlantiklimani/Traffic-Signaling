@@ -1,0 +1,61 @@
+FehmiLladrovci_Teknik_Qerimi  Menza_MAShTI_Parlamenti
+
+Interex_ElezBerisha_TreguIMadh ElezBerisha_TreguIMadh_KlanKosova
+
+Plava_Tjegullorja_Vushtrria MetoBajraktari_XhamiaLlapitTregu_LidhjaPrizrenit
+
+Katedralja_Santea_RobertDoll UkshinHoti_BQK_LuanHaradinaj
+
+Parlamenti_MAShTI_Menza MAShTI_Menza_Teknik
+
+Katedralja_Santea_RobertDoll
+
+BillClinton_Santea_Katedralja Santea_Katedralja_PTK
+
+PTK_Katedralja_Menza
+
+LidhjaPrizrenit_XhamiaLlapitTregu_MetoBajraktari KolegjiRiinvest_Lulishtja_Tirana
+
+Plava_Tjegullorja_Zagrebi
+
+ElezBerisha_TreguIMadh_KlanKosova
+
+28Nentori_PTK_BulevardiDK
+
+Zagrebi_Tjegullorja_Vushtrria
+
+AhmetKrasniqi_KomunaRe_Cacttus
+
+RobertDoll_Santea_BillClinton
+
+Menza_Qerimi_Teknik
+
+EnverMaloku_Qerimi_HajrullahAbdullahu
+
+Menza_Katedralja_Parking
+
+RobertDoll_Santea_BillClinton Santea_Katedralja_Menza
+
+Parlamenti_MAShTI_KarlGega
+
+Katedralja_Santea_BillClinton Santea_BillClinton_Tuneli
+
+FehmiLladrovci_Teknik_Qerimi
+
+Menza_MAShTI_Parlamenti
+
+BibajSport_RrugaB_MaxiMarket
+
+MaxiMarket_RrugaB_Teknik
+
+RrugaB_Teknik_Menza
+
+Katedralja_Menza_MAShTI
+
+Menza_Qerimi_Teknik
+
+Teknik_RrugaB_BibajSport
+
+Parlamenti_MAShTI_Menza MAShTI_Menza_Katedralja Menza_Teknik_FehmiLladrovci
+
+RrugaB_Teknik_Menza Teknik_Menza_MAShTI
