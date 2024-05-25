@@ -229,7 +229,7 @@ def find_street_by_name(streets, name):
             return street
     return None
 def grade(schedules, streets, intersections, paths, total_duration, bonus_points, yellow_phase,
-          duration_to_pass_through_a_traffic_light):
+          duration_to_pass_through_a_traffic_light, name_to_i_street):
     reinit(streets, intersections)  # we reset intersections and streets before performing a simulation
     # save path copies to reset them after performing the simulation
     paths_copy = [path.copy() for path in paths]
@@ -328,7 +328,7 @@ def grade(schedules, streets, intersections, paths, total_duration, bonus_points
                         if green_street.name in group:
                             for street_name in group:
                                 if street_name!=green_street.name:
-                                    current_street=find_street_by_name(streets,street_name)
+                                    current_street=name_to_i_street[street_name]
                                     # if current_street is None:
                                     #     print("Test")
                                     # try:

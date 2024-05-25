@@ -460,7 +460,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                                    limit_on_maximum_green_phase_duration)
 
         grade, completed_cars, avg_cars = gl.grade(sol, streets, intersections, paths, total_duration, bonus_points,
-                                                   yellow_phase, duration_to_pass_through_a_traffic_light)
+                                                   yellow_phase, duration_to_pass_through_a_traffic_light, name_to_i_street)
         patches.append(Patch(grade, sol, cars=completed_cars, avg=avg_cars))
     while (time() - terminated_time < executionTime):
         patches.sort(reverse=True, key=sortKey)
@@ -501,7 +501,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
 
                 tempScore, completed_cars1, avg_cars1 = gl.grade(tempSchedule, streets, intersections, paths,
                                                                  total_duration, bonus_points, yellow_phase,
-                                                                 duration_to_pass_through_a_traffic_light)
+                                                                 duration_to_pass_through_a_traffic_light, name_to_i_street)
 
                 if (tempScore > patches[i].score):
                     patches[i].stg = False
@@ -528,7 +528,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                                         limit_on_maximum_green_phase_duration)
             grade, completed_cars4, avg_cars4 = gl.grade(solution, streets, intersections, paths, total_duration,
                                                          bonus_points, yellow_phase,
-                                                         duration_to_pass_through_a_traffic_light)
+                                                         duration_to_pass_through_a_traffic_light, name_to_i_street)
             # gl.grade_for_simulation(solution, streets, intersections, paths, total_duration,
             #                                              bonus_points, yellow_phase,
             #                                              duration_to_pass_through_a_traffic_light,grade)
