@@ -56,7 +56,7 @@ class Patch:
 def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads, limit_on_minimum_green_phase_duration,
                             limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length,
                             limit_on_maximum_cycle_length, i_id_to_intersection):
-    constant = 1
+    constant = 3
     if (numberOfIntersection <= 0):
         return schedule
 
