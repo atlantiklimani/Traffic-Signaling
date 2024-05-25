@@ -647,7 +647,7 @@ def grade_for_simulation(schedules, streets, intersections, paths, total_duratio
                 street_ids_to_remove.add(i_street)
         street_ids_with_driving_cars.difference_update(street_ids_to_remove)
     #print(dict)
-    with open(f'simulation{score_grade}.json',"w") as outfile:
+    with open(f'simulations/simulation_{score_grade}.json',"w") as outfile:
         json.dump(dict, outfile)
     # The end of simulation, we reset the paths
     for i_path in range(len(paths)):
