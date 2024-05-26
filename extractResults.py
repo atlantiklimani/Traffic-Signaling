@@ -36,10 +36,5 @@ for folder in folders:
     
 
 df = pd.DataFrame.from_dict(data=result, orient='index')
+df.transpose()
 df.to_excel('results.xlsx')
-
-# with open('results.csv', 'w') as csvfile:
-#     pd.
-#     writer = csv.writer(csvfile)
-#     for key, value in result.items():
-#         writer.writerow([key, value])
