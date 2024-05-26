@@ -37,4 +37,4 @@ for folder in folders:
 
 df = pd.DataFrame.from_dict(data=result, orient='index')
 df.transpose()
-df.to_excel('results.xlsx')
+df.to_excel('results.xlsx', index=False)
