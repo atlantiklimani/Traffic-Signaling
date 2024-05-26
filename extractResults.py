@@ -5,7 +5,7 @@ import pandas as pd
 
 result = {}
 
-solution_generated_by = 'traffic'
+solution_generated_by = 'usage'
 
 path = f'./output/{solution_generated_by}'
 
@@ -37,4 +37,4 @@ for folder in folders:
 
 df = pd.DataFrame.from_dict(data=result)
 # df.transpose()
-df.to_excel('results.xlsx')
+df.to_excel(f'results_{solution_generated_by}.xlsx')
