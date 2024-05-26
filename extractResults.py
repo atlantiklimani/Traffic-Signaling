@@ -35,6 +35,6 @@ for folder in folders:
         result[completed_path_field_name].append(json_object['cars_completed'])
     
 
-df = pd.DataFrame.from_dict(data=result, orient='index')
-df.transpose()
-df.to_excel('results.xlsx', index=False)
+df = pd.DataFrame.from_dict(data=result)
+# df.transpose()
+df.to_excel('results.xlsx')
