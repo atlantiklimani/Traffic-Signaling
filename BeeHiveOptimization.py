@@ -56,7 +56,7 @@ class Patch:
 def changeGreenTimeDuration(schedule, numberOfIntersection, numberOfRoads, limit_on_minimum_green_phase_duration,
                             limit_on_maximum_green_phase_duration, limit_on_minimum_cycle_length,
                             limit_on_maximum_cycle_length, i_id_to_intersection):
-    constant = 1
+    constant = 3
     if (numberOfIntersection <= 0):
         return schedule
 
@@ -445,7 +445,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
     stgLim = 4  # stagnation limit for patches
     shrinkageFactor = 0.001  # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
     shrinkageFactorReducedBy = 0.99  # by how much is the shrinkage factor reduceb by for iteration
-    executionTime =  30  # 8 * 60 * 60
+    executionTime =  30 * 60
     ## Only for visualisation purposes
     initialShrinkageFactor = shrinkageFactor
     countIterations = 0
@@ -460,7 +460,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                                    limit_on_maximum_green_phase_duration)
 
         grade, completed_cars, avg_cars = gl.grade(sol, streets, intersections, paths, total_duration, bonus_points,
-                                                   yellow_phase, duration_to_pass_through_a_traffic_light)
+                                                   yellow_phase, duration_to_pass_through_a_traffic_light, name_to_i_street)
         patches.append(Patch(grade, sol, cars=completed_cars, avg=avg_cars))
     while (time() - terminated_time < executionTime):
         patches.sort(reverse=True, key=sortKey)
@@ -501,7 +501,7 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
 
                 tempScore, completed_cars1, avg_cars1 = gl.grade(tempSchedule, streets, intersections, paths,
                                                                  total_duration, bonus_points, yellow_phase,
-                                                                 duration_to_pass_through_a_traffic_light)
+                                                                 duration_to_pass_through_a_traffic_light, name_to_i_street)
 
                 if (tempScore > patches[i].score):
                     patches[i].stg = False
@@ -528,10 +528,10 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
                                         limit_on_maximum_green_phase_duration)
             grade, completed_cars4, avg_cars4 = gl.grade(solution, streets, intersections, paths, total_duration,
                                                          bonus_points, yellow_phase,
-                                                         duration_to_pass_through_a_traffic_light)
-            gl.grade_for_simulation(solution, streets, intersections, paths, total_duration,
-                                                         bonus_points, yellow_phase,
-                                                         duration_to_pass_through_a_traffic_light)
+                                                         duration_to_pass_through_a_traffic_light, name_to_i_street)
+            # gl.grade_for_simulation(solution, streets, intersections, paths, total_duration,
+            #                                              bonus_points, yellow_phase,
+            #                                              duration_to_pass_through_a_traffic_light,grade)
             patches.append(Patch(score=grade, scout=solution, cars=completed_cars4, avg=avg_cars4))
 
         if (shrinkageFactor > 0.001):
@@ -543,7 +543,9 @@ def BeeHive(streets, intersections, paths, total_duration, bonus_points, termina
         # patches = patches[0: ns]
 
     patches.sort(reverse=True, key=sortKey)
-
+    gl.grade_for_simulation(patches[0].scout, streets, intersections, paths, total_duration,
+                                                         bonus_points, yellow_phase,
+                                                         duration_to_pass_through_a_traffic_light,grade)
     outputToFile(patches, executionTime, countIterations, ns, nb, ne, nrb, nre, stgLim, initialShrinkageFactor,
                  shrinkageFactorReducedBy, shrinkageFactor, start,patches[0].cars, patches[0].avg,patches[0].score)
 

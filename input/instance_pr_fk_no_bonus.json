@@ -9,8 +9,8 @@
         "yellow_phase": 4,
         "limit_on_minimum_cycle_length": 60,
         "limit_on_maximum_cycle_length": 120,
-        "limit_on_minimum_green_phase_duration": 15,
-        "limit_on_maximum_green_phase_duration": 70
+        "limit_on_minimum_green_phase_duration": 19,
+        "limit_on_maximum_green_phase_duration": 74
     },
     "intersections": [
         {

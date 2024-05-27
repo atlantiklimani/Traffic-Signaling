@@ -1,0 +1,46 @@
+Parameters:
+ns - 20, nb - 5, ne - 2, nrb - 5, nre - 20,
+Stagnation limit - 4
+Initial shrinkage factor - 0.001, Shrinkage Factor per Iteration Reduced by - 0.99, Termianl shrinkage factor - 0.001
+Execution Time - 1800, Number of loop iterations - 300
+Score of patch: ,222657
+Score of patch: ,222576
+Score of patch: ,222452
+Score of patch: ,222451
+Score of patch: ,222351
+Score of patch: ,222346
+Score of patch: ,222327
+Score of patch: ,222191
+Score of patch: ,222132
+Score of patch: ,222089
+Real Execution Time: 1812.4258494377136
+------------------------- Output File Begins Here -------------------------------------
+6
+19
+1
+Lakrishte_TahirZajmi_TerminaliDoganor 74
+20
+3
+DeshmoretEPonoshecit_TerminaliDoganor_TreguIMadh 19
+TreguIMadh_TerminaliDoganor_TahirZajmi 37
+TahirZajmi_TerminaliDoganor_DeshmoretEPonoshecit 40
+21
+3
+ElezBerisha_TreguIMadh_TerminaliDoganor 37
+KlanKosova_TreguIMadh_ElezBerisha 31
+TerminaliDoganor_TreguIMadh_KlanKosova 24
+22
+3
+RrugaEUglarit_ElezBerisha_TreguIMadh 41
+TreguIMadh_ElezBerisha_Interex 27
+Interex_ElezBerisha_RrugaEUglarit 24
+23
+3
+KompleksiLinda3_RrugaEUglarit_HajrullahZymi 25
+HajrullahZymi_RrugaEUglarit_ElezBerisha 39
+ElezBerisha_RrugaEUglarit_KompleksiLinda3 29
+24
+3
+RrugaEUglarit_HajrullahZymi_RrethiRrugaEPejes 39
+RrethiRrugaEPejes_HajrullahZymi_Dardania 26
+Dardania_HajrullahZymi_RrugaEUglarit 19
