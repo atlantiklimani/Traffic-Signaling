@@ -1,0 +1,1437 @@
+{
+    "number_of_intersections": 25,
+    "score": 1972975,
+    "cars_completed": 3656,
+    "average_waiting_cars": 23.9454759106933,
+    "intersections": [
+        {
+            "intersection_name": "BillClinton",
+            "all_red_phase_interval": 4,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "Lakrishte_BillClinton_Santea": 40
+                        },
+                        {
+                            "Lakrishte_BillClinton_Tuneli": 40
+                        },
+                        {
+                            "Santea_BillClinton_Lakrishte": 40
+                        },
+                        {
+                            "Santea_BillClinton_ShtjefenGjeqovi": 40
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "Tuneli_BillClinton_ShtjefenGjeqovi": 22
+                        },
+                        {
+                            "Tuneli_BillClinton_Lakrishte": 22
+                        },
+                        {
+                            "Tuneli_BillClinton_Santea": 22
+                        },
+                        {
+                            "ShtjefenGjeqovi_BillClinton_Tuneli": 22
+                        },
+                        {
+                            "ShtjefenGjeqovi_BillClinton_Santea": 22
+                        },
+                        {
+                            "ShtjefenGjeqovi_BillClinton_Lakrishte": 22
+                        },
+                        {
+                            "Lakrishte_BillClinton_Tuneli": 22
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "Lakrishte_BillClinton_ShtjefenGjeqovi": 31
+                        },
+                        {
+                            "Lakrishte_BillClinton_Lakrishte": 31
+                        },
+                        {
+                            "Santea_BillClinton_Santea": 31
+                        },
+                        {
+                            "Santea_BillClinton_Tuneli": 31
+                        },
+                        {
+                            "Tuneli_BillClinton_Santea": 31
+                        },
+                        {
+                            "ShtjefenGjeqovi_BillClinton_Lakrishte": 31
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "Santea",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 10,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "RobertDoll_Santea_BillClinton": 28
+                        },
+                        {
+                            "RobertDoll_Santea_Katedralja": 28
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "BillClinton_Santea_Katedralja": 40
+                        },
+                        {
+                            "Katedralja_Santea_BillClinton": 40
+                        },
+                        {
+                            "Katedralja_Santea_RobertDoll": 40
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "BillClinton_Santea_RobertDoll": 29
+                        },
+                        {
+                            "BillClinton_Santea_BillClinton": 29
+                        },
+                        {
+                            "Katedralja_Santea_RobertDoll": 29
+                        },
+                        {
+                            "RobertDoll_Santea_BillClinton": 29
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "Katedralja",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "Menza_Katedralja_Santea": 30
+                        },
+                        {
+                            "Menza_Katedralja_Parking": 30
+                        },
+                        {
+                            "Santea_Katedralja_Menza": 30
+                        },
+                        {
+                            "Santea_Katedralja_PTK": 30
+                        },
+                        {
+                            "PTK_Katedralja_Menza": 30
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "Menza_Katedralja_PTK": 20
+                        },
+                        {
+                            "Menza_Katedralja_Menza": 20
+                        },
+                        {
+                            "Santea_Katedralja_Santea": 20
+                        },
+                        {
+                            "Santea_Katedralja_Parking": 20
+                        },
+                        {
+                            "Santea_Katedralja_PTK": 20
+                        },
+                        {
+                            "PTK_Katedralja_Menza": 20
+                        },
+                        {
+                            "Parking_Katedralja_Santea": 20
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "PTK_Katedralja_PTK": 24
+                        },
+                        {
+                            "PTK_Katedralja_Santea": 24
+                        },
+                        {
+                            "PTK_Katedralja_Parking": 24
+                        },
+                        {
+                            "PTK_Katedralja_Menza": 24
+                        },
+                        {
+                            "Santea_Katedralja_PTK": 24
+                        },
+                        {
+                            "Parking_Katedralja_Parking": 24
+                        },
+                        {
+                            "Parking_Katedralja_Menza": 24
+                        }
+                    ]
+                },
+                {
+                    "phase": 4,
+                    "streets": [
+                        {
+                            "Parking_Katedralja_PTK": 22
+                        },
+                        {
+                            "Santea_Katedralja_PTK": 22
+                        },
+                        {
+                            "PTK_Katedralja_Menza": 22
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "Teknik",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "RrugaB_Teknik_FehmiLladrovci": 26
+                        },
+                        {
+                            "RrugaB_Teknik_RrugaB": 26
+                        },
+                        {
+                            "RrugaB_Teknik_Menza": 26
+                        },
+                        {
+                            "RrugaB_Teknik_Qerimi": 26
+                        },
+                        {
+                            "FehmiLladrovci_Teknik_RrugaB": 26
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "FehmiLladrovci_Teknik_FehmiLladrovci": 28
+                        },
+                        {
+                            "FehmiLladrovci_Teknik_RrugaB": 28
+                        },
+                        {
+                            "FehmiLladrovci_Teknik_Menza": 28
+                        },
+                        {
+                            "FehmiLladrovci_Teknik_Qerimi": 28
+                        },
+                        {
+                            "Menza_Teknik_FehmiLladrovci": 28
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "Menza_Teknik_Menza": 24
+                        },
+                        {
+                            "Menza_Teknik_FehmiLladrovci": 24
+                        },
+                        {
+                            "Menza_Teknik_RrugaB": 24
+                        },
+                        {
+                            "Menza_Teknik_Qerimi": 24
+                        }
+                    ]
+                },
+                {
+                    "phase": 4,
+                    "streets": [
+                        {
+                            "Qerimi_Teknik_Qerimi": 29
+                        },
+                        {
+                            "Qerimi_Teknik_Menza": 29
+                        },
+                        {
+                            "Qerimi_Teknik_RrugaB": 29
+                        },
+                        {
+                            "Qerimi_Teknik_FehmiLladrovci": 29
+                        },
+                        {
+                            "RrugaB_Teknik_Qerimi": 29
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "Qerimi",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 17,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "EnverMaloku_Qerimi_EnverMaloku": 41
+                        },
+                        {
+                            "EnverMaloku_Qerimi_Teknik": 41
+                        },
+                        {
+                            "EnverMaloku_Qerimi_Menza": 41
+                        },
+                        {
+                            "EnverMaloku_Qerimi_HajrullahAbdullahu": 41
+                        },
+                        {
+                            "Menza_Qerimi_Teknik": 41
+                        },
+                        {
+                            "Teknik_Qerimi_EnverMaloku": 41
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "Teknik_Qerimi_Teknik": 36
+                        },
+                        {
+                            "Teknik_Qerimi_Menza": 36
+                        },
+                        {
+                            "Teknik_Qerimi_HajrullahAbdullahu": 36
+                        },
+                        {
+                            "Teknik_Qerimi_EnverMaloku": 36
+                        },
+                        {
+                            "Menza_Qerimi_Teknik": 36
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "Menza_Qerimi_Menza": 25
+                        },
+                        {
+                            "Menza_Qerimi_Teknik": 25
+                        },
+                        {
+                            "Menza_Qerimi_EnverMaloku": 25
+                        },
+                        {
+                            "Menza_Qerimi_HajrullahAbdullahu": 25
+                        },
+                        {
+                            "Teknik_Qerimi_EnverMaloku": 25
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "RrugaB",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 20,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "MaxiMarket_RrugaB_Teknik": 46
+                        },
+                        {
+                            "MaxiMarket_RrugaB_BibajSport": 46
+                        },
+                        {
+                            "BibajSport_RrugaB_Teknik": 46
+                        },
+                        {
+                            "BibajSport_RrugaB_MaxiMarket": 46
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "Teknik_RrugaB_Teknik": 54
+                        },
+                        {
+                            "Teknik_RrugaB_MaxiMarket": 54
+                        },
+                        {
+                            "Teknik_RrugaB_BibajSport": 54
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "MAShTI",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "Menza_MAShTI_Parlamenti": 40
+                        },
+                        {
+                            "Menza_MAShTI_Menza": 40
+                        },
+                        {
+                            "Menza_MAShTI_FakultetiEkonomik": 40
+                        },
+                        {
+                            "Menza_MAShTI_KarlGega": 40
+                        },
+                        {
+                            "Parlamenti_MAShTI_Menza": 40
+                        },
+                        {
+                            "Parlamenti_MAShTI_FakultetiEkonomik": 40
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "Parlamenti_MAShTI_KarlGega": 31
+                        },
+                        {
+                            "Parlamenti_MAShTI_Parlamenti": 31
+                        },
+                        {
+                            "Parlamenti_MAShTI_Menza": 31
+                        },
+                        {
+                            "Parlamenti_MAShTI_FakultetiEkonomik": 31
+                        },
+                        {
+                            "KarlGega_MAShTI_Parlamenti": 31
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "FakultetiEkonomik_MAShTI_Parlamenti": 25
+                        },
+                        {
+                            "FakultetiEkonomik_MAShTI_KarlGega": 25
+                        },
+                        {
+                            "FakultetiEkonomik_MAShTI_Menza": 25
+                        },
+                        {
+                            "KarlGega_MAShTI_Menza": 25
+                        },
+                        {
+                            "KarlGega_MAShTI_FakultetiEkonomik": 25
+                        },
+                        {
+                            "KarlGega_MAShTI_Parlamenti": 25
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "Parlamenti",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "IbrahimLutfiu_Parlamenti_MAShTI": 21
+                        },
+                        {
+                            "IbrahimLutfiu_Parlamenti_XhamiaLlapitTregu": 21
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "MAShTI_Parlamenti_XhamiaLlapitTregu": 40
+                        },
+                        {
+                            "MAShTI_Parlamenti_IbrahimLutfiu": 40
+                        },
+                        {
+                            "XhamiaLlapitTregu_Parlamenti_MAShTI": 40
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "XhamiaLlapitTregu_Parlamenti_IbrahimLutfiu": 32
+                        },
+                        {
+                            "XhamiaLlapitTregu_Parlamenti_MAShTI": 32
+                        },
+                        {
+                            "IbrahimLutfiu_Parlamenti_XhamiaLlapitTregu": 32
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "XhamiaLlapitTregu",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 16,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "MetoBajraktari_XhamiaLlapitTregu_XhamiaLlapit": 28
+                        },
+                        {
+                            "MetoBajraktari_XhamiaLlapitTregu_LidhjaPrizrenit": 28
+                        },
+                        {
+                            "MetoBajraktari_XhamiaLlapitTregu_Parlamenti": 28
+                        },
+                        {
+                            "LidhjaPrizrenit_XhamiaLlapitTregu_Parlamenti": 28
+                        },
+                        {
+                            "LidhjaPrizrenit_XhamiaLlapitTregu_MetoBajraktari": 28
+                        },
+                        {
+                            "LidhjaPrizrenit_XhamiaLlapitTregu_XhamiaLlapit": 28
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "Parlamenti_XhamiaLlapitTregu_XhamiaLlapit": 54
+                        },
+                        {
+                            "Parlamenti_XhamiaLlapitTregu_MetoBajraktari": 54
+                        },
+                        {
+                            "Parlamenti_XhamiaLlapitTregu_LidhjaPrizrenit": 54
+                        },
+                        {
+                            "XhamiaLlapit_XhamiaLlapitTregu_LidhjaPrizrenit": 54
+                        },
+                        {
+                            "XhamiaLlapit_XhamiaLlapitTregu_Parlamenti": 54
+                        },
+                        {
+                            "XhamiaLlapit_XhamiaLlapitTregu_MetoBajraktari": 54
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "XhamiaLlapit",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 18,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "LidhjaLezhes_XhamiaLlapit_Tjegullorja": 28
+                        },
+                        {
+                            "LidhjaLezhes_XhamiaLlapit_VellezeritFazliu": 28
+                        },
+                        {
+                            "LidhjaLezhes_XhamiaLlapit_Makovc": 28
+                        },
+                        {
+                            "LidhjaLezhes_XhamiaLlapit_XhamiaLlapitTregu": 28
+                        },
+                        {
+                            "Makovc_XhamiaLlapit_XhamiaLlapitTregu": 28
+                        },
+                        {
+                            "Makovc_XhamiaLlapit_LidhjaLezhes": 28
+                        },
+                        {
+                            "Makovc_XhamiaLlapit_Tjegullorja": 28
+                        },
+                        {
+                            "Makovc_XhamiaLlapit_VellezeritFazliu": 28
+                        },
+                        {
+                            "Tjegullorja_XhamiaLlapit_VellezeritFazliu": 28
+                        },
+                        {
+                            "Tjegullorja_XhamiaLlapit_Makovc": 28
+                        },
+                        {
+                            "Tjegullorja_XhamiaLlapit_XhamiaLlapitTregu": 28
+                        },
+                        {
+                            "Tjegullorja_XhamiaLlapit_LidhjaLezhes": 28
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "XhamiaLlapitTregu_XhamiaLlapit_LidhjaLezhes": 60
+                        },
+                        {
+                            "XhamiaLlapitTregu_XhamiaLlapit_VellezeritFazliu": 60
+                        },
+                        {
+                            "XhamiaLlapitTregu_XhamiaLlapit_Tjegullorja": 60
+                        },
+                        {
+                            "XhamiaLlapitTregu_XhamiaLlapit_Makovc": 60
+                        },
+                        {
+                            "VellezeritFazliu_XhamiaLlapit_Tjegullorja": 60
+                        },
+                        {
+                            "VellezeritFazliu_XhamiaLlapit_LidhjaLezhes": 60
+                        },
+                        {
+                            "VellezeritFazliu_XhamiaLlapit_XhamiaLlapitTregu": 60
+                        },
+                        {
+                            "VellezeritFazliu_XhamiaLlapit_Makovc": 60
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "Vranjefc",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 15,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "IsmetKrasniqi_Vranjefc_AzizZhilivoda": 67
+                        },
+                        {
+                            "IsmetKrasniqi_Vranjefc_Bardhosh": 67
+                        },
+                        {
+                            "Bardhosh_Vranjefc_IsmetKrasniqi": 67
+                        },
+                        {
+                            "Bardhosh_Vranjefc_AzizZhilivoda": 67
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "AzizZhilivoda_Vranjefc_Bardhosh": 27
+                        },
+                        {
+                            "AzizZhilivoda_Vranjefc_IsmetKrasniqi": 27
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "Tjegullorja",
+            "all_red_phase_interval": 3,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "Vushtrria_Tjegullorja_Zagrebi": 27
+                        },
+                        {
+                            "Vushtrria_Tjegullorja_Plava": 27
+                        },
+                        {
+                            "Vushtrria_Tjegullorja_XhamiaLlapit": 27
+                        },
+                        {
+                            "Plava_Tjegullorja_XhamiaLlapit": 27
+                        },
+                        {
+                            "Plava_Tjegullorja_Vushtrria": 27
+                        },
+                        {
+                            "Plava_Tjegullorja_Zagrebi": 27
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "XhamiaLlapit_Tjegullorja_Vushtrria": 63
+                        },
+                        {
+                            "XhamiaLlapit_Tjegullorja_Zagrebi": 63
+                        },
+                        {
+                            "XhamiaLlapit_Tjegullorja_Plava": 63
+                        },
+                        {
+                            "Zagrebi_Tjegullorja_Plava": 63
+                        },
+                        {
+                            "Zagrebi_Tjegullorja_XhamiaLlapit": 63
+                        },
+                        {
+                            "Zagrebi_Tjegullorja_Vushtrria": 63
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "PTK",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 15,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "28Nentori_PTK_Katedralja": 25
+                        },
+                        {
+                            "28Nentori_PTK_ImzotNikeprela": 25
+                        },
+                        {
+                            "28Nentori_PTK_BulevardiDK": 25
+                        },
+                        {
+                            "ImzotNikeprela_PTK_Katedralja": 25
+                        },
+                        {
+                            "ImzotNikeprela_PTK_28Nentori": 25
+                        },
+                        {
+                            "ImzotNikeprela_PTK_BulevardiDK": 25
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "BulevardiDK_PTK_Katedralja": 33
+                        },
+                        {
+                            "BulevardiDK_PTK_28Nentori": 33
+                        },
+                        {
+                            "BulevardiDK_PTK_ImzotNikeprela": 33
+                        },
+                        {
+                            "BulevardiDK_PTK_BulevardiDK": 33
+                        },
+                        {
+                            "28Nentori_PTK_BulevardiDK": 33
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "Katedralja_PTK_BulevardiDK": 40
+                        },
+                        {
+                            "Katedralja_PTK_Katedralja": 40
+                        },
+                        {
+                            "Katedralja_PTK_ImzotNikeprela": 40
+                        },
+                        {
+                            "Katedralja_PTK_28Nentori": 40
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "Lulishtja",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "Tirana_Lulishtja_KolegjiRiinvest": 27
+                        },
+                        {
+                            "Tirana_Lulishtja_UCK": 27
+                        },
+                        {
+                            "Tirana_Lulishtja_FehmiAgani": 27
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "UCK_Lulishtja_Tirana": 27
+                        },
+                        {
+                            "Tirana_Lulishtja_UCK": 27
+                        },
+                        {
+                            "Tirana_Lulishtja_FehmiAgani": 27
+                        },
+                        {
+                            "UCK_Lulishtja_FehmiAgani": 27
+                        },
+                        {
+                            "UCK_Lulishtja_KolegjiRiinvest": 27
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "FehmiAgani_Lulishtja_Tirana": 20
+                        },
+                        {
+                            "FehmiAgani_Lulishtja_KolegjiRiinvest": 20
+                        },
+                        {
+                            "FehmiAgani_Lulishtja_UCK": 20
+                        }
+                    ]
+                },
+                {
+                    "phase": 4,
+                    "streets": [
+                        {
+                            "KolegjiRiinvest_Lulishtja_UCK": 24
+                        },
+                        {
+                            "KolegjiRiinvest_Lulishtja_FehmiAgani": 24
+                        },
+                        {
+                            "KolegjiRiinvest_Lulishtja_Tirana": 24
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "BQK",
+            "all_red_phase_interval": 3,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "UkshinHoti_BQK_UkshinHoti": 52
+                        },
+                        {
+                            "UkshinHoti_BQK_Garibaldi": 52
+                        },
+                        {
+                            "UkshinHoti_BQK_LuanHaradinaj": 52
+                        },
+                        {
+                            "LuanHaradinaj_BQK_LuanHaradinaj": 52
+                        },
+                        {
+                            "LuanHaradinaj_BQK_Grandi": 52
+                        },
+                        {
+                            "LuanHaradinaj_BQK_UkshinHoti": 52
+                        },
+                        {
+                            "LuanHaradinaj_BQK_Garibaldi": 52
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "Garibaldi_BQK_Garibaldi": 26
+                        },
+                        {
+                            "Garibaldi_BQK_LuanHaradinaj": 26
+                        },
+                        {
+                            "Garibaldi_BQK_Grandi": 26
+                        },
+                        {
+                            "Garibaldi_BQK_UkshinHoti": 26
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "Grandi_BQK_Grandi": 19
+                        },
+                        {
+                            "Grandi_BQK_UkshinHoti": 19
+                        },
+                        {
+                            "Grandi_BQK_Garibaldi": 19
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "Eulexi",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "ArbenorEAstritDehari_Eulexi_MuharremFejza": 43
+                        },
+                        {
+                            "MuharremFejza_Eulexi_ArbenorEAstritDehari": 43
+                        },
+                        {
+                            "ArbenorEAstritDehari_Eulexi_ArbenorEAstritDehari": 43
+                        },
+                        {
+                            "ArbenorEAstritDehari_Eulexi_ErnestKoliqi": 43
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "MuharremFejza_Eulexi_ErnestKoliqi": 27
+                        },
+                        {
+                            "MuharremFejza_Eulexi_MuharremFejza": 27
+                        },
+                        {
+                            "MuharremFejza_Eulexi_ArbenorEAstritDehari": 27
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "ErnestKoliqi_Eulexi_ArbenorEAstritDehari": 25
+                        },
+                        {
+                            "ErnestKoliqi_Eulexi_MuharremFejza": 25
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "Menza",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "MAShTI_Menza_Teknik": 27
+                        },
+                        {
+                            "MAShTI_Menza_Katedralja": 27
+                        },
+                        {
+                            "Teknik_Menza_MAShTI": 27
+                        },
+                        {
+                            "Teknik_Menza_Qerimi": 27
+                        },
+                        {
+                            "Katedralja_Menza_Teknik": 27
+                        },
+                        {
+                            "Qerimi_Menza_MAShTI": 27
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "Katedralja_Menza_Katedralja": 30
+                        },
+                        {
+                            "Katedralja_Menza_MAShTI": 30
+                        },
+                        {
+                            "Katedralja_Menza_Qerimi": 30
+                        },
+                        {
+                            "Katedralja_Menza_Teknik": 30
+                        },
+                        {
+                            "MAShTI_Menza_Katedralja": 30
+                        },
+                        {
+                            "Teknik_Menza_Qerimi": 30
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "Qerimi_Menza_Qerimi": 27
+                        },
+                        {
+                            "Qerimi_Menza_MAShTI": 27
+                        },
+                        {
+                            "Qerimi_Menza_Katedralja": 27
+                        },
+                        {
+                            "Qerimi_Menza_Teknik": 27
+                        },
+                        {
+                            "Teknik_Menza_Qerimi": 27
+                        },
+                        {
+                            "Katedralja_Menza_Teknik": 27
+                        },
+                        {
+                            "MAShTI_Menza_Katedralja": 27
+                        }
+                    ]
+                },
+                {
+                    "phase": 4,
+                    "streets": [
+                        {
+                            "MAShTI_Menza_Qerimi": 21
+                        },
+                        {
+                            "MAShTI_Menza_MAShTI": 21
+                        },
+                        {
+                            "Teknik_Menza_Teknik": 21
+                        },
+                        {
+                            "Teknik_Menza_Katedralja": 21
+                        },
+                        {
+                            "Qerimi_Menza_MAShTI": 21
+                        },
+                        {
+                            "Katedralja_Menza_Teknik": 21
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "KomunaRe",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 15,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "AhmetKrasniqi_KomunaRe_FeridCurri": 61
+                        },
+                        {
+                            "AhmetKrasniqi_KomunaRe_HotelAdria": 61
+                        },
+                        {
+                            "AhmetKrasniqi_KomunaRe_Cacttus": 61
+                        },
+                        {
+                            "HotelAdria_KomunaRe_Cacttus": 61
+                        },
+                        {
+                            "HotelAdria_KomunaRe_AhmetKrasniqi": 61
+                        },
+                        {
+                            "HotelAdria_KomunaRe_FeridCurri": 61
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "Cacttus_KomunaRe_AhmetKrasniqi": 27
+                        },
+                        {
+                            "Cacttus_KomunaRe_FeridCurri": 27
+                        },
+                        {
+                            "Cacttus_KomunaRe_HotelAdria": 27
+                        },
+                        {
+                            "FeridCurri_KomunaRe_HotelAdria": 27
+                        },
+                        {
+                            "FeridCurri_KomunaRe_Cacttus": 27
+                        },
+                        {
+                            "FeridCurri_KomunaRe_AhmetKrasniqi": 27
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "Lakrishte",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 30,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "TahirZajmi_Lakrishte_BillClinton": 74
+                        },
+                        {
+                            "BillClinton_Lakrishte_TahirZajmi": 74
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "TahirZajmi",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 22,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "Lakrishte_TahirZajmi_TerminaliDoganor": 74
+                        },
+                        {
+                            "TerminaliDoganor_TahirZajmi_Lakrishte": 74
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "TerminaliDoganor",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "DeshmoretEPonoshecit_TerminaliDoganor_TreguIMadh": 23
+                        },
+                        {
+                            "DeshmoretEPonoshecit_TerminaliDoganor_TahirZajmi": 23
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "TreguIMadh_TerminaliDoganor_TahirZajmi": 40
+                        },
+                        {
+                            "TahirZajmi_TerminaliDoganor_TreguIMadh": 40
+                        },
+                        {
+                            "TreguIMadh_TerminaliDoganor_DeshmoretEPonoshecit": 40
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "TahirZajmi_TerminaliDoganor_DeshmoretEPonoshecit": 29
+                        },
+                        {
+                            "TahirZajmi_TerminaliDoganor_TahirZajmi": 29
+                        },
+                        {
+                            "TahirZajmi_TerminaliDoganor_TreguIMadh": 29
+                        },
+                        {
+                            "DeshmoretEPonoshecit_TerminaliDoganor_TahirZajmi": 29
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "TreguIMadh",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "ElezBerisha_TreguIMadh_TerminaliDoganor": 40
+                        },
+                        {
+                            "TerminaliDoganor_TreguIMadh_ElezBerisha": 40
+                        },
+                        {
+                            "ElezBerisha_TreguIMadh_KlanKosova": 40
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "KlanKosova_TreguIMadh_ElezBerisha": 24
+                        },
+                        {
+                            "KlanKosova_TreguIMadh_TerminaliDoganor": 24
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "TerminaliDoganor_TreguIMadh_KlanKosova": 29
+                        },
+                        {
+                            "TerminaliDoganor_TreguIMadh_TerminaliDoganor": 29
+                        },
+                        {
+                            "TerminaliDoganor_TreguIMadh_ElezBerisha": 29
+                        },
+                        {
+                            "KlanKosova_TreguIMadh_TerminaliDoganor": 29
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "ElezBerisha",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "RrugaEUglarit_ElezBerisha_TreguIMadh": 40
+                        },
+                        {
+                            "TreguIMadh_ElezBerisha_RrugaEUglarit": 40
+                        },
+                        {
+                            "RrugaEUglarit_ElezBerisha_Interex": 40
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "Interex_ElezBerisha_RrugaEUglarit": 24
+                        },
+                        {
+                            "Interex_ElezBerisha_TreguIMadh": 24
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "TreguIMadh_ElezBerisha_Interex": 29
+                        },
+                        {
+                            "TreguIMadh_ElezBerisha_TreguIMadh": 29
+                        },
+                        {
+                            "TreguIMadh_ElezBerisha_RrugaEUglarit": 29
+                        },
+                        {
+                            "Interex_ElezBerisha_TreguIMadh": 29
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "RrugaEUglarit",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "HajrullahZymi_RrugaEUglarit_ElezBerisha": 40
+                        },
+                        {
+                            "ElezBerisha_RrugaEUglarit_HajrullahZymi": 40
+                        },
+                        {
+                            "HajrullahZymi_RrugaEUglarit_KompleksiLinda3": 40
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "ElezBerisha_RrugaEUglarit_KompleksiLinda3": 29
+                        },
+                        {
+                            "ElezBerisha_RrugaEUglarit_ElezBerisha": 29
+                        },
+                        {
+                            "ElezBerisha_RrugaEUglarit_HajrullahZymi": 29
+                        },
+                        {
+                            "KompleksiLinda3_RrugaEUglarit_ElezBerisha": 29
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "KompleksiLinda3_RrugaEUglarit_HajrullahZymi": 23
+                        },
+                        {
+                            "KompleksiLinda3_RrugaEUglarit_ElezBerisha": 23
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "HajrullahZymi",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "Dardania_HajrullahZymi_RrugaEUglarit": 25
+                        },
+                        {
+                            "Dardania_HajrullahZymi_RrethiRrugaEPejes": 25
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "RrugaEUglarit_HajrullahZymi_RrethiRrugaEPejes": 40
+                        },
+                        {
+                            "RrugaEUglarit_HajrullahZymi_Dardania": 40
+                        },
+                        {
+                            "RrethiRrugaEPejes_HajrullahZymi_RrugaEUglarit": 40
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "RrethiRrugaEPejes_HajrullahZymi_Dardania": 29
+                        },
+                        {
+                            "RrethiRrugaEPejes_HajrullahZymi_RrethiRrugaEPejes": 29
+                        },
+                        {
+                            "RrethiRrugaEPejes_HajrullahZymi_RrugaEUglarit": 29
+                        },
+                        {
+                            "Dardania_HajrullahZymi_RrethiRrugaEPejes": 29
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

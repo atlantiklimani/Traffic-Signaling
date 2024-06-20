@@ -1,0 +1,109 @@
+Parameters:
+ns - 20, nb - 5, ne - 2, nrb - 5, nre - 20,
+Stagnation limit - 4
+Initial shrinkage factor - 0.001, Shrinkage Factor per Iteration Reduced by - 0.99, Termianl shrinkage factor - 0.001
+Execution Time - 14400, Number of loop iterations - 3883
+Score of patch: ,1747630
+Score of patch: ,1719718
+Score of patch: ,1719670
+Score of patch: ,1719644
+Score of patch: ,1719632
+Score of patch: ,1719620
+Score of patch: ,1719620
+Score of patch: ,1719618
+Score of patch: ,1719464
+Score of patch: ,1719454
+Real Execution Time: 14408.029020786285
+------------------------- Output File Begins Here -------------------------------------
+19
+0
+3
+Tuneli_BillClinton_ShtjefenGjeqovi 22
+Lakrishte_BillClinton_Santea 40
+Lakrishte_BillClinton_ShtjefenGjeqovi 30
+1
+3
+BillClinton_Santea_Katedralja 35
+RobertDoll_Santea_BillClinton 24
+BillClinton_Santea_RobertDoll 27
+2
+4
+PTK_Katedralja_PTK 31
+Menza_Katedralja_Santea 28
+Menza_Katedralja_PTK 24
+Parking_Katedralja_PTK 19
+3
+4
+RrugaB_Teknik_FehmiLladrovci 23
+FehmiLladrovci_Teknik_FehmiLladrovci 44
+Qerimi_Teknik_Qerimi 24
+Menza_Teknik_Menza 24
+4
+3
+EnverMaloku_Qerimi_EnverMaloku 46
+Teknik_Qerimi_Teknik 19
+Menza_Qerimi_Menza 27
+5
+2
+MaxiMarket_RrugaB_Teknik 71
+Teknik_RrugaB_Teknik 24
+6
+3
+Menza_MAShTI_Parlamenti 33
+Parlamenti_MAShTI_KarlGega 35
+FakultetiEkonomik_MAShTI_Parlamenti 29
+7
+3
+IbrahimLutfiu_Parlamenti_MAShTI 23
+MAShTI_Parlamenti_XhamiaLlapitTregu 33
+XhamiaLlapitTregu_Parlamenti_IbrahimLutfiu 31
+8
+2
+MetoBajraktari_XhamiaLlapitTregu_XhamiaLlapit 27
+Parlamenti_XhamiaLlapitTregu_XhamiaLlapit 50
+9
+2
+LidhjaLezhes_XhamiaLlapit_Tjegullorja 29
+XhamiaLlapitTregu_XhamiaLlapit_LidhjaLezhes 53
+10
+2
+IsmetKrasniqi_Vranjefc_AzizZhilivoda 74
+AzizZhilivoda_Vranjefc_Bardhosh 19
+11
+2
+Vushtrria_Tjegullorja_Zagrebi 24
+XhamiaLlapit_Tjegullorja_Vushtrria 67
+12
+3
+BulevardiDK_PTK_Katedralja 38
+28Nentori_PTK_Katedralja 27
+Katedralja_PTK_BulevardiDK 34
+13
+4
+Tirana_Lulishtja_KolegjiRiinvest 20
+UCK_Lulishtja_Tirana 44
+KolegjiRiinvest_Lulishtja_UCK 30
+FehmiAgani_Lulishtja_Tirana 26
+14
+3
+UkshinHoti_BQK_UkshinHoti 74
+Garibaldi_BQK_Garibaldi 19
+Grandi_BQK_Grandi 20
+15
+3
+ArbenorEAstritDehari_Eulexi_MuharremFejza 51
+ErnestKoliqi_Eulexi_ArbenorEAstritDehari 27
+MuharremFejza_Eulexi_ErnestKoliqi 41
+16
+4
+Katedralja_Menza_Katedralja 28
+MAShTI_Menza_Teknik 43
+MAShTI_Menza_Qerimi 19
+Qerimi_Menza_Qerimi 24
+17
+2
+AhmetKrasniqi_KomunaRe_FeridCurri 71
+Cacttus_KomunaRe_AhmetKrasniqi 34
+18
+1
+TahirZajmi_Lakrishte_BillClinton 74

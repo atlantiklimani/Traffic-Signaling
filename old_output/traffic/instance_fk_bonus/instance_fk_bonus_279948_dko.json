@@ -1,0 +1,271 @@
+{
+    "number_of_intersections": 6,
+    "score": 279948,
+    "cars_completed": 569,
+    "average_waiting_cars": 37.49029126213592,
+    "intersections": [
+        {
+            "intersection_name": "TahirZajmi",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 22,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "Lakrishte_TahirZajmi_TerminaliDoganor": 70
+                        },
+                        {
+                            "TerminaliDoganor_TahirZajmi_Lakrishte": 70
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "TerminaliDoganor",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "DeshmoretEPonoshecit_TerminaliDoganor_TreguIMadh": 19
+                        },
+                        {
+                            "DeshmoretEPonoshecit_TerminaliDoganor_TahirZajmi": 19
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "TreguIMadh_TerminaliDoganor_TahirZajmi": 40
+                        },
+                        {
+                            "TahirZajmi_TerminaliDoganor_TreguIMadh": 40
+                        },
+                        {
+                            "TreguIMadh_TerminaliDoganor_DeshmoretEPonoshecit": 40
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "TahirZajmi_TerminaliDoganor_DeshmoretEPonoshecit": 37
+                        },
+                        {
+                            "TahirZajmi_TerminaliDoganor_TahirZajmi": 37
+                        },
+                        {
+                            "TahirZajmi_TerminaliDoganor_TreguIMadh": 37
+                        },
+                        {
+                            "DeshmoretEPonoshecit_TerminaliDoganor_TahirZajmi": 37
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "TreguIMadh",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "ElezBerisha_TreguIMadh_TerminaliDoganor": 41
+                        },
+                        {
+                            "TerminaliDoganor_TreguIMadh_ElezBerisha": 41
+                        },
+                        {
+                            "ElezBerisha_TreguIMadh_KlanKosova": 41
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "KlanKosova_TreguIMadh_ElezBerisha": 31
+                        },
+                        {
+                            "KlanKosova_TreguIMadh_TerminaliDoganor": 31
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "TerminaliDoganor_TreguIMadh_KlanKosova": 20
+                        },
+                        {
+                            "TerminaliDoganor_TreguIMadh_TerminaliDoganor": 20
+                        },
+                        {
+                            "TerminaliDoganor_TreguIMadh_ElezBerisha": 20
+                        },
+                        {
+                            "KlanKosova_TreguIMadh_TerminaliDoganor": 20
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "ElezBerisha",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "RrugaEUglarit_ElezBerisha_TreguIMadh": 34
+                        },
+                        {
+                            "TreguIMadh_ElezBerisha_RrugaEUglarit": 34
+                        },
+                        {
+                            "RrugaEUglarit_ElezBerisha_Interex": 34
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "Interex_ElezBerisha_RrugaEUglarit": 31
+                        },
+                        {
+                            "Interex_ElezBerisha_TreguIMadh": 31
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "TreguIMadh_ElezBerisha_Interex": 29
+                        },
+                        {
+                            "TreguIMadh_ElezBerisha_TreguIMadh": 29
+                        },
+                        {
+                            "TreguIMadh_ElezBerisha_RrugaEUglarit": 29
+                        },
+                        {
+                            "Interex_ElezBerisha_TreguIMadh": 29
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "RrugaEUglarit",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "HajrullahZymi_RrugaEUglarit_ElezBerisha": 24
+                        },
+                        {
+                            "ElezBerisha_RrugaEUglarit_HajrullahZymi": 24
+                        },
+                        {
+                            "HajrullahZymi_RrugaEUglarit_KompleksiLinda3": 24
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "ElezBerisha_RrugaEUglarit_KompleksiLinda3": 34
+                        },
+                        {
+                            "ElezBerisha_RrugaEUglarit_ElezBerisha": 34
+                        },
+                        {
+                            "ElezBerisha_RrugaEUglarit_HajrullahZymi": 34
+                        },
+                        {
+                            "KompleksiLinda3_RrugaEUglarit_ElezBerisha": 34
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "KompleksiLinda3_RrugaEUglarit_HajrullahZymi": 37
+                        },
+                        {
+                            "KompleksiLinda3_RrugaEUglarit_ElezBerisha": 37
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "intersection_name": "HajrullahZymi",
+            "all_red_phase_interval": 0,
+            "pedestrian_phase_interval": 0,
+            "phases": [
+                {
+                    "phase": 1,
+                    "streets": [
+                        {
+                            "RrugaEUglarit_HajrullahZymi_RrethiRrugaEPejes": 37
+                        },
+                        {
+                            "RrugaEUglarit_HajrullahZymi_Dardania": 37
+                        },
+                        {
+                            "RrethiRrugaEPejes_HajrullahZymi_RrugaEUglarit": 37
+                        }
+                    ]
+                },
+                {
+                    "phase": 2,
+                    "streets": [
+                        {
+                            "RrethiRrugaEPejes_HajrullahZymi_Dardania": 27
+                        },
+                        {
+                            "RrethiRrugaEPejes_HajrullahZymi_RrethiRrugaEPejes": 27
+                        },
+                        {
+                            "RrethiRrugaEPejes_HajrullahZymi_RrugaEUglarit": 27
+                        },
+                        {
+                            "Dardania_HajrullahZymi_RrethiRrugaEPejes": 27
+                        }
+                    ]
+                },
+                {
+                    "phase": 3,
+                    "streets": [
+                        {
+                            "Dardania_HajrullahZymi_RrugaEUglarit": 19
+                        },
+                        {
+                            "Dardania_HajrullahZymi_RrethiRrugaEPejes": 19
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
