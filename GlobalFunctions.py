@@ -1,5 +1,6 @@
 import json
 from collections import deque
+import random
 
 from recordclass import recordclass
 
@@ -152,6 +153,8 @@ def readInput(input_file_path):
 
         path = deque(name_to_street[name] for name in path)
         paths.append(path)
+    # Shuffle the paths list
+    # random.shuffle(paths)
 
     for constraint in json_file['constraints']:
         # if (constraint['intersection_name'] == 'BillClinton'):
@@ -747,14 +750,28 @@ def assertOrder(actual, constraint, name_to_i_street):
 
 
 def assertOrderPhaseForSchedule(schedule, intersections, name_to_i_street):
+    result=True
     if 'signal_phase_order' in intersections[schedule.i_intersection].constraints:
-        if (assertOrder(
-                schedule.order,
-                intersections[schedule.i_intersection].constraints['signal_phase_order'],
-                name_to_i_street) == False
-        ):
-            return False
-    return True
+        result=False
+        # print(intersections[schedule.i_intersection].constraints['signal_phase_order'])
+        # print(schedule.order)
+        constraint_signal_phase_order=[name_to_i_street[c].id for c in intersections[schedule.i_intersection].constraints['signal_phase_order']]
+        # print(constraint_signal_phase_order)
+        preceding_street_id=constraint_signal_phase_order[0]
+        following_street_id=constraint_signal_phase_order[1]
+        for i in range(len(schedule.order)):
+            street_id=schedule.order[i]
+            if street_id==preceding_street_id:
+                next_street_id=schedule.order[(i+1)%len(schedule.order)]
+                if next_street_id==following_street_id:
+                    result=True
+                    break
+        # if (assertOrder(
+        #         schedule.order,
+        #         intersections[schedule.i_intersection].constraints['signal_phase_order'],
+        #         name_to_i_street) == False
+        # ):
+    return result
 
 
 def printSchedule(schedules, streets):
@@ -764,7 +781,6 @@ def printSchedule(schedules, streets):
         print(len(schedule.order))
         for i in range(len(schedule.order)):
             print(streets[schedule.order[i]].name, schedule.green_times[schedule.order[i]])
-
 
 def getPrintedSchedule(schedules, streets):
     result = f'{len(schedules)}\n'

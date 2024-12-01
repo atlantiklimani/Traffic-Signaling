@@ -1,0 +1,16 @@
+MAShTI_Parlamenti_XhamiaLlapitTregu Parlamenti_MAShTI_Menza MAShTI_Menza_Katedralja
+
+EnverMaloku_Qerimi_Menza Qerimi_Menza_MAShTI Menza_MAShTI_Parlamenti
+
+Parking_Katedralja_Santea  Santea_BillClinton_Lakrishte
+
+Katedralja_Santea_BillClinton Santea_BillClinton_Lakrishte
+
+Parking_Katedralja_Menza  Menza_Qerimi_Teknik
+
+RrugaB_Teknik_Menza Teknik_Menza_Katedralja
+
+Katedralja_Santea_BillClinton Santea_BillClinton_Lakrishte
+
+Parking_Katedralja_Santea Katedralja_Santea_RobertDoll
+

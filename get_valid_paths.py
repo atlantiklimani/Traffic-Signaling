@@ -63,3 +63,9 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     main(args.possible_paths_file_path, args.raw_files_dir)
+
+    # Call command in cmd (run as admin)
+    # python
+    # get_valid_paths.py - p
+    # "D:\KS-Data\Projektet\Fostering Applied Research Activities in Kosovo - GIZ\ABC-PR\Traffic-Signaling\possible_paths_dir\possible_paths_file.csv" - f
+    # "D:\KS-Data\Projektet\Fostering Applied Research Activities in Kosovo - GIZ\ABC-PR\Traffic-Signaling\possible_paths_dir\raw_files"
