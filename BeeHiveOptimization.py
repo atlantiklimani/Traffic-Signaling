@@ -1,20 +1,23 @@
-import GlobalFunctions as gl
-from time import time
-from random import sample, choices, shuffle
-from recordclass import recordclass
-from copy import deepcopy
-import random
+import argparse
 import math
-import sys
-import numpy as np
 import os
+import random
 import string
+from copy import deepcopy
+from random import choices
+from time import time
+
+import numpy as np
+from recordclass import recordclass
+
+import GlobalFunctions as gl
 
 Schedule = recordclass('Schedule', [
     'i_intersection',
     'order',
     'green_times'
 ])
+
 
 def randomSolution(intersections):
     schedules = []
@@ -42,8 +45,10 @@ def initialPopulation(streets, intersections, paths, total_duration, bonus_point
         population.append([gl.grade(schedules, streets, intersections, paths, total_duration, bonus_points), schedules])
     return population
 
+
 def sortKey(e):
-  return e.score
+    return e.score
+
 
 class Patch:
     def __init__(self, score, scout):
@@ -53,30 +58,33 @@ class Patch:
         self.employees = 0
         self.stg = True
 
+
 def firstOperator(order):
     order = order[1:] + order[:1]
     return order
 
+
 def fifthOperator(schedules, numberOfIntersections, numberOfRoads, instersections, streets):
-    if(numberOfIntersections <= 0):
+    if (numberOfIntersections <= 0):
         return schedules
-    
+
     maxNumOfSchedules = len(schedules)
-    for i in range(0,numberOfIntersections):
-        intersection = schedules[random.randint(0,maxNumOfSchedules)]
-        for j in range (0, numberOfRoads):
-            if(j >= len(intersection.order)):
+    for i in range(0, numberOfIntersections):
+        intersection = schedules[random.randint(0, maxNumOfSchedules)]
+        for j in range(0, numberOfRoads):
+            if (j >= len(intersection.order)):
                 break
             else:
-                streetId = intersection.order[random.randint(0,len(intersection.order) - 1)]
-                intersection.green_times[streetId] = choices([2,3,4], weights=[85,10,5])
+                streetId = intersection.order[random.randint(0, len(intersection.order) - 1)]
+                intersection.green_times[streetId] = choices([2, 3, 4], weights=[85, 10, 5])
         ## Street to find the next intersection
-        streetId = intersection.order[random.randint(0,len(intersection.order) - 1)]
+        streetId = intersection.order[random.randint(0, len(intersection.order) - 1)]
         nextInterectionId = streets[streetId].end
         # print(streets[streetId], ' -------------- aouiwfhsihfauish')
-        intersection = [x for x in schedules if x.i_intersection ==  nextInterectionId][0]
+        intersection = [x for x in schedules if x.i_intersection == nextInterectionId][0]
 
     return schedules
+
 
 def changeGreenTimeDuration(schedules, numberOfRoads):
     count = 0
@@ -84,13 +92,14 @@ def changeGreenTimeDuration(schedules, numberOfRoads):
     for schedule in schedules:
         length = len(schedule.order)
         otherCount = 0
-        while(otherCount < length and otherCount < numberOfRoads):
-            semaforId = random.randint(0,length - 1)
-            schedule.green_times[schedule.order[semaforId]] = int(choices([1, 2, 3],weights=[10, 70, 20], k=1)[0]) 
+        while (otherCount < length and otherCount < numberOfRoads):
+            semaforId = random.randint(0, length - 1)
+            schedule.green_times[schedule.order[semaforId]] = int(choices([1, 2, 3], weights=[10, 70, 20], k=1)[0])
             otherCount += 1
-        count+=1
+        count += 1
 
     return schedule
+
 
 def shuffleOrder(schedules):
     for schedule in schedules:
@@ -98,32 +107,35 @@ def shuffleOrder(schedules):
 
     return schedules
 
+
 def swapOrder(schedules):
     for schedule in schedules:
         incomingStreetsLength = len(schedule.order)
-        if(incomingStreetsLength == 1):
+        if (incomingStreetsLength == 1):
             continue
         rand1 = random.randint(0, incomingStreetsLength - 1)
         rand2 = random.randint(0, incomingStreetsLength - 1)
-        while(rand1 == rand2):
+        while (rand1 == rand2):
             rand2 = random.randint(0, incomingStreetsLength - 1)
         temp = schedule.order[rand1]
         schedule.order[rand1] = schedule.order[rand2]
         schedule.order[rand2] = temp
-    
+
     return schedules
+
 
 def copyScheduleArray(scheduleArr):
     newScheduleArr = []
-    for i in range(0,len(scheduleArr)):
+    for i in range(0, len(scheduleArr)):
         newScheduleArr.append(
             Schedule(
                 i_intersection=scheduleArr[i].i_intersection,
                 order=deepcopy(scheduleArr[i].order),
                 green_times=deepcopy(scheduleArr[i].green_times))
-            )
-        
+        )
+
     return newScheduleArr
+
 
 def traffic_based_initial_solution(intersections: list[gl.Intersection]) -> list[Schedule]:
     schedules = []
@@ -153,6 +165,7 @@ def traffic_based_initial_solution(intersections: list[gl.Intersection]) -> list
             schedules.append(Schedule(intersection.id, order, green_times))
     return schedules
 
+
 def usage_based_initial_solution(intersections: list[gl.Intersection]) -> list[Schedule]:
     schedules = []
     for intersection in intersections:
@@ -173,41 +186,47 @@ def usage_based_initial_solution(intersections: list[gl.Intersection]) -> list[S
             schedules.append(Schedule(intersection.id, order, green_times))
     return schedules
 
-def generateSolution(intersections):
-    decideGen = random.randint(0,1)
 
-    if(decideGen == 0):
+def generateSolution(intersections):
+    decideGen = random.randint(0, 1)
+
+    if (decideGen == 0):
         solution = traffic_based_initial_solution(intersections)
     else:
         solution = usage_based_initial_solution(intersections)
 
     return solution
 
+
 def assignEmployeesArray(ns, ne, shrinkage):
     employees = np.zeros(ns)
 
-    for i in range(0,ns):
+    for i in range(0, ns):
         employees[i] = shrinkage ** (i / 2)
-    
+
     employees = employees / employees.sum()
 
     for i in range(0, ns):
         employees[i] = math.floor(employees[i] * ne)
-    
+
     for i in range(0, int(ne - employees.sum())):
         employees[i] += 1
 
     return employees
-def outputToFile(patches, executionTime, countIterations, ns, nEmployees, stgLim, initialShrinkageFactor, shrinkageFactorReducedBy, shrinkageFactor, start):
-    global file
 
-    if not os.path.exists(f'output/{file}'):
-        os.mkdir(f'output/{file}')
-    
-    output = open(f'output/{file}/{file}_{patches[0].score}_{"".join(random.choices(string.ascii_lowercase, k= 3))}', 'a')
-    output.write(f'Parameters:\nns - {ns}, number of employees - {nEmployees},\nStagnation limit - {stgLim}\nInitial shrinkage factor - {initialShrinkageFactor}, Shrinkage Factor per Iteration Reduced by - {shrinkageFactorReducedBy}, Termianl shrinkage factor - {shrinkageFactor:.3f}'
-    f'\nExecution Time - {executionTime}, Number of loop iterations - {countIterations}\n')
-    for i in range(0,10):
+
+def outputToFile(patches, executionTime, countIterations, ns, nEmployees, stgLim, initialShrinkageFactor,
+                 shrinkageFactorReducedBy, shrinkageFactor, start, streets,
+                 version, instance_name):
+    new_instance_name = f'ea-{version}-{instance_name}'
+    output_file_path = os.path.join('output', new_instance_name)
+
+    output = open(f'{output_file_path}_{patches[0].score}_{"".join(random.choices(string.ascii_lowercase, k=3))}',
+                  'a')
+    output.write(
+        f'Parameters:\nns - {ns}, number of employees - {nEmployees},\nStagnation limit - {stgLim}\nInitial shrinkage factor - {initialShrinkageFactor}, Shrinkage Factor per Iteration Reduced by - {shrinkageFactorReducedBy}, Termianl shrinkage factor - {shrinkageFactor:.3f}'
+        f'\nExecution Time - {executionTime}, Number of loop iterations - {countIterations}\n')
+    for i in range(0, 10):
         output.write(f'Score of patch: ,{patches[i].score}\n')
     output.write(f'Real Execution Time: {time() - start}\n')
     output.write("------------------------- Output File Begins Here -------------------------------------\n")
@@ -215,139 +234,143 @@ def outputToFile(patches, executionTime, countIterations, ns, nEmployees, stgLim
     output.close()
     return
 
+
 # Select intersections based on the number of waiting cars. This number is the total of waiting cars on all streets
-def selectSchedules(schedules, numOfSchedules):
-    if(numOfSchedules <= 0):
+def selectSchedules(schedules, numOfSchedules, intersections):
+    if (numOfSchedules <= 0):
         return random.sample(schedules, k=1)
-    
-    if(numOfSchedules * 2 > len(schedules)):
+
+    if (numOfSchedules * 2 > len(schedules)):
         expandedIntersections = len(schedules)
-    else: 
+    else:
         expandedIntersections = numOfSchedules * 2
 
     schedules = random.sample(schedules, k=expandedIntersections)
-    
+
     def sortKey(s):
         return intersections[s.i_intersection].num_waiting_cars
-        
+
     schedules.sort(reverse=True, key=sortKey)
 
     schedules = schedules[:numOfSchedules]
 
     return schedules
 
-    
-def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, use_seed = False, solution_file_path = None):
+
+def BeeHive(streets, intersections, paths, total_duration, bonus_points, terminated_time, use_seed=False,
+            solution_file_path=None):
     patches = []
-    ns = 30 #number of scout bees
+    ns = 30  # number of scout bees
     nEmployees = 150
-    stgLim = 4 #stagnation limit for patches
-    shrinkageFactor = 0.5 # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
-    shrinkageFactorReducedBy = 0.97 # by how much is the shrinkage factor reduceb by for iteration
+    stgLim = 4  # stagnation limit for patches
+    shrinkageFactor = 0.5  # how fast does the neighborhood shrink. 1 is max. This higher the factor the less is the neighborhood shrinking
+    shrinkageFactorReducedBy = 0.97  # by how much is the shrinkage factor reduceb by for iteration
     executionTime = 30 * 60
     ## Only for visualisation purposes
-    initialShrinkageFactor = shrinkageFactor 
+    initialShrinkageFactor = shrinkageFactor
     countIterations = 0
     ##
 
-    for i in range(0,ns):
-        if(use_seed == 'True' and i < 5):
+    for i in range(0, ns):
+        if (use_seed == 'True' and i < 5):
             sol = gl.readSolution(solution_file_path=solution_file_path, streets=streets)
             if i != 0:
-                selectedSchedules = selectSchedules(sol,  math.floor(len(sol) * 0.2))
+                selectedSchedules = selectSchedules(sol, math.floor(len(sol) * 0.2), intersections)
                 shuffleOrder(selectedSchedules)
-        else :    
-            sol = generateSolution(intersections)         
-        
-        grade = gl.grade(sol,streets, intersections, paths, total_duration, bonus_points)
+        else:
+            sol = generateSolution(intersections)
+
+        grade = gl.grade(sol, streets, intersections, paths, total_duration, bonus_points)
         patches.append(Patch(grade, sol))
-    
+
     while (time() - terminated_time < executionTime):
-        
+
         patches.sort(reverse=True, key=sortKey)
 
-        if(len(patches) == ns):
+        if (len(patches) == ns):
             patches = patches[0: ns]
         elif len(patches) > ns:
             lowerScorePatchesPercent = math.floor(len(patches) * 0.35)
             worsePatches = random.choices(patches[ns:], k=lowerScorePatchesPercent)
             patches = patches[0:(ns - lowerScorePatchesPercent)]
             patches.extend(worsePatches)
-            
+
         assignEmployees = assignEmployeesArray(ns, nEmployees, shrinkage=shrinkageFactor)
         indexOfFirstSiteWithoutEmployees = ns
-        for i in range(0,ns):
+        for i in range(0, ns):
             employees = assignEmployees[i]
 
-            if(employees == 0):
+            if (employees == 0):
                 indexOfFirstSiteWithoutEmployees = i
                 break
 
             patches[i].stg = True
 
-            for e in range(0,int(employees)):
+            for e in range(0, int(employees)):
                 tempSchedule = copyScheduleArray(patches[i].scout)
-                decideOperator = random.randint(0,20) 
-                if(decideOperator < 3):
-                    selectedSchedules = selectSchedules(tempSchedule,  math.floor(len(tempSchedule) * shrinkageFactor) + 1)
+                decideOperator = random.randint(0, 20)
+                if (decideOperator < 3):
+                    selectedSchedules = selectSchedules(tempSchedule,
+                                                        math.floor(len(tempSchedule) * shrinkageFactor) + 1,
+                                                        intersections)
                     shuffleOrder(selectedSchedules)
-                elif(decideOperator >= 3 and decideOperator < 20):
-                    selectedSchedules = selectSchedules(tempSchedule,  math.floor(len(tempSchedule) * shrinkageFactor) + 1)
+                elif (decideOperator >= 3 and decideOperator < 20):
+                    selectedSchedules = selectSchedules(tempSchedule,
+                                                        math.floor(len(tempSchedule) * shrinkageFactor) + 1,
+                                                        intersections)
                     swapOrder(selectedSchedules)
                 else:
-                    selectedSchedules = selectSchedules(tempSchedule,  math.floor(len(tempSchedule) * shrinkageFactor * 0.001) + 1)
+                    selectedSchedules = selectSchedules(tempSchedule,
+                                                        math.floor(len(tempSchedule) * shrinkageFactor * 0.001) + 1,
+                                                        intersections)
                     changeGreenTimeDuration(selectedSchedules, 1)
 
-                    
-                tempScore = gl.grade(tempSchedule,streets, intersections, paths, total_duration, bonus_points)
+                tempScore = gl.grade(tempSchedule, streets, intersections, paths, total_duration, bonus_points)
 
-                if(tempScore > patches[i].score):
+                if (tempScore > patches[i].score):
                     patches[i].stg = False
                     patches.append(Patch(score=tempScore, scout=tempSchedule))
 
-            
-            if(patches[i].stg):
+            if (patches[i].stg):
                 patches[i].stgLim += 1
             else:
                 patches[i].stgLim = 0
-                 
-            if(patches[i].stgLim > stgLim and i != 0):
-                solution = generateSolution(intersections)      
+
+            if (patches[i].stgLim > stgLim and i != 0):
+                solution = generateSolution(intersections)
                 grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points)
-                patches[i] = Patch(score=grade, scout= solution)
+                patches[i] = Patch(score=grade, scout=solution)
 
         for i in range(indexOfFirstSiteWithoutEmployees, ns):
-            solution = generateSolution(intersections)      
+            solution = generateSolution(intersections)
             grade = gl.grade(solution, streets, intersections, paths, total_duration, bonus_points)
-            patches.append(Patch(score=grade, scout= solution))
-    
-        if(shrinkageFactor > 0.001):
-            shrinkageFactor *= shrinkageFactorReducedBy
-        
-        countIterations += 1
+            patches.append(Patch(score=grade, scout=solution))
 
-        # patches.sort(reverse=True, key=sortKey)
-        # patches = patches[0: ns]
+        if (shrinkageFactor > 0.001):
+            shrinkageFactor *= shrinkageFactorReducedBy
+
+        countIterations += 1
 
     patches.sort(reverse=True, key=sortKey)
 
-    outputToFile(patches, executionTime, countIterations, ns, nEmployees, stgLim, initialShrinkageFactor, shrinkageFactorReducedBy, shrinkageFactor, start)
+    return patches, executionTime, countIterations, ns, nEmployees, stgLim, initialShrinkageFactor, shrinkageFactorReducedBy, shrinkageFactor
 
-    return patches[0].scout, patches[0].score
 
-# file = input("Enter name of the input file, e.g. \"a.txt\": ")
-file = sys.argv[1]
+def main(instance_name, version):
+    start = time()
 
-start = time()
-total_duration, bonus_points, intersections, streets, name_to_i_street, paths = gl.readInput(file)
-if len(sys.argv) == 3:
-    use_seed = sys.argv[2]
-    solution_file_path = './seeds/' + sys.argv[1] # + '.txt.out'
-    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start, use_seed, solution_file_path)
-else :
-    schedule, score = BeeHive(streets, intersections, paths, total_duration, bonus_points,start)
+    total_duration, bonus_points, intersections, streets, name_to_i_street, paths = gl.readInput(instance_name)
+    patches, executionTime, countIterations, ns, nEmployees, stgLim, initialShrinkageFactor, shrinkageFactorReducedBy, shrinkageFactor = BeeHive(
+        streets, intersections, paths, total_duration, bonus_points, start)
 
-# print(gl.grade(gl.readSolution('./seeds/I500_S998_C1000.txt.out',streets),streets, intersections, paths, total_duration, bonus_points))
-# print(gl.grade(gl.readSolution('./I200_S17200_C1000_1207889',streets),streets, intersections, paths, total_duration, bonus_points))
+    outputToFile(patches, executionTime, countIterations, ns, nEmployees, stgLim, initialShrinkageFactor,
+                 shrinkageFactorReducedBy, shrinkageFactor, start, streets, version, instance_name)
 
-# gl.printSchedule(schedule, streets)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--instance_name', type=str, required=True)
+    parser.add_argument('-ve', '--version', type=str, required=True)
+
+    args = parser.parse_args()
+    main(args.instance_name, args.version)

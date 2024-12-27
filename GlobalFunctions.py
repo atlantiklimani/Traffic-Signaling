@@ -1,3 +1,4 @@
+import os.path
 from collections import deque
 from recordclass import recordclass
 
@@ -63,9 +64,8 @@ def readSolution(solution_file_path, streets):
     
     return schedules
 
-def readInput(input_file_path):
-    # filename = "Instances/" + input_file_path
-    filename = "input/" + input_file_path
+def readInput(instance_name):
+    filename = os.path.join('input', instance_name)
 
     with open(filename) as f:
         lines = deque(f.readlines())
